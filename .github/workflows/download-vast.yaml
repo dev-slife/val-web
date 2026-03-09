@@ -1,0 +1,50 @@
+name: VAST Download
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/cache@v4
+      id: cache
+      with:
+        path: src/libs/vast
+        key: vast-5820971792
+        restore-keys: vast-
+    
+    - name: Download VAST
+      if: steps.cache.outputs.cache-hit != 'true'
+      env:
+        GITHUB_TOKEN: ${{ secrets.VAST_PAT }}
+      run: |
+        echo "Downloading artifact..."
+        curl -L -H "Authorization: token $GITHUB_TOKEN" \
+          "https://api.github.com/repos/dev-slife/val-ast/actions/artifacts/5820971792/zip" \
+          -o vast.zip
+
+        mkdir -p src/libs/vast
+        unzip vast.zip -d src/libs/vast/
+        rm vast.zip
+        ls -la src/libs/vast/
+
+    - name: Commit VAST files
+      if: steps.cache.outputs.cache-hit != 'true'
+      env:
+        GITHUB_TOKEN: ${{ secrets.VAL_PAT }}
+        GIT_AUTHOR_NAME: VAL
+        GIT_AUTHOR_EMAIL: val-slife@users.noreply.github.com
+        GIT_COMMITTER_NAME: VAL
+        GIT_COMMITTER_EMAIL: val-slife@users.noreply.github.com
+      run: |
+        git add src/libs/vast/*
+        git commit -m "Uploaded Dependencies: VAST v1.0.0" || echo "No changes"
+        git remote set-url origin https://x-access-token:$GITHUB_TOKEN@github.com/dev-slife/val-web.git
+        git push origin main
