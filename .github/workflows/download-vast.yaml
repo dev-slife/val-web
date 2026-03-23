@@ -8,8 +8,8 @@ permissions:
   contents: write
 
 env:
-  VAST_VER: "v1.1.2"
-  VAST_ID: "6051942178"
+  VAST_VER: "v1.2.0"
+  VAST_ID: "6067970453"
 
 jobs:
   build:
