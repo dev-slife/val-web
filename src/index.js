@@ -1,9 +1,13 @@
-import * as vast from "./libs/vast/algebra.mjs";
+import * as vast from "./libs/vast/api/algebra.mjs";
 
-const bodyParser = require('body-parser');
+import bodyParser from "body-parser";
 
-const path = require('path');
-const express = require('express');
+import { fileURLToPath } from 'url';
+import path from "path";
+import express from "express";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
 
 
@@ -19,6 +23,5 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
-    const ans = vast.simplify("2x+3x-5");
-    console.log("VAST Check: ", ans);
+    vast.solve("2x+3x-5");
 });
