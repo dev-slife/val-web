@@ -10,7 +10,8 @@ There are multiple people who worked hard and dependencies used to make VAL poss
     - Frontend Developer
     - UX/UI
 - [mahmudulsalman](https://github.com/mahmudulsalman)
-    - UX/UI      
+    - UI
+    - Storage Admin(Devops)     
 
 
 ## Dependencies
