@@ -7,7 +7,9 @@ There are multiple people who worked hard and dependencies used to make VAL poss
     - DevOps Lead ⚙️
     - Backend & Frontend Developer 🐛
 - [jbeshir-umd](https://github.com/jbeshir-umd)
-    - Project Communications Lead
+    - Frontend Developer
+    - UX/UI
+
 
 ## Dependencies
 - VAST 📏
