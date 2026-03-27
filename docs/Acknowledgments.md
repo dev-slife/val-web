@@ -9,7 +9,7 @@ There are multiple people who worked hard and dependencies used to make VAL poss
 - [jbeshir-umd](https://github.com/jbeshir-umd)
     - Frontend Developer
     - UX/UI
-- [jbeshir-umd](https://github.com/jbeshir-umd)
+- [mahmudulsalman](https://github.com/mahmudulsalman)
     - UX/UI      
 
 
