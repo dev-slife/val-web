@@ -11,7 +11,10 @@ There are multiple people who worked hard and dependencies used to make VAL poss
     - UX/UI
 - [mahmudulsalman](https://github.com/mahmudulsalman)
     - UI
-    - Storage Admin(Devops)     
+    - Storage Admin(Devops) 
+- [selamfesseha](https://github.com/sfesseha)
+    - Database Admin
+    - Project Mangement    
 
 
 ## Dependencies
