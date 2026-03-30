@@ -24,8 +24,8 @@
 
 html,
 body {
-  height: 100%;
-  height: 100%;
+    height: 100%;
+    height: 100%;
 }
 
 
@@ -43,20 +43,21 @@ body {
 footer {
     margin: 2%;
     font-size: 18px;
+    text-align: center;
 }
 
 
 h1 {
-  font-size: var(--h1-size);
-  margin: 3%;
+    font-size: var(--h1-size);
+    margin: 3%;
 }
 
 h2 {
-  font-size: var(--h2-size);
-  margin: 2%;
+    font-size: var(--h2-size);
+    margin: 2%;
 }
 
 h3 {
-  font-size: var(--h3-size);
-  margin: 1%;
+    font-size: var(--h3-size);
+    margin: 1%;
 }
