@@ -6,6 +6,14 @@
     <link rel="icon" href="../favicon.ico">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/home.css">
+    <script type="module">
+        import {simplify, solve} from "../js/vast.mjs";
+        import {login, register} from "../js/account.mjs";
+        await console.log(simplify("12x+3x-5"));
+        await console.log(solve("12x+3x-5"));
+        await console.log(login("dev.slife", "pass123"));
+        await console.log(register("dev.slife", "pass123"));
+    </script>
     <title>VAL</title>
 </head>
 <body>

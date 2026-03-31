@@ -38,7 +38,7 @@ async function expressFetch(url) {
 
 export function changePage(page="home", is_index_file=false) {
     // First try to use the express route
-    const expressURL = window.location.href + page;
+    const expressURL = window.location.href + (page == "home") ? "": page;
     if (!expressPage(expressURL)) {
         // If not default to html file
         const base_url = (is_index_file) ? "./pages/": "../pages/";
@@ -46,5 +46,4 @@ export function changePage(page="home", is_index_file=false) {
         const url = base_url + file_name;
         window.location.href = url;
     }
-
 }

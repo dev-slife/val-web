@@ -2,14 +2,28 @@
   "name": "val-web",
   "version": "1.0.0",
   "description": "VAL's web server",
+  "homepage": "https://github.com/dev-slife/val-web#readme",
+  "bugs": {
+    "url": "https://github.com/dev-slife/val-web/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dev-slife/val-web.git"
+  },
+  "license": "GPL-3.0-or-later",
+  "author": "dev.slife",
+  "type": "commonjs",
   "main": "src/index.js",
+  "directories": {
+    "doc": "docs"
+  },
   "scripts": {
     "start": "node src/index.js"
   },
   "dependencies": {
-    "body-parser": "^2.2.2",
     "express": "^4.21.1"
   },
+  "devDependencies": {},
   "engines": {
     "node": ">=20.0.0"
   }
