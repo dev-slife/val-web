@@ -11,7 +11,7 @@
 
 export async function simplify(expression) {
     try {
-        const url = `/api/vast/simplify?expression=${expression}`;
+        const url = `/api/vast/simplify?expression=${encodeURIComponent(expression)}`;
         const response = await fetch(url);
         const success = await response.json();
         return success;
@@ -23,7 +23,7 @@ export async function simplify(expression) {
 
 export async function solve(expression) {
     try {
-        const url = `/api/vast/solve?expression=${expression}`;
+        const url = `/api/vast/solve?expression=${encodeURIComponent(expression)}`;
         const response = await fetch(url);
         const success = await response.json();
         return success;

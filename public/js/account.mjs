@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 3/30/26
+ * Date Updated: 3/31/26
  * Description:
  *      Requests logins/registrations for accounts.
  */
@@ -11,7 +11,7 @@
 
 export async function login(user, pass) {
     try {
-        const url = `/api/login?user=${user}&pass=${pass}`;
+        const url = `/api/credentials/login?user=${user}&pass=${pass}`;
         const response = await fetch(url);
         const success = await response.json();
         return success;
@@ -23,7 +23,7 @@ export async function login(user, pass) {
 
 export async function register(user, pass) {
     try {
-        const url = `/api/register?user=${user}&pass=${pass}`;
+        const url = `/api/credentials/register?user=${user}&pass=${pass}`;
         const response = await fetch(url);
         const success = await response.json();
         return success;

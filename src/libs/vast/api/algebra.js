@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/22/26
- * Date Updated: 3/30/26
+ * Date Updated: 3/31/26
  * Description:
  *      Works with the VAST system (C++) to parse and solve math equations.
  */
@@ -9,25 +9,24 @@
 
 // --------------------------- IMPORTS & CONSTANTS --------------------------- //
 
-const app = require("./app");
-const { spawn } = require('node:child_process');
-const { dirname } = require('path');
-const { fileURLToPath } = require('url');
+const express = require("express");
+const router = express.Router();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const { spawn } = require('node:child_process');
 const pyLib = "py.vast"
+
 
 
 // ---------------------------- API FUNCTIONS ---------------------------- //
 
-app.get('/api/vast/simplify', (req, res) => {
+router.get('/simplify', (req, res) => {
     const { expression } = req.query;
+    console.log(decodeURIComponent(expression));
     let output = "";
 
     const payload = JSON.stringify({
         "Eval": "simplify",
-        "Input": expression
+        "Input": decodeURIComponent(expression)
     });
     const py = spawn("python", ['-m', pyLib, payload], {
         cwd: __dirname
@@ -57,13 +56,14 @@ app.get('/api/vast/simplify', (req, res) => {
 });
 
 
-app.get('/api/vast/solve', (req, res) => {
+router.get('/solve', (req, res) => {
     const { expression } = req.query;
     let output = "";
+    console.log(decodeURIComponent(expression));
 
     const payload = JSON.stringify({
         "Eval": "solve_literal",
-        "Input": expression
+        "Input": decodeURIComponent(expression)
     });
     const py = spawn("python", ['-m', pyLib, payload], {
         cwd: __dirname
@@ -91,3 +91,9 @@ app.get('/api/vast/solve', (req, res) => {
         }
     });
 });
+
+
+
+// --------------------------- EXPORT ROUTER --------------------------- //
+
+module.exports = router;

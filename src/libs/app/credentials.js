@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 3/30/26
+ * Date Updated: 3/31/26
  * Description:
  *      Handles all account api functions.
  */
@@ -9,20 +9,27 @@
 
 // --------------------------- IMPORTS & CONSTANTS --------------------------- //
 
-const app = require("./app");
+const express = require("express");
+const router = express.Router();
 
 
 
 // --------------------------- SERVER FUNCTIONS --------------------------- //
 
-app.get('/api/login', (req, res) => {
+router.get('/login', (req, res) => {
     const {user, pass} = req.query;
     // verify correct username and password with db
     console.error("Currently unable to manage account information.");
 });
 
-app.get('/api/register', (req, res) => {
+router.get('/register', (req, res) => {
     const {user, pass} = req.query;
     // verify correct username and password with db
     console.error("Currently unable to manage account information.");
 });
+
+
+
+// --------------------------- EXPORT ROUTER --------------------------- //
+
+module.exports = router;

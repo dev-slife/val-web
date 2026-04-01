@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 3/29/26
+ * Date Updated: 3/31/26
  * Description:
  *      Handles all main API communication between the frontend, backend, and web app services.
  */
@@ -22,12 +22,20 @@ const options = {
     extensions: ['html']
 }
 
+const credRouter = require("./libs/app/credentials");
+const vastRouter = require("./libs/vast/api/algebra");
+
 
 
 // --------------------------- INITIALIZATION --------------------------- //
 
+// Mount app
 app.use(express.static(__public, options));
 app.use(express.json());
+
+// Mount routers
+app.use('/api/credentials', credRouter);
+app.use('/api/vast', vastRouter);
 
 
 
@@ -62,5 +70,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
 });
-
-module.exports = app;
