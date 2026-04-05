@@ -10,7 +10,6 @@
 
 // --------------------------- IMPORTS & CONSTANTS --------------------------- //
 
-const { fileURLToPath } = require("url");
 const path = require("path");
 const express = require("express");
 

@@ -1,0 +1,16 @@
+services:
+    val-web:
+        image: devslife/val:v0.0.0
+        container_name: val-web
+        build:
+            context: ..
+            dockerfile: ./docker/val.Dockerfile
+        ports:
+            - "3000:3000"
+        networks:
+            default:
+                aliases:
+                    - val.dev-slife.test
+        environment:
+            - NODE_ENV=development
+        restart: always
