@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 4/4/26
+ * Date Updated: 4/15/26
  * Description:
  *      Handles all account api functions.
  */
@@ -9,11 +9,49 @@
 
 // --------------------------- IMPORTS & CONSTANTS --------------------------- //
 
+const { MongoClient } = require("mongodb")
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
+
+
+// --------------------------- MONGODB FUNCTIONS --------------------------- //
+
+async function isRegistered(payload) {
+    const client = new MongoClient(process.env.MONGO_CONN);
+
+    try {
+        await client.connect();
+        const db = client.db("VAL_DATA");
+        const users = db.collection("users");
+
+        const isRegistered = await users.find(payload);
+        return (isRegistered) ? true: false;
+    } catch (err) {
+        console.log(err);
+    } finally {
+        await client.close();
+    }
+}
+
+async function registerUser(payload) {
+    const client = new MongoClient(process.env.MONGO_CONNECTION);
+
+    try {
+        await client.connect();
+        const db = client.db("VAL_DATA");
+        const users = db.collection("users");
+
+        const result = await users.insertOne(payload);
+        return (result) ? true: false;
+    } catch (err) {
+        console.log(err);
+    } finally {
+        await client.close();
+    }
+}
 
 
 // --------------------------- SERVER FUNCTIONS --------------------------- //
@@ -41,12 +79,13 @@ router.get('/login', (req, res) => {
 
 router.get('/register', (req, res) => {
     const {user, pass} = req.query;
-    // make sure the current username is not taken
-    bcrypt.genSalt(saltRounds, function(err, salt) {
-        bcrypt.hash(pass, salt, function(err, hash) {
-            // store hash in MongoDB
+    if (!isRegistered({"user": user})) {
+        bcrypt.genSalt(saltRounds, function(err, salt) {
+            bcrypt.hash(pass, salt, function(err, hash) {
+                registerUser({"user": user, "pass": hash});
+            });
         });
-    });
+    }
     console.error("Currently unable to manage account information.");
 });
 
