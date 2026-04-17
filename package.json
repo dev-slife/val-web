@@ -22,7 +22,9 @@
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "minio": "^8.0.7",
+    "mongodb": "^7.1.1"
   },
   "engines": {
     "node": ">=20.0.0"

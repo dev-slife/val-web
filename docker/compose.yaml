@@ -17,6 +17,8 @@ services:
         environment:
             NODE_ENV: development
             MONGO_CONN: mongodb://${DB_USER}:${DB_PASS}@mongodb:27017/?authSource=admin
+            MINIO_USER: ${MINIO_USER}
+            MINIO_PASS: ${MINIO_PASS}
             PORT: ${APP_PORT}
         depends_on:
             mongodb:
