@@ -3,7 +3,8 @@ name: val
 services:
     val-web:
         image: ${APP_IMAGE}
-        container_name: val-web
+        container_name: web-app
+        restart: always
         build:
             context: ..
             dockerfile: ./docker/val.Dockerfile
@@ -17,9 +18,10 @@ services:
             NODE_ENV: development
             MONGO_CONN: mongodb://${DB_USER}:${DB_PASS}@mongodb:27017/?authSource=admin
             PORT: ${APP_PORT}
-        restart: always
         depends_on:
             mongodb:
+                condition: service_healthy
+            minio:
                 condition: service_healthy
 
     mongo-express:
@@ -56,6 +58,28 @@ services:
             timeout: 5s
             retries: 5
 
+    minio:
+        image: quay.io/minio/minio:latest
+        container_name: minio
+        restart: always
+        ports:
+            - "9000:9000"
+            - "9001:9001"
+        environment:
+            MINIO_ROOT_USER: ${MINIO_USER}
+            MINIO_ROOT_PASSWORD: ${MINIO_PASS}
+        volumes:
+            - minio-data:/data
+        command: server /data --console-address ":9001"
+        healthcheck:
+            test: ["CMD-SHELL", "bash -c ':> /dev/tcp/127.0.0.1/9000' || exit 1"]
+            interval: 10s
+            timeout: 5s
+            retries: 3
+            start_period: 5s
+        
+
 volumes:
     mongo-data:
     mongo-config:
+    minio-data:
