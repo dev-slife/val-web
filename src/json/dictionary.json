@@ -1,0 +1,53 @@
+{
+    "Q_STARTERS": [
+        "who", "what", "when", "where", "how", "why", "is", "are", "do", "does", "could", "can"
+    ],
+    
+    "AUX_VERBS": [
+        "am", "are", "can", "did", "do", "does", "has", "had", "have", "is", "should", "was", "were"
+    ],
+
+    "MQnA": {
+        "NOUNS": [
+            "answer",
+            "equation",
+            "formula", "function",
+            "number",
+            "pattern", "problem"
+        ],
+
+        "PRONOUNS": {
+            "it": ["equation", "formula", "function", "problem"],
+            "that": ["equation", "formula", "function", "problem", "pattern", "answer"],
+            "these": ["equations", "formulas", "functions", "problems", "answers"],
+            "this": ["equation", "formula", "function", "problem", "pattern", "answer"],
+            "those": ["equations", "formulas", "functions", "problems", "answers"]
+        },
+    
+        "VERBS": [
+            "add",
+            "calculate", "combine",
+            "decide", "divide",
+            "evaluate",
+            "factor",
+            "give",
+            "multiply",
+            "simplify", "solve", "subtract",
+            "tell"
+        ],
+
+        "REFERENCES": {
+            "what about": ["simplify", "solve"],
+            "how about": ["simplify", "solve"]
+        },
+    
+        "ADJECTIVES": [
+            "basic",
+            "complex", "complicated",
+            "difficult",
+            "new",
+            "quick",
+            "simple", "simplified", "symbolic"
+        ]
+    }
+}

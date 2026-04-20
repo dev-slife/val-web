@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/16/26
- * Date Updated: 4/16/26
+ * Date Updated: 4/19/26
  * Description:
  *      Handles all MinIO communication.
  */
@@ -9,7 +9,7 @@
 
 // --------------------------- IMPORTS & CONSTANTS --------------------------- //
 
-const Minio = require('minio');
+const minio = require('minio');
 const express = require("express");
 const router = express.Router();
 
@@ -18,7 +18,7 @@ const router = express.Router();
 // --------------------------- MINIO FUNCTIONS --------------------------- //
 
 async function uploadPFP() {
-    const client = new Minio.Client({
+    const client = new minio.Client({
         endPoint: 'localhost',
         port: 9000,
         useSSL: false,

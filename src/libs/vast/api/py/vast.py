@@ -1,7 +1,7 @@
 """
 Author: dev.slife
 Date Created: 2/15/26
-Date Updated: 3/23/26
+Date Updated: 4/15/26
 Description:
     Works with the VAST system (C++) to parse and solve math equations.
 """
@@ -28,6 +28,7 @@ DLL_PATH = os.path.join(PACKAGE_DIR, "bin", "VAST.dll")
 VAST_LIB = ctypes.CDLL(DLL_PATH)
 
 
+
 #------------------------ DEFINE CTYPES ------------------------#
 
 VAST_LIB.VAST_simplify.argtypes = [ctypes.c_char_p]
@@ -51,26 +52,52 @@ def __findVASTException(eType="VASTError", eMsg="An unexpected error occurred wh
     VASTError(eMsg)
     
 
+def __decodeVAST(msg: str) -> tuple:
+    answer, log = msg.split(" | ")
+    attr = ("ID", "result", "left", "oper", "right")
+    entries = []
+    i = 0
+    while (log[i] != "}"):
+        offset = 1
+        logMap = {}
+        if (log[i] == "["):
+            parse = ""
+            parseCount = 0
+            while (log[i+offset] != "]"):
+                if (log[i+offset] == ","):
+                    logMap[attr[parseCount]] = parse
+                    parse = ""
+                    parseCount += 1
+                else:
+                    parse += log[i+offset]
+                offset += 1
+            if parse: logMap[attr[parseCount]] = parse
+            entries.append(logMap)
+        i += offset
+    return answer[1:], entries
+    
+
 
 #------------------------ API FUNCTIONS ------------------------#
 
-def simplify(expression: str) -> str:
+def simplify(expression: str) -> tuple:
     result_bytes = VAST_LIB.VAST_simplify(expression.encode())
     result: str = result_bytes.decode()
     if ": " in result:
         eType = result.split(": ")[0]
         eMsg = result.split(": ")[-1]
         raise __findVASTException(eType, eMsg)
-    return result_bytes.decode()
+    return __decodeVAST(result)
 
-def solve(expression: str) -> str:
+
+def solve(expression: str) -> tuple:
     result_bytes = VAST_LIB.VAST_solve_literal(expression.encode())
     result: str = result_bytes.decode()
     if ": " in result:
         eType = result.split(": ")[0]
         eMsg = result.split(": ")[-1]
         raise __findVASTException(eType, eMsg)
-    return result_bytes.decode() 
+    return __decodeVAST(result)
 
 
 
@@ -86,7 +113,10 @@ if __name__ == "__main__":
         elif (data["Eval"].lower() == "solve_literal"):
             output = solve(data["Input"])   
         
-        output = {"answer": output}
+        output = {
+            "answer": output[0],
+            "log": output[1]
+        }
         print(json.dumps(output))
         sys.stdout.flush()
     else:
