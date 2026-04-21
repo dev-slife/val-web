@@ -1,63 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;500;600&family=Mulish:wght@400;600;700&family=Rajdhani:wght@500;600;700&display=swap');
+
+/* ======================================================
+   base.css  –  Global reset, variables & shared styles
+   ====================================================== */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 :root {
-    /* COLOR */
-    --primary-color: #e0e3e8;
-    --secondary-color: #b2b5bb;
+    /* ── USER-PROVIDED COLORS ── */
+    --primary-color:    #e0e3e8;
+    --secondary-color:  #b2b5bb;
+    --bkg-gradient:     linear-gradient(#424956, #5a6371);
 
-    --bkg-gradient: linear-gradient(#424956, #5a6371);
+    /* ── USER-PROVIDED FONTS ── */
+    --font-primary:     "Poppins", sans-serif;
+    --font-secondary:   "Mulish", sans-serif;
 
-
-    /* FONT */
-    --font-primary: "Poppins", sans-serif;
-    --font-secondary: "Mulish", sans-serif;
-
+    /* ── USER-PROVIDED FONT SIZES ── */
     --h1-size: 64px;
     --h2-size: 40px;
     --h3-size: 24px;
+
+    /* ── VAL COLORS ── */
+    --bg-deep:       #13131a;
+    --bg-sidebar:    #0f0f15;
+    --bg-main:       #1a1a24;
+    --bg-input:      #0d0d12;
+    --bg-nav:        #13131a;
+    --bg-card:       #22223a;
+    --accent-blue:   #5b9bd5;
+    --accent-yellow: #c8b96e;
+    --accent-red:    #d95f6e;
+    --text-primary:  #e8e8f0;
+    --text-muted:    #7a7a9a;
+    --text-sidebar:  #c0c0d8;
+    --border:        #2a2a3a;
+    --nav-border:    #2e2e3e;
+    --sidebar-width: 230px;
+    --nav-height:    58px;
 }
 
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html,
-body {
+html, body {
     height: 100%;
-    height: 100%;
-}
-
-
-body {
     width: 100%;
-    height: 100%;
     line-height: 1.5;
     font-family: var(--font-primary);
-    background: var(--bkg-gradient);
-    color: var(--primary-color);
+    background: var(--bg-deep);
+    color: var(--text-primary);
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
 
+/* ── HEADINGS ── */
+h1 { font-size: var(--h1-size); margin: 3%; }
+h2 { font-size: var(--h2-size); margin: 2%; }
+h3 { font-size: var(--h3-size); margin: 1%; }
+
+/* ── FOOTER ── */
 footer {
+    display: none;
     margin: 2%;
     font-size: 18px;
     text-align: center;
 }
 
-
-h1 {
-    font-size: var(--h1-size);
-    margin: 3%;
+/* ── LOGO ── */
+.logo-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px 20px 20px;
+    gap: 6px;
 }
 
-h2 {
-    font-size: var(--h2-size);
-    margin: 2%;
+.logo-letters {
+    display: flex;
+    gap: 2px;
+    line-height: 1;
 }
 
-h3 {
-    font-size: var(--h3-size);
-    margin: 1%;
+.logo-letter {
+    font-family: 'Lilita One', sans-serif;
+    font-size: 5.5rem;
+    line-height: 1;
+}
+
+.logo-letter.v { color: var(--accent-blue); }
+.logo-letter.a { color: var(--accent-yellow); }
+.logo-letter.l { color: var(--accent-red); }
+
+.logo-subtitle {
+    font-family: 'Lilita One', sans-serif;
+    font-size: 1.35rem;
+    letter-spacing: 0.2em;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+/* ── CONTENT CARD ── */
+.content-card {
+    background: var(--bg-card);
+    border-radius: 18px;
+    padding: 44px 52px;
+    text-align: center;
+}
+
+.content-card p {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.75;
+    color: var(--text-primary);
+}
+
+/* ── PAGE LABEL ── */
+.page-label {
+    text-align: center;
+    font-family: 'Lilita One', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    color: var(--text-primary);
+    margin-bottom: 22px;
+}
+
+/* ── SIGN IN BUTTON ── */
+.sign-in-btn {
+    font-family: 'Lilita One', sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: 0.12em;
+    color: var(--text-primary);
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: color 0.2s;
+}
+
+.sign-in-btn:hover { color: var(--accent-blue); }
+
+/* ── BOTTOM SECTION (info pages) ── */
+.bottom-section {
+    max-width: 860px;
+    margin: 40px auto 0;
+    padding: 0 24px 30px;
+}
+
+.bottom-divider {
+    height: 1px;
+    background: var(--border);
+    width: 160px;
+    margin-bottom: 18px;
 }
