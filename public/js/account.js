@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 3/31/26
+ * Date Updated: 4/22/26
  * Description:
  *      Requests logins/registrations for accounts.
  */
@@ -9,7 +9,7 @@
 
 // --------------------------- MODULE FUNCTIONS --------------------------- //
 
-export async function login(user, pass) {
+async function login(user, pass) {
     try {
         const url = `/api/credentials/login?user=${user}&pass=${pass}`;
         const response = await fetch(url);
@@ -21,7 +21,7 @@ export async function login(user, pass) {
     }
 }
 
-export async function register(user, pass) {
+async function register(user, pass) {
     try {
         const url = `/api/credentials/register?user=${user}&pass=${pass}`;
         const response = await fetch(url);

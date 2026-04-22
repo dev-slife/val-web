@@ -6,6 +6,7 @@
     <link rel="icon" href="../favicon.ico">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/home.css">
+    <script src="../js/main.js"></script>
     <title>VAL</title>
 </head>
 <body class="home-page">
@@ -27,21 +28,17 @@
         </div>
     </aside>
 
-    <!-- Top Nav -->
+    <!-- Nav -->
     <nav>
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Privacy</a>
-        <a href="#">Terms &amp; Services</a>
-        <a href="#">Copyright</a>
+        <button class="active" onclick="changePage('home')">Home</button>
+        <button onclick="changePage('about')">About</button>
+        <button onclick="changePage('privacy')">Privacy</button>
+        <button onclick="changePage('terms')">Terms &amp; Services</button>
+        <button onclick="changePage('copyright')">Copyright</button>
     </nav>
 
     <!-- Main Content -->
     <main>
-        <div class="title" style="display:none;">
-            <h1>Chat With VAL</h1>
-        </div>
-
         <div class="logo-area">
             <div class="logo-letters">
                 <span class="logo-letter v">V</span>
@@ -64,8 +61,7 @@
     </main>
 
     <footer>
-        <p>More will be added soon.</p>
+        <p>&copy; 2026 VAL</p>
     </footer>
-
 </body>
 </html>

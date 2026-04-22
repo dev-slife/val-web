@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 3/30/26
+ * Date Updated: 4/22/26
  * Description:
  *      Communicates with the VAST system to handle all math logic.
  */
@@ -9,7 +9,7 @@
 
 // --------------------------- MODULE FUNCTIONS --------------------------- //
 
-export async function simplify(expression) {
+async function simplify(expression) {
     try {
         const url = `/api/vast/simplify?expression=${encodeURIComponent(expression)}`;
         const response = await fetch(url);
@@ -21,7 +21,7 @@ export async function simplify(expression) {
     }
 }
 
-export async function solve(expression) {
+async function solve(expression) {
     try {
         const url = `/api/vast/solve?expression=${encodeURIComponent(expression)}`;
         const response = await fetch(url);

@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../favicon.ico">
     <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/info.css">
+    <script src="../js/main.js"></script>
     <title>Terms Of Service - VAL</title>
 </head>
 <body class="info-page">
@@ -22,19 +23,15 @@
 
     <!-- Nav -->
     <nav>
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Privacy</a>
-        <a href="#" class="active">Terms &amp; Services</a>
-        <a href="#">Copyright</a>
+        <button onclick="changePage('home')">Home</button>
+        <button onclick="changePage('about')">About</button>
+        <button onclick="changePage('privacy')">Privacy</button>
+        <button class="active" onclick="changePage('terms')">Terms &amp; Services</button>
+        <button onclick="changePage('copyright')">Copyright</button>
     </nav>
 
     <!-- Main -->
     <main>
-        <div>
-            <h1>Terms Of Service</h1>
-        </div>
-
         <div class="page-label">Terms &amp; Services Page</div>
 
         <div class="content-card">
@@ -57,8 +54,7 @@
     </div>
 
     <footer>
-        <p>More will be added soon.</p>
+        <p>&copy; 2026 VAL</p>
     </footer>
-
 </body>
 </html>

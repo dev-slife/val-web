@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../favicon.ico">
     <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/info.css">
+    <script src="../js/main.js"></script>
     <title>About - VAL</title>
 </head>
 <body class="info-page">
@@ -22,30 +23,30 @@
 
     <!-- Nav -->
     <nav>
-        <a href="#">Home</a>
-        <a href="#" class="active">About</a>
-        <a href="#">Privacy</a>
-        <a href="#">Terms &amp; Services</a>
-        <a href="#">Copyright</a>
+        <button onclick="changePage('home')">Home</button>
+        <button class="active" onclick="changePage('about')">About</button>
+        <button onclick="changePage('privacy')">Privacy</button>
+        <button onclick="changePage('terms')">Terms &amp; Services</button>
+        <button onclick="changePage('copyright')">Copyright</button>
     </nav>
 
     <!-- Main -->
     <main>
-        <div class="title">
-            <h1>About VAL</h1>
-        </div>
-
         <div class="page-label">About Page</div>
 
-        <div class="about-card">
+        <div class="content-card">
             <h2>What Is VAL?</h2>
             <p>
-                VAL (Virtual Arithmetic Luminary) is an AI-powered math assistant designed to help
-                students, educators, and curious minds tackle mathematical problems of all kinds.
-                Whether you're solving simple equations, exploring calculus concepts, or working
-                through word problems, VAL is here to guide you step by step. Start a conversation
-                at any time to get clear explanations, worked examples, and personalized support
-                tailored to your level and goals.
+                VAL otherwise known as your Virtual Arithmetic Luminary is a chatbot here to
+                help you learn and better understand algebraic concepts! If you're struggling
+                to understand certain algebra concepts or are having difficulty solving an
+                equation, you can ask VAL for help. As a math luminary, VAL will break down
+                your problem into smaller chunks and walk you through the problem solving process.
+                The goal is not to have VAL just give you answers, but to help you understand
+                how to tackle algebraic problems. All questions given to VAL are handled directly
+                through the backend. After some thinking, VAL will generate a response and walk
+                you through the problem step by step. Past conversations will only be stored after
+                the user enables the setting for their account and can be deleted at anytime.
             </p>
         </div>
     </main>
@@ -57,8 +58,7 @@
     </div>
 
     <footer>
-        <p>More will be added soon.</p>
+        <p>&copy; 2026 VAL</p>
     </footer>
-
 </body>
 </html>

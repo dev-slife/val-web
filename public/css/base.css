@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;500;600&family=Mulish:wght@400;600;700&family=Rajdhani:wght@500;600;700&display=swap');
 
-/* ======================================================
-   base.css  –  Global reset, variables & shared styles
-   ====================================================== */
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -10,22 +7,31 @@
     padding: 0;
 }
 
+
+/* --------------------- VARIABLES --------------------- */
+
 :root {
-    /* ── USER-PROVIDED COLORS ── */
+    /* COLORS */
     --primary-color:    #e0e3e8;
     --secondary-color:  #b2b5bb;
     --bkg-gradient:     linear-gradient(#424956, #5a6371);
 
-    /* ── USER-PROVIDED FONTS ── */
+    /* FONTS */
     --font-primary:     "Poppins", sans-serif;
     --font-secondary:   "Mulish", sans-serif;
 
-    /* ── USER-PROVIDED FONT SIZES ── */
+    /* FONT SIZES */
     --h1-size: 64px;
     --h2-size: 40px;
     --h3-size: 24px;
+    --footer-size: 12px;
+    --logo-size: 128px;
+    --logo-subtitle-size: 28px;
+    --page-label-size: 18px;
+    --content-card-size: 14px;
+    --sign-in-size: 16px;
 
-    /* ── VAL COLORS ── */
+    /* VAL COLORS */
     --bg-deep:       #13131a;
     --bg-sidebar:    #0f0f15;
     --bg-main:       #1a1a24;
@@ -55,20 +61,36 @@ html, body {
     background-attachment: fixed;
 }
 
-/* ── HEADINGS ── */
-h1 { font-size: var(--h1-size); margin: 3%; }
-h2 { font-size: var(--h2-size); margin: 2%; }
-h3 { font-size: var(--h3-size); margin: 1%; }
 
-/* ── FOOTER ── */
-footer {
-    display: none;
+/* --------------------- HEADINGS --------------------- */
+
+h1 {
+    font-size: var(--h1-size);
+    margin: 3%;
+}
+
+h2 {
+    font-size: var(--h2-size);
     margin: 2%;
-    font-size: 18px;
+}
+
+h3 {
+    font-size: var(--h3-size);
+    margin: 1%;
+}
+
+
+/* --------------------- FOOTER --------------------- */
+
+footer {
+    margin: 2%;
+    font-size: var(--footer-size);
     text-align: center;
 }
 
-/* ── LOGO ── */
+
+/* --------------------- LOGO --------------------- */
+
 .logo-area {
     display: flex;
     flex-direction: column;
@@ -85,23 +107,33 @@ footer {
 
 .logo-letter {
     font-family: 'Lilita One', sans-serif;
-    font-size: 5.5rem;
+    font-size: var(--logo-size);
     line-height: 1;
 }
 
-.logo-letter.v { color: var(--accent-blue); }
-.logo-letter.a { color: var(--accent-yellow); }
-.logo-letter.l { color: var(--accent-red); }
+.logo-letter.v {
+    color: var(--accent-blue);
+}
+
+.logo-letter.a {
+    color: var(--accent-yellow);
+}
+
+.logo-letter.l {
+    color: var(--accent-red);
+}
 
 .logo-subtitle {
     font-family: 'Lilita One', sans-serif;
-    font-size: 1.35rem;
-    letter-spacing: 0.2em;
+    font-size: var(--logo-subtitle-size);
+    letter-spacing: 3px;
     color: var(--text-primary);
     text-align: center;
 }
 
-/* ── CONTENT CARD ── */
+
+/* --------------------- CONTENT CARD --------------------- */
+
 .content-card {
     background: var(--bg-card);
     border-radius: 18px;
@@ -110,27 +142,31 @@ footer {
 }
 
 .content-card p {
-    font-size: 1.05rem;
+    font-size: var(--content-card-size);
     font-weight: 700;
     line-height: 1.75;
     color: var(--text-primary);
 }
 
-/* ── PAGE LABEL ── */
+
+/* --------------------- PAGE LABEL --------------------- */
+
 .page-label {
     text-align: center;
     font-family: 'Lilita One', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 0.15em;
+    font-size: var(--page-label-size);
+    letter-spacing: 1px;
     color: var(--text-primary);
     margin-bottom: 22px;
 }
 
-/* ── SIGN IN BUTTON ── */
+
+/* --------------------- SIGN IN --------------------- */
+
 .sign-in-btn {
     font-family: 'Lilita One', sans-serif;
-    font-size: 1.15rem;
-    letter-spacing: 0.12em;
+    font-size: var(--sign-in-size);
+    letter-spacing: 2px;
     color: var(--text-primary);
     cursor: pointer;
     background: none;
@@ -138,9 +174,13 @@ footer {
     transition: color 0.2s;
 }
 
-.sign-in-btn:hover { color: var(--accent-blue); }
+.sign-in-btn:hover {
+    color: var(--accent-blue);
+}
 
-/* ── BOTTOM SECTION (info pages) ── */
+
+/* --------------------- BOTTOM INFO --------------------- */
+
 .bottom-section {
     max-width: 860px;
     margin: 40px auto 0;
