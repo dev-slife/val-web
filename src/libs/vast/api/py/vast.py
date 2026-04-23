@@ -1,7 +1,7 @@
 """
 Author: dev.slife
 Date Created: 2/15/26
-Date Updated: 4/15/26
+Date Updated: 4/22/26
 Description:
     Works with the VAST system (C++) to parse and solve math equations.
 """
@@ -82,7 +82,7 @@ def __decodeVAST(msg: str) -> tuple:
 
 def simplify(expression: str) -> tuple:
     result_bytes = VAST_LIB.VAST_simplify(expression.encode())
-    result: str = result_bytes.decode()
+    result: str = ctypes.string_at(result_bytes).decode()
     if ": " in result:
         eType = result.split(": ")[0]
         eMsg = result.split(": ")[-1]
@@ -92,7 +92,7 @@ def simplify(expression: str) -> tuple:
 
 def solve(expression: str) -> tuple:
     result_bytes = VAST_LIB.VAST_solve_literal(expression.encode())
-    result: str = result_bytes.decode()
+    result: str = ctypes.string_at(result_bytes).decode()
     if ": " in result:
         eType = result.split(": ")[0]
         eMsg = result.split(": ")[-1]
@@ -124,5 +124,7 @@ if __name__ == "__main__":
         print(f"Exists: {os.path.exists(DLL_PATH)}")
         print(f"Size: {os.path.getsize(DLL_PATH) if os.path.exists(DLL_PATH) else 'N/A'}")
         inp = input("Please enter a mathmetical expression: ")
-        result = solve(inp)
-        print(result)
+        simple = simplify(inp)
+        solved = solve(inp)
+        print(simple)
+        print(solved)

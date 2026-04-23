@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/22/26
- * Date Updated: 4/19/26
+ * Date Updated: 4/22/26
  * Description:
  *      Works with the VAST system (C++) to parse and solve math equations.
  */
@@ -39,12 +39,9 @@ async function simplify(expression) {
         })
 
         py.on("close", (code) => {
-            console.log('Python exited with code:', code);
-            
             if (output) {
                 try {
                     const response = JSON.parse(output);
-                    console.log("Data processed from Python.");
                     resolve(response);
                 } catch (err) {
                     console.error('Invalid JSON from Python:', output);
@@ -78,12 +75,9 @@ async function solve(expression) {
         })
     
         py.on("close", (code) => {
-            console.log('Python exited with code:', code);
-            
             if (output) {
                 try {
                     const response = JSON.parse(output);
-                    console.log("Data received from Python.");
                     resolve(response);
                 } catch (err) {
                     console.error('Invalid JSON from Python:', output);

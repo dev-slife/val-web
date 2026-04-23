@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 12/11/25
- * Date Updated: 2/15/26
+ * Date Updated: 4/2/26
  * Description:
  *      Manages operators used by VAL's abstract syntax tree.
  */
@@ -16,13 +16,13 @@
 
 // ----------------------- LIBRARIES ----------------------- //
 
-#include "VAST.h"
-#include "NumNode.h"
-#include "VarNode.h"
-#include "AddNode.h"
-#include "SubNode.h"
-#include "MulNode.h"
-#include "ExpNode.h"
+#include "nodes/VAST.h"
+#include "nodes/NumNode.h"
+#include "nodes/VarNode.h"
+#include "nodes/AddNode.h"
+#include "nodes/SubNode.h"
+#include "nodes/MulNode.h"
+#include "nodes/ExpNode.h"
 
 
 

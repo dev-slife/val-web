@@ -74,17 +74,17 @@ app.listen(PORT, async () => {
     console.log(`App listening on port ${PORT}`);
     console.log("Matches Schema: " + JSON.stringify(msgGen.validatePrompts()));
 
-    try {
-        const model = new msgGen.SLM();
-        const question = "Hey VAL, could you help me simplify this: 5x-3x+2";
-        const eq = msgGen.analyzeMsg(question)["equation"];
-        console.log("Equation: ", eq);
-        const answer = await algebra.solve(eq);
-        console.log("TutorLog: ", answer["log"]);
-        const result = model.ask(question, answer["log"]);
-        console.log("Randomly Generated Message(s):");
-        console.log(result);
-    } catch (err) {
-        console.error(err);
-    }
+    // try {
+    //     const model = new msgGen.SLM();
+    //     const question = "Hey VAL, could you help me simplify this: 5x-3x+2";
+    //     const eq = msgGen.analyzeMsg(question)["equation"];
+    //     console.log("Equation: ", eq);
+    //     const answer = await algebra.solve(eq);
+    //     console.log("TutorLog: ", answer["log"]);
+    //     const result = model.ask(question, answer["log"]);
+    //     console.log("Randomly Generated Message(s):");
+    //     console.log(result);
+    // } catch (err) {
+    //     console.error(err);
+    // }
 });

@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 4/19/26
+ * Date Updated: 4/22/26
  * Description:
  *      Handles all message generation for VAL.
  */
@@ -25,9 +25,9 @@ const SLM_MODEL = "MQnA";
 // --------------------------- HELPER FUNCTIONS --------------------------- //
 
 function genSeed(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 
@@ -144,20 +144,24 @@ function preloadMsgs(msgType) {
 
 function analyzeMsg(text) {
     const pattern = /(?:\d\w+|[\-\+\*\/\^\(\)]\s*\w+|\d+|\s*[\-\+\*\/\(\)]\s*)/gm;
-    const expression = text.match(pattern).join('');
+    const mathMatch = text.match(pattern);
 
-    if (expression.length == 0) {
-        return {
-            "success": false,
-            "msg": "No equation was given.",
-            "equation": null
+    if (mathMatch) {
+        const expression = mathMatch.join('');
+        if (expression.length != 0) {
+            return {
+                "success": true,
+                "msg": expression,
+                "equation": expression
+            };
         }
     }
+
     return {
-        "success": true,
-        "msg": expression,
-        "equation": expression
-    };
+        "success": false,
+        "msg": "No equation was given.",
+        "equation": null
+    }
 }
 
 
@@ -293,12 +297,13 @@ class SLM {
         const nouns = this.extract_nouns();
         const verbs = this.extract_verbs();
         const known_nouns = this.get_known(["NOUNS"]);
+        const known_verbs = this.get_known(["VERBS"])
         const expression = analyzeMsg(this.Q);
 
         if (known_nouns.some(known_noun => nouns.includes(known_noun)) || expression["success"]) {
             this.update_context(nouns, "NOUNS");
             this.update_context(verbs, "VERBS");
-            if (verbs.includes("simplify")) {
+            if (known_verbs.some(known_verb => verbs.includes(known_verb))) {
                 responses.push(this.choose_response("start"));
             }
             if (expression["success"]) {
