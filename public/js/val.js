@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 4/22/26
+ * Date Updated: 4/23/26
  * Description:
  *      Communicates with the VAST system to handle all math logic.
  */
