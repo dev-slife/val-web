@@ -72,7 +72,3 @@ router.get('/ask', async(req, res) => {
 // --------------------------- EXPORT ROUTER --------------------------- //
 
 module.exports = router;
-
-
-// test query
-// http://localhost:3000/api/vast/ask?question=Hey%20VAL%20could%20you%20help%20me%20solve%20this%20equation%3F%0A5x-3x%2B2
