@@ -101,7 +101,8 @@ jobs:
         npm ci
         npm start &
         npx wait-on http://localhost:3000/ || sleep 5
-        npm test -- tests.vast_test.js
+        npm test
+        npm audit fix
 
     - name: Commit VAST files
       if: steps.cache.outputs.cache-hit != 'true' && steps.vast-test.outcome == 'success'
