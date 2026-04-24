@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node tests.vast_test.js"
+    "test": "node tests/vast_test.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
