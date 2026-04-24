@@ -11,11 +11,6 @@
 /* --------------------- VARIABLES --------------------- */
 
 :root {
-    /* COLORS */
-    --primary-color:    #e0e3e8;
-    --secondary-color:  #b2b5bb;
-    --bkg-gradient:     linear-gradient(#424956, #5a6371);
-
     /* FONTS */
     --font-primary:     "Poppins", sans-serif;
     --font-secondary:   "Mulish", sans-serif;

@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/home.css">
     <script src="../js/main.js"></script>
+    <script src="../js/val.js"></script>
     <title>VAL</title>
 </head>
-<body class="home-page">
+<body class="home-page" id="homePage">
 
     <!-- Sidebar -->
     <aside>
@@ -39,7 +40,7 @@
 
     <!-- Main Content -->
     <main>
-        <div class="logo-area">
+        <div class="logo-area" id="logo">
             <div class="logo-letters">
                 <span class="logo-letter v">V</span>
                 <span class="logo-letter a">A</span>
@@ -47,21 +48,14 @@
             </div>
             <div class="logo-subtitle">Virtual Arithmetic Luminary</div>
         </div>
-
+        
         <div class="input-area">
+            <div id="messages" class="messages"></div>
             <div class="input-wrapper">
                 <input type="text" placeholder="Type your equation here" id="mathInput" />
-                <button class="send-btn" aria-label="Send">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2 21l21-9L2 3v7l15 2-15 2z"/>
-                    </svg>
-                </button>
+                <button class="send-btn" id="sendBtn" aria-label="Send">Send</button>
             </div>
         </div>
     </main>
-
-    <footer>
-        <p>&copy; 2026 VAL</p>
-    </footer>
 </body>
 </html>
