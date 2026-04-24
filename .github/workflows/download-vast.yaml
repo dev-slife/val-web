@@ -45,7 +45,7 @@ jobs:
           echo "No workflow runs found - check if val-ast has Actions enabled"
           exit 1
         fi
-        
+
         echo "run-id=$RUN_ID" >> $GITHUB_OUTPUT
 
     - name: Get artifact ID from latest run
@@ -62,7 +62,7 @@ jobs:
     - name: Set Tag Data
       run: |
         echo "VAST_VER=${{ steps.latest-tag.outputs.tag }}" >> $GITHUB_ENV
-        echo "VAST_ID=vast-${{ steps.latest-artifact.outputs.artifact-id }}" >> $GITHUB_ENV
+        echo "VAST_ID=${{ steps.latest-artifact.outputs.artifact-id }}" >> $GITHUB_ENV
     
     - uses: actions/setup-node@v4
       with:
