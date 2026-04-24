@@ -12,21 +12,51 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Current Repo
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
-    - name: Grab Latest Tag
-      id: latest-tag
-      uses: actions-ecosystem/action-get-latest-tag@v1
+    - name: Checkout VAST Repo
+      uses: actions/checkout@v4
       with:
         repository: dev-slife/val-ast
         token: ${{ secrets.VAST_DOWNLOAD }}
+        path: val-ast
+
+    - name: Grab Latest Tag
+      id: latest-tag
+      working-directory: val-ast
+      run: |
+        git fetch --tags --unshallow
+        echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+
+    - name: Get latest workflow run ID
+      id: latest-run
+      env:
+        GITHUB_TOKEN: ${{ secrets.VAST_DOWNLOAD }}
+      run: |
+        RUN_ID=$(gh api \
+          -H "Accept: application/vnd.github+json" \
+          /repos/dev-slife/val-ast/actions/runs?per_page=1 \
+          | jq -r '.[0].id')
+        echo "run-id=$RUN_ID" >> $GITHUB_OUTPUT
+
+    - name: Get artifact ID from latest run
+      id: latest-artifact
+      env:
+        GITHUB_TOKEN: ${{ secrets.VAST_DOWNLOAD }}
+      run: |
+        ARTIFACT_ID=$(gh api \
+          -H "Accept: application/vnd.github+json" \
+          /repos/dev-slife/val-ast/actions/runs/${{ steps.latest-run.outputs.run-id }}/artifacts \
+          | jq -r '.artifacts[0].id')
+        echo "artifact-id=$ARTIFACT_ID" >> $GITHUB_OUTPUT
 
     - name: Set Tag Data
       run: |
         echo "VAST_VER=${{ steps.latest-tag.outputs.tag }}" >> $GITHUB_ENV
-        echo "VAST_ID=vast-${{ steps.latest-tag.outputs.tag }}" >> $GITHUB_ENV
+        echo "VAST_ID=vast-${{ steps.latest-artifact.outputs.artifact-id }}" >> $GITHUB_ENV
     
     - uses: actions/setup-node@v4
       with:
