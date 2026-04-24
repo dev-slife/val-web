@@ -8,12 +8,6 @@
 
 
 
-// --------------------------- IMPORTS & CONSTANTS --------------------------- //
-
-const fetch = require('node-fetch');
-
-
-
 // --------------------------- TEST FUNCTIONS --------------------------- //
 
 async function testSimplify() {
