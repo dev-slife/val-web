@@ -22,21 +22,29 @@ const { SLM, analyzeMsg } = require("../app/slm.js");
 router.get('/simplify', async(req, res) => {
     try {
         const { expression } = req.query;
-        const result = await algebra.simplify(decodeURIComponent(expression));
-        res.send(result);
+        if (expression) {
+            const result = await algebra.simplify(decodeURIComponent(expression));
+            res.status(200).send(result);
+        } else {
+            res.status(400).send("No expression was given.")
+        }
     } catch (err) {
-        res.send(`Could not simplify expression: ${err}`);
+        res.status(500).send("Could not simplify expression.");
     }
 });
 
 
 router.get('/solve', async(req, res) => {
     try {
-        const { expression, question } = req.query;
-        const result = await algebra.solve(decodeURIComponent(expression));
-        res.send(result);
+        const { expression } = req.query;
+        if (expression) {
+            const result = await algebra.solve(decodeURIComponent(expression));
+            res.status(200).send(result);
+        } else {
+            res.status(400).send("No expression was given.")
+        }
     } catch (err) {
-        res.send(`Could not solve expression: ${err}`);
+        res.status(500).send("Could not solve expression.");
     }
 });
 
@@ -49,13 +57,13 @@ router.get('/ask', async(req, res) => {
         const result = await algebra.solve(decodeURIComponent(expression));
         const model = new SLM();
         const msgList = model.ask(decodeURIComponent(question), result["log"]);
-        res.send({
+        res.status(200).send({
             "answer": result["answer"],
             "log": result["log"],
             "slm": msgList
         })
     } catch (err) {
-        res.send(`Could not solve expression: ${err}`);
+        res.status(500).send(`Could not solve expression: ${err}`);
     }
 });
 
