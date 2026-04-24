@@ -39,7 +39,13 @@ jobs:
         RUN_ID=$(gh api \
           -H "Accept: application/vnd.github+json" \
           /repos/dev-slife/val-ast/actions/runs?per_page=1 \
-          | jq -r '.[0].id')
+          | jq -r '.workflow_runs[0].id')
+
+        if [ -z "$RUN_ID" ]; then
+          echo "No workflow runs found - check if val-ast has Actions enabled"
+          exit 1
+        fi
+        
         echo "run-id=$RUN_ID" >> $GITHUB_OUTPUT
 
     - name: Get artifact ID from latest run
