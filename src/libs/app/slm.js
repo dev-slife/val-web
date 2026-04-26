@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 4/22/26
+ * Date Updated: 4/25/26
  * Description:
  *      Handles all message generation for VAL.
  */
@@ -273,16 +273,28 @@ class SLM {
         }
 
         if (index == tutorLog.length - 1) {
-            responses.push(this.choose_response("finish"));
+            const chosenMsg = this.choose_response("finish");
+            const response = (!chosenMsg.includes('?')) ? chosenMsg + "\n" +
+                log["left"] + " " + log["oper"] + " " + log["right"] + " = " + log["result"]:
+                    chosenMsg;
+            responses.push(response);
             return responses;
         } else if (solving) {
-            responses.push(this.choose_response("isolate_variable"));
+            const chosenMsg = this.choose_response("isolate_variable");
+            const response = (!chosenMsg.includes('?')) ? chosenMsg + "\n" +
+                log["left"] + " " + log["oper"] + " " + log["right"] + " = " + log["result"]:
+                    chosenMsg;
+            responses.push(response);
             return this.next_response(tutorLog, index + 1, solving, responses);
         } else {
             if (log["oper"] == "V" && log["left"] == "S" && log["right"] == "L") {
                 return this.next_response(tutorLog, index + 1, true, responses);
             } else {
-                responses.push(this.choose_response("simplify"));
+                const chosenMsg = this.choose_response("simplify");
+                const response = (!chosenMsg.includes('?')) ? chosenMsg + "\n" +
+                    log["left"] + " " + log["oper"] + " " + log["right"] + " = " + log["result"]:
+                        chosenMsg;
+                responses.push(response);
                 return this.next_response(tutorLog, index + 1, solving, responses);
             }
         }

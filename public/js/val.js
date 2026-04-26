@@ -1,10 +1,54 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 4/24/26
+ * Date Updated: 4/25/26
  * Description:
  *      Communicates with the VAST system to handle all math logic.
  */
+
+
+
+// ---------------------------- VAST ERRORS ---------------------------- //
+
+class VASTError extends Error {
+    // Custom Exception for VAST errors.
+    constructor(message="An unexpected error occurred when using VAST.") {
+        this.super(message);
+        this.name = "VASTError";
+    }
+}
+
+class NotEstablishedYet extends VASTError {
+    // VASTError for functions or objects that haven't been established yet.
+    constructor(message="Arithmetic operation not established.") {
+        this.super(message);
+        this.name = "NotEstablishedYet";
+    }
+}
+
+class InvalidEquation extends VASTError {
+    // VASTError for invalid equations that are given.
+    constructor(message="The given equation is not valid.") {
+        this.super(message);
+        this.name = "InvalidEquation";
+    }
+}
+
+class UndefinedVariable extends VASTError {
+    // VASTError for undefined variables.
+    constructor(message="The given variable does not have an assigned value.") {
+        this.super(message);
+        this.name = "UndefinedVariable";
+    }
+}
+
+class InvalidType extends VASTError {
+    // VASTError for invalid data types that are given.
+    constructor(message="The given data type is invalid.") {
+        this.super(message);
+        this.name = "InvalidType";
+    }
+}
 
 
 
@@ -52,59 +96,27 @@ async function ask(question) {
 
 async function generateResponses(text) {
     const result = await ask(text);
-    const messages = result["slm"];
-    const answer = result["answer"];
 
-    let responses = [];
-
-    for (let i = 0; i < messages.length; i++) {
-        responses.push(messages[i]);
-    }
-    responses.push(`The answer is: ${answer}`);
-
-    return responses;
-}
-
-async function sendMessage(userInput, messages) {
-    const logo = document.getElementById("logo");
-    const homePage = document.getElementById("homePage");
-    logo.style.display = "none";
-    homePage.style.overflow = "auto";
-    homePage.style.height = "auto";
-
-    const text = userInput.value.trim();
-    if (!text) return;
+    if (result) {
+        const messages = result["slm"];
+        const answer = result["answer"];
+        
+        let responses = [];
+        let steps = [];
     
-    addMessage(text, 'user', messages);
-    userInput.value = '';
-
-    const responses = await generateResponses(text);
+        for (let i = 0; i < messages.length; i++) {
+            steps.push(result["log"][i]["result"])
+            responses.push(messages[i]);
+        }
+        responses.push(`${answer}`);
     
-    for (let i = 0; i < responses.length; i++) {
-        const response = responses[i];
-        const typingIndicator = await showTyping(messages);
-        await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
-        await addMessage(response, 'VAL', messages, typingIndicator);
+        return [responses, steps];
+    } else {
+        return [["Sorry, I ran into an unexpected error and am not able to respond to your question at the moment."], []];
     }
 }
 
-async function addMessage(text, sender, messages, typingIndicator) {
-    if (typingIndicator) hideTyping(messages, typingIndicator);
-
-    const message = document.createElement('div');
-    message.className = `message ${sender.toLowerCase()}`;
-    
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    bubble.id = sender.toLowerCase();
-    bubble.textContent = text;
-    
-    message.appendChild(bubble);
-    messages.appendChild(message);
-    messages.scrollTop = messages.scrollHeight;
-}
-
-async function showTyping(messages) {
+function showTyping(messages) {
     const typingIndicator = document.createElement('div');
     typingIndicator.className = 'message ai';
     typingIndicator.innerHTML = '<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
@@ -121,22 +133,132 @@ function hideTyping(messages, typingIndicator) {
     }
 }
 
+function addMessage(text, sender, typingIndicator) {
+    const messages = document.getElementById("messages");
+    if (typingIndicator) hideTyping(messages, typingIndicator);
+
+    const message = document.createElement('div');
+    message.className = `message ${sender.toLowerCase()}`;
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.id = sender.toLowerCase();
+    bubble.textContent = text;
+    
+    message.appendChild(bubble);
+    messages.appendChild(message);
+    if (messages.scrollTop + messages.clientHeight >= messages.scrollHeight - 5) {
+        messages.scrollTop = messages.scrollHeight;
+    }
+}
+
+
+function messageSender() {
+    const userInput = document.getElementById('mathInput');
+    const messages = document.getElementById("messages");
+    let processing = false;
+    let logoHidden = false;
+    let responding = false;
+    let userResponse = "";
+    
+    async function processMessage() {
+        const text = userInput.value.trim();
+        if (!text) return;
+        
+        userInput.value = "";
+        addMessage(text, "user");
+        
+        if (responding) {
+            userResponse = text;
+            responding = false;
+        } else {
+            const responseData = await generateResponses(text);
+            const responses = responseData[0];
+            const answers = responseData[1];
+    
+            for (let i = 0; i < responses.length; i++) {
+                const response = responses[i];
+                let typingIndicator = showTyping(messages);
+                await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
+                addMessage(response, "VAL", typingIndicator);
+                if (response.includes("?")) {
+                    let attempts = 0;
+                    let correct = false;
+
+                    while (!correct && attempts < 3) {
+                        responding = true;
+                        while (responding) {
+                            await new Promise(resolve => setTimeout(resolve, 500));
+                        }
+
+                        const pattern = /(?:\d\w+|[\-\+\*\/\^\(\)]\s*\w+|\d+|\s*[\-\+\*\/\(\)]\s*)/gm;
+                        const mathMatch = userResponse.match(pattern);
+                        typingIndicator = showTyping(messages);
+                        await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 500));
+    
+                        if (mathMatch) {
+                            const expression = mathMatch.join('');
+                            if (expression.length != 0) {
+                                console.log(answers[i], expression);
+                                if (answers[i] == expression) {
+                                    correct = true;
+                                    addMessage("Yes, nice job!", "VAL", typingIndicator);
+                                } else {
+                                    addMessage("Nope, that answer doesn't seem right.", "VAL", typingIndicator)
+                                }
+                            } else {
+                                addMessage("Hmm? Did you provide an answer?", "VAL", typingIndicator);
+                            }
+                        } else {
+                            addMessage("Hmm? Did you provide an answer?", "VAL", typingIndicator);
+                        }
+
+                        attempts++;
+                    } 
+                }
+            }
+        }
+    }
+
+    return async function sendMessage() {        
+        if (responding) {
+            await processMessage();
+        } else {
+            if (processing) { return; }
+            processing = true;
+    
+            if (!logoHidden) {
+                const logo = document.getElementById("logo");
+                const homePage = document.getElementById("homePage");
+                const messages = document.getElementById('messages');
+                logo.style.display = "none";
+                homePage.style.overflow = "auto";
+                homePage.style.height = "auto";
+                messages.style.height = "68vh";
+                logoHidden = true;
+            }
+            await processMessage();
+            processing = false;
+        }
+    }
+}
+
 
 
 // --------------------------- LOAD PAGE --------------------------- //
 
 document.addEventListener('DOMContentLoaded', async() => {
-    const messages = document.getElementById('messages');
     const userInput = document.getElementById('mathInput');
     const sendBtn = document.getElementById('sendBtn');
+    const sendMessage = messageSender();
 
     sendBtn.addEventListener('click', async() => {
-        await sendMessage(userInput, messages);
+        await sendMessage();
     });
 
     userInput.addEventListener('keypress', async(e) => {
         if (e.key === 'Enter') {
-            await sendMessage(userInput, messages);
+            await sendMessage();
         }
     });
 });

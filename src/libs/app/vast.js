@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 4/23/26
+ * Date Updated: 4/25/26
  * Description:
  *      Works with the VAST system (C++) & VAL's SLM to generate responses and walk students through math problems.
  */
@@ -26,9 +26,14 @@ router.get('/simplify', async(req, res) => {
             const result = await algebra.simplify(decodeURIComponent(expression));
             res.status(200).send(result);
         } else {
-            res.status(400).send("No expression was given.")
+            res.status(400).send({
+                "answer": "Hi, I'm unable to help you without an equation to look at.",
+                "log": [],
+                "slm": []
+            });
         }
     } catch (err) {
+        console.log(err);
         res.status(500).send("Could not simplify expression.");
     }
 });
@@ -41,9 +46,14 @@ router.get('/solve', async(req, res) => {
             const result = await algebra.solve(decodeURIComponent(expression));
             res.status(200).send(result);
         } else {
-            res.status(400).send("No expression was given.")
+            res.status(400).send({
+                "answer": "Hi, I'm unable to help you without an equation to look at.",
+                "log": [],
+                "slm": []
+            });
         }
     } catch (err) {
+        console.log(err);
         res.status(500).send("Could not solve expression.");
     }
 });
@@ -54,15 +64,24 @@ router.get('/ask', async(req, res) => {
         const { question } = req.query;
         const response = analyzeMsg(question);
         const expression = response["equation"];
-        const result = await algebra.solve(decodeURIComponent(expression));
-        const model = new SLM();
-        const msgList = model.ask(decodeURIComponent(question), result["log"]);
-        res.status(200).send({
-            "answer": result["answer"],
-            "log": result["log"],
-            "slm": msgList
-        })
+        if (expression) {
+            const result = await algebra.solve(decodeURIComponent(expression));
+            const model = new SLM();
+            const msgList = model.ask(decodeURIComponent(question), result["log"]);
+            res.status(200).send({
+                "answer": result["answer"],
+                "log": result["log"],
+                "slm": msgList
+            });
+        } else {
+            res.status(400).send({
+                "answer": "Hi, I'm unable to help you without an equation to look at.",
+                "log": [],
+                "slm": []
+            });
+        }
     } catch (err) {
+        console.log(err);
         res.status(500).send(`Could not solve expression: ${err}`);
     }
 });
