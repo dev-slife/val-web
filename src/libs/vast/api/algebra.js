@@ -82,15 +82,23 @@ async function callVAST(payload) {
         });
 
         py.stderr.on("data", (data) => {
-            const errStream = data.toString();
-            console.log(errStream);
-            const errData = errStream.match(/(?<header>py\.errors\.)(?<error>\w+):\s(?<message>.+)/)
-            console.log(errData);
-            const errType = errData["error"];
-            const errMsg = errData["message"];
-
-            console.warn('Python stderr:', errStream);
-            reject(throwVASTException(errType, errMsg));
+            console.log(data);
+            if (data) {
+                const errStream = data.toString();
+                console.log(errStream);
+                if (errStream) {
+                    const errData = errStream.match(/(?<header>py\.errors\.)(?<error>\w+):\s(?<message>.+)/)
+                    console.log(errData);
+                    if (errData) {
+                        const errType = errData["error"];
+                        const errMsg = errData["message"];
+            
+                        console.warn('Python stderr:', errStream);
+                        reject(throwVASTException(errType, errMsg));
+                    }
+                }
+            }
+            reject(new Error(`An unexpected Python error occurred: ${data}`));
         })
 
         py.on("close", (code) => {
