@@ -1,9 +1,9 @@
 """
 Author: dev.slife
 Date Created: 2/15/26
-Date Updated: 4/22/26
+Date Updated: 4/27/26
 Description:
-    Works with the VAST system (C++) to parse and solve math equations.
+    Works with the VAST system (C++) to parse and solve math equations (Linux).
 """
 
 
@@ -24,7 +24,7 @@ from .errors import *
 
 FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 PACKAGE_DIR = os.path.dirname(os.path.dirname(FILE_DIR))
-DLL_PATH = os.path.join(PACKAGE_DIR, "bin", "VAST.dll")
+DLL_PATH = os.path.join(PACKAGE_DIR, "bin", "VAST.so")
 VAST_LIB = ctypes.CDLL(DLL_PATH)
 
 
