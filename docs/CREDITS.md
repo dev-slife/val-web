@@ -1,4 +1,4 @@
-# Acknowledgments
+# Credits
 There are multiple people who worked hard and dependencies used to make VAL possible.
 
 ## VAL's Team
@@ -11,10 +11,10 @@ There are multiple people who worked hard and dependencies used to make VAL poss
     - UX/UI
 - [mahmudulsalman](https://github.com/mahmudulsalman)
     - UI
-    - Storage Admin(Devops) 
+    - Storage DevOps
 - [selamfesseha](https://github.com/sfesseha)
-    - Database Admin
-    - Project Mangement    
+    - Database DevOps
+    - Project Mangement
 
 
 ## Dependencies
@@ -22,3 +22,4 @@ There are multiple people who worked hard and dependencies used to make VAL poss
 - [Docker](https://www.docker.com/) 🐳
 - [Node.js](https://nodejs.org/en) ⚡
 - [MongoDB](https://www.mongodb.com/) 🍃
+- [MinIO](https://www.min.io/) 🦩
