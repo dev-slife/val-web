@@ -1,5 +1,5 @@
 name: Feature Request
-about: Suggest new features to add
+description: Suggest new features to add
 title: "[Feature]"
 labels: ["feature", "template"]
 assignees: ["dev-slife"]
@@ -23,7 +23,7 @@ body:
 
   - type: textarea
     id: reason
-    attriubtes:
+    attributes:
       label: Reason For Feature
       description: A clear and concise reason as to why you believe this feature should be added.
     validations:

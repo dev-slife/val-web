@@ -41,19 +41,11 @@ The application uses Express.js to serve pages and handle API requests.
 - `/api/vast` Algebra processing and VAL functions  
 - `/api/storage` Conversation or file storage  
 
-## Tech Stack
-
-- Node.js  
-- Express.js  
-- MongoDB  
-- MinIO  
-- Docker  
-
 ## Running the App
 
 ```bash
 npm install
 npm start
+```
 
-
-## [See Acknowledgments](Acknowledgments.md#acknowledgments)
+## [See CREDITS](CREDITS.md#acknowledgments)
