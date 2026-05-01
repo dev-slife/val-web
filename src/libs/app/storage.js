@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/16/26
- * Date Updated: 4/30/26
+ * Date Updated: 5/1/26
  * Description:
  *      Handles all MinIO communication.
  */
@@ -10,58 +10,91 @@
 // --------------------------- IMPORTS & CONSTANTS --------------------------- //
 
 const minio = require('minio');
+const multer = require('multer');
 const express = require("express");
 const router = express.Router();
 
 const pfpBucket = "profiles";
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 10 * 1024 * 1024 } // 10MB
+});
+const minioEndpoint = () => {
+    if (process.env.MINIO_ENDPOINT) return process.env.MINIO_ENDPOINT;
+
+    // Windows
+    if (process.env.NODE_ENV !== 'production' && process.platform === 'win32') {
+        return 'host.docker.internal';
+    }
+
+    // Linux
+    return '127.0.0.1';
+};
 
 
 
 // --------------------------- MINIO FUNCTIONS --------------------------- //
 
-async function uploadPFP(key) {
-    try {
-        const client = new minio.Client({
-            endPoint: 'localhost',
-            port: 9000,
-            useSSL: false,
-            accessKey: process.env.MINIO_USER,
-            secretKey: process.env.MINIO_PASS
-        });
-
-        const bucketExists = await client.bucketExists(pfpBucket);
-        if (!bucketExists) {
-            await client.makeBucket(pfpBucket);
-        }
-
-        const url = await client.presignedPutObject(pfpBucket, key, 60 * 5);
-        return url;
-    } catch (err) {
-        console.error(err);
-    }
-}
-
 
 async function grabPFP(key) {
-    try {
-        const client = new minio.Client({
-            endPoint: 'localhost',
-            port: 9000,
-            useSSL: false,
-            accessKey: process.env.MINIO_USER,
-            secretKey: process.env.MINIO_PASS
-        });
+    const client = new minio.Client({
+        endPoint: minioEndpoint(),
+        port: 9000,
+        useSSL: false,
+        forcePathStyle: true,
+        accessKey: process.env.MINIO_USER,
+        secretKey: process.env.MINIO_PASS
+    });
 
-        const bucketExists = await client.bucketExists(pfpBucket);
-        if (bucketExists) {
+    try {
+        const bucketFound = await client.bucketExists(pfpBucket);
+        if (bucketFound) {
             const url = await client.presignedGetObject(pfpBucket, key, 60 * 5);
             return url;
         } else {
             console.error(`${pfpBucket} does not exist as a storage bucket.`);
-            return;
         }
     } catch (err) {
-        console.error(err);
+        console.error('Error details:', {
+            message: err.message,
+            code: err.code,
+            cause: err.cause
+        });
+        throw err;
+    }
+}
+
+
+async function uploadPFP(key, file) {
+    console.log(minioEndpoint());
+    const client = new minio.Client({
+        endPoint: minioEndpoint(),
+        port: 9000,
+        useSSL: false,
+        forcePathStyle: true,
+        accessKey: process.env.MINIO_USER,
+        secretKey: process.env.MINIO_PASS
+    });
+
+    try {
+        const bucketFound = await client.bucketExists(pfpBucket);
+        if (!bucketFound) {
+            await client.makeBucket(pfpBucket);
+        }
+
+        const result = await client.putObject(pfpBucket, key, file.buffer, {
+            'Content-Type': file.mimetype
+        });
+
+        const url = await grabPFP(key);
+        return url;
+    } catch (err) {
+        console.error('Error details:', {
+            message: err.message,
+            code: err.code,
+            cause: err.cause
+        });
+        throw err;
     }
 }
 
@@ -69,16 +102,18 @@ async function grabPFP(key) {
 
 // --------------------------- ROUTING --------------------------- //
     
-router.get('/pfp/upload', async(req, res) => {
+router.post('/pfp/upload', upload.single('pfp'), async(req, res) => {
     try {
-        const { user } = req.params;
+        const user = req.body.user;
+        const file = req.file;
         const key = `${user}.png`;
 
         if (!user) {
             res.status(400).send("No user was given.");
         }
-
-        const url = await uploadPFP(key);
+        
+        console.log('Uploading to bucket:', pfpBucket, 'key:', key);
+        const url = await uploadPFP(key, file);
 
         res.status(200).send({
             "message": 'Profile picture uploaded successfully',
@@ -93,7 +128,7 @@ router.get('/pfp/upload', async(req, res) => {
 
 router.get('/pfp/pull', async(req, res) => {
     try {
-        const { user } = req.params;
+        const { user } = req.query;
         const key = `${user}.png`;
 
         if (!user) {

@@ -19,6 +19,7 @@ services:
             MONGO_CONN: mongodb://${DB_USER}:${DB_PASS}@mongodb:27017/?authSource=admin
             MINIO_USER: ${MINIO_USER}
             MINIO_PASS: ${MINIO_PASS}
+            MINIO_ENDPOINT: ${MINIO_ENDPOINT}
             PORT: ${APP_PORT}
         depends_on:
             mongodb:
@@ -70,6 +71,8 @@ services:
         environment:
             MINIO_ROOT_USER: ${MINIO_USER}
             MINIO_ROOT_PASSWORD: ${MINIO_PASS}
+            MINIO_API_CORS_ALLOW_ORIGIN: 'http://localhost:${APP_PORT},http://127.0.0.1:${APP_PORT},http://localhost:*'
+            MINIO_API_CORS_ALLOW_CREDENTIALS_WITH_WILDCARD: 'on'
         volumes:
             - minio-data:/data
         command: server /data --console-address ":9001"
