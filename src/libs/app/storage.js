@@ -17,7 +17,7 @@ const router = express.Router();
 
 // --------------------------- MINIO FUNCTIONS --------------------------- //
 
-async function uploadPFP() {
+async function uploadPFP(userId, file) {
     const client = new minio.Client({
         endPoint: 'localhost',
         port: 9000,
@@ -27,21 +27,53 @@ async function uploadPFP() {
     });
 
     try {
-        // Figure out how to send an image to MinIO
-        // If possible, find a way to keep track of or delete previous pfp images uploaded by a user to prevent data build up
-    } catch (err) {
+        const bucketExists = await client.bucketExists(bucketName);
+        if (!bucketExists) {
+          await client.makeBucket(bucketName, 'us-east-1');
+        }
+    
+        const ext = file.originalname.split('.').pop();
+        const objectName = `pfp/${userId}.${ext}`;
+    
+        await client.putObject(
+          bucketName,
+          objectName,
+          file.buffer,
+          file.size,
+          {
+            'Content-Type': file.mimetype,
+          }
+        );
+    
+        return {
+          bucketName,
+          objectName,
+        };
+      } catch (err) {
         console.log(err);
+        throw err;
+      }
     }
-}
-
-
-
-// --------------------------- SERVER FUNCTIONS --------------------------- //
-
-router.get('/pfp', (req, res) => {
-    // Research and figure out how to retrieve image data with the backend
-});
-
+    
+    router.post('/pfp', upload.single('image'), async (req, res) => {
+      try {
+        const userId = req.body.userId; // or req.user.id if you have auth
+        const file = req.file;
+    
+        if (!file) {
+          return res.status(400).json({ message: 'No image uploaded' });
+        }
+    
+        const result = await uploadPFP(userId, file);
+    
+        res.json({
+          message: 'Profile picture uploaded successfully',
+          ...result,
+        });
+      } catch (err) {
+        res.status(500).json({ message: 'Upload failed', error: err.message });
+      }
+    });
 
 
 // --------------------------- EXPORT ROUTER --------------------------- //
