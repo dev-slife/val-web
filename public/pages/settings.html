@@ -37,7 +37,7 @@
 
         <div class="content-card">
             <p>Test Image Upload</p>
-            <img id="testPFP" src="" alt="">
+            <img id="testPFP" style="max-height: 500px; width: auto" src="">
             <form id="uploadPFP" action="/api/storage/pfp/upload" method="POST" enctype="multipart/form-data">
                 <label for="inputPFP">Upload Profile Picture</label>
                 <input type="file" id="inputPFP" name="pfp" accept="image/*">

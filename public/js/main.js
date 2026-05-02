@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 4/30/26
+ * Date Updated: 5/2/26
  * Description:
  *      Handles main frontend interaction.
  */
@@ -43,8 +43,8 @@ async function login(user, pass) {
     try {
         const url = `/api/credentials/login?user=${user}&pass=${pass}`;
         const response = await fetch(url);
-        const success = await response.json();
-        return success;
+        const result = await response.json();
+        return result;
     } catch (error) {
         console.error("Account login failed.");
         return false;
@@ -56,13 +56,69 @@ async function register(user, pass) {
     try {
         const url = `/api/credentials/register?user=${user}&pass=${pass}`;
         const response = await fetch(url);
-        const success = await response.json();
-        return success;
+        const result = await response.json();
+        return result;
     } catch (error) {
         console.error("Could not register account.");
         return false;
     }
 }
+
+
+
+// --------------------------- LOAD PAGE --------------------------- //
+
+document.addEventListener('DOMContentLoaded', async() => {
+    const loginBtn = document.getElementById("login");
+    const registerBtn = document.getElementById("register");
+    const user = document.getElementById("username");
+    const pass = document.getElementById("pass");
+    const errorMsg = document.getElementById("error-msg");
+
+    if (loginBtn) {
+        loginBtn.addEventListener('click', async function (event) {
+            event.preventDefault();
+            if (user.value.length == 0 || pass.value.length == 0) {
+                errorMsg.textContent = "Please enter a username and password.";
+                errorMsg.style.display = "block";
+            } else {
+                const result = await login(user.value, pass.value);
+
+                if (result["success"] && result["registered"]) {
+                    await changePage("home");
+                } else if (result["registered"]) {
+                    errorMsg.textContent = "Incorrect username or password was given.";
+                    errorMsg.style.display = "block";
+                } else {
+                    errorMsg.textContent = "User is not currently registered.";
+                    errorMsg.style.display = "block";
+                }
+            }
+        })
+    }
+
+    if (registerBtn) {
+        registerBtn.addEventListener('click', async function (event) {
+            event.preventDefault();
+            if (user.value.length == 0 || pass.value.length == 0) {
+                errorMsg.textContent = "Please enter a username and password.";
+                errorMsg.style.display = "block";
+            } else {
+                const result = await register(user.value, pass.value);
+                
+                if (result["success"] && result["registered"]) {
+                    await changePage("home");
+                } else if (result["registered"]) {
+                    errorMsg.textContent = "Username is already taken.";
+                    errorMsg.style.display = "block";
+                } else {
+                    errorMsg.textContent = "An unexpected error occurred.";
+                    errorMsg.style.display = "block";
+                }
+            }
+        })
+    }
+});
 
 
 

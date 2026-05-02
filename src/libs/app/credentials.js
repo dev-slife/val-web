@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 4/15/26
+ * Date Updated: 5/2/26
  * Description:
  *      Handles all account api functions.
  */
@@ -27,8 +27,8 @@ async function isRegistered(payload) {
         const db = client.db("VAL_DATA");
         const users = db.collection("users");
 
-        const isRegistered = await users.find(payload);
-        return (isRegistered) ? true: false;
+        const isRegistered = await users.find(payload).toArray();
+        return (isRegistered.length != 0) ? true: false;
     } catch (err) {
         console.log(err);
     } finally {
@@ -37,7 +37,7 @@ async function isRegistered(payload) {
 }
 
 async function registerUser(payload) {
-    const client = new MongoClient(process.env.MONGO_CONNECTION);
+    const client = new MongoClient(process.env.MONGO_CONN);
 
     try {
         await client.connect();
@@ -53,40 +53,92 @@ async function registerUser(payload) {
     }
 }
 
+async function grabHash(payload) {
+    const client = new MongoClient(process.env.MONGO_CONN);
+
+    try {
+        await client.connect();
+        const db = client.db("VAL_DATA");
+        const users = db.collection("users");
+
+        const result = await users.find(payload).toArray();
+        return result[0]["pass"]
+    } catch (err) {
+        console.log(err);
+    } finally {
+        await client.close();
+    }
+}
+
+
 
 // --------------------------- SERVER FUNCTIONS --------------------------- //
 
-router.get('/login', (req, res) => {
+router.get('/login', async(req, res) => {
     const {user, pass} = req.query;
-    // verify correct username and password with db
-    const hash = ""; // grab from MongoDB
-    bcrypt.compare(pass, hash, function(err, result) {
-        if (result) {
-            // load profile
-            res.send({
-                user: user,
-                success: true
-            });
-        } else {
-            res.send({
-                user: user,
-                success: false
-            });
-        }
-    });
-    console.error("Currently unable to manage account information.");
-});
 
-router.get('/register', (req, res) => {
-    const {user, pass} = req.query;
-    if (!isRegistered({"user": user})) {
-        bcrypt.genSalt(saltRounds, function(err, salt) {
-            bcrypt.hash(pass, salt, function(err, hash) {
-                registerUser({"user": user, "pass": hash});
-            });
+    if (await isRegistered({"user": user})) {
+        const hash = await grabHash({"user": user});
+    
+        await bcrypt.compare(pass, hash, async function(err, result) {
+            if (result) {
+                res.status(200).send({
+                    "success": true,
+                    "registered": true,
+                    "user": user,
+                    "msg": "sucessfully logged in"
+                });
+            } else {
+                res.status(400).send({
+                    "success": false,
+                    "registered": true,
+                    "user": user,
+                    "msg": "incorrect password"
+                });
+            }
+        });
+    } else {
+        res.status(400).send({
+            "success": false,
+            "registered": false,
+            "user": user,
+            "msg": "user is not registered"
         });
     }
-    console.error("Currently unable to manage account information.");
+});
+
+router.get('/register', async(req, res) => {
+    const {user, pass} = req.query;
+
+    if (!await isRegistered({"user": user})) {
+        await bcrypt.genSalt(saltRounds, async function(err, salt) {
+            await bcrypt.hash(pass, salt, async function(err, hash) {
+                const success = await registerUser({"user": user, "pass": hash});
+                if (success) {
+                    res.status(200).send({
+                        "success": true,
+                        "registered": true,
+                        "user": user,
+                        "msg": "user successfully registered."
+                    })
+                } else {
+                    res.status(500).send({
+                        "success": false,
+                        "registered": false,
+                        "user": user,
+                        "msg": "server ran into an error when registering."
+                    })
+                }
+            });
+        });
+    } else {
+       res.status(400).send({
+            "success": false,
+            "registered": true,
+            "user": user,
+            "msg": "user is already registered."
+        }) 
+    }
 });
 
 

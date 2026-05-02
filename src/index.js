@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 5/1/26
+ * Date Updated: 5/2/26
  * Description:
  *      Handles all main API communication between the frontend, backend, and web app services.
  */
@@ -62,6 +62,14 @@ app.get('/privacy', (_, res) => {
 
 app.get('/copyright', (_, res) => {
     res.sendFile(path.join(__public, 'pages', 'copyright.html'));
+});
+
+app.get('/register', (_, res) => {
+    res.sendFile(path.join(__public, 'pages', 'register.html'));
+});
+
+app.get('/login', (_, res) => {
+    res.sendFile(path.join(__public, 'pages', 'login.html'));
 });
 
 app.get('/settings', (_, res) => {
