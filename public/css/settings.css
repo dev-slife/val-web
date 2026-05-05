@@ -1,0 +1,552 @@
+/* Make logo smaller on settings pages */
+.logo-letter {
+    font-size: 72px;
+}
+
+.logo-subtitle {
+    font-size: 20px;
+}
+
+
+
+/* --------------------- NAVIGATION BAR --------------------- */
+
+nav {
+    margin: 0 auto 32px;
+    max-width: 960px;
+    background: var(--bg-input);
+    border-radius: 999px;
+    border: 1px solid var(--nav-border);
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+nav button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 10px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-family: var(--font-nav);
+    font-size: 18px;
+    letter-spacing: 1px;
+    border-right: 1px solid var(--nav-border);
+    background: rgba(255,255,255,0);
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+nav button:last-child {
+    border-right: none;
+}
+
+nav button:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+nav button.active {
+    color: var(--accent-blue);
+}
+
+
+
+/* --------------------- MAIN LAYOUT --------------------- */
+
+main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 0;
+    max-width: 1100px;
+    width: 100%;
+    margin: 40px auto;
+    padding: 0 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.page-header {
+    grid-column: 1 / -1;
+    margin-bottom: 32px;
+}
+
+.page-label {
+    font-family: var(--font-primary);
+    font-size: var(--h2-size);
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.1px;
+}
+
+.page-description {
+    color: var(--text-sidebar);
+    font-size: 16px;
+    margin-top: 6px;
+}
+
+
+
+/* --------------------- SIDEBAR --------------------- */
+
+.settings-nav {
+    padding-right: 24px;
+    border-right: 1px solid var(--border);
+}
+
+.settings-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-sidebar);
+    font-size: 16px;
+    font-weight: 500;
+    transition: background .15s, color .15s;
+    margin-bottom: 2px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+}
+
+.settings-nav-item:hover {
+    background: var(--bg-main);
+    color: var(--text-primary);
+}
+
+.settings-nav-item.active {
+    background: var(--soft-blue);
+    color: var(--accent-blue);
+}
+
+.settings-nav-item svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.settings-nav-item.active svg {
+    opacity: 1;
+}
+
+.settings-nav-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 12px 0;
+}
+
+
+
+/* --------------------- CONTENT PANELS --------------------- */
+
+.settings-content {
+    padding-left: 36px;
+}
+
+.settings-section {
+    display: none;
+}
+
+.settings-section.active {
+    display: block;
+}
+
+.section-title {
+    font-family: var(--font-primary);
+    font-size: var(--h3-size);
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.section-subtitle {
+    color: var(--text-sidebar);
+    font-size: var(--content-card-size);
+    margin-bottom: 28px;
+}
+
+
+
+/* --------------------- CARDS --------------------- */
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 16px;
+}
+
+.card-title {
+    font-size: var(--content-card-size);
+    font-family: var(--font-secondary);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1px;
+    margin-bottom: 18px;
+}
+
+
+
+/* --------------------- Profile Picture --------------------- */
+
+.pfp-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.pfp-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+#testPFP {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+    background: var(--bg-main);
+    display: block;
+}
+
+.pfp-placeholder {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: var(--bg-main);
+    border: 2px dashed var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: var(--text-muted);
+}
+
+.pfp-meta {
+    flex: 1;
+}
+
+.pfp-meta h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.pfp-meta p {
+    font-size: var(--content-card-size);
+    color: var(--text-sidebar);
+    margin-bottom: 12px;
+}
+
+
+
+/* --------------------- FORM FIELDS --------------------- */
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.field-row.full {
+    grid-template-columns: 1fr;
+}
+
+.field {
+    margin-bottom: 16px;
+}
+
+.field label {
+    display: block;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--text-sidebar);
+    margin-bottom: 7px;
+    letter-spacing: .03em;
+}
+
+.field input,
+.field select,
+.field textarea {
+    width: 100%;
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: var(--text-primary);
+    font-family: var(--font-secondary);
+    font-size: .9rem;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    border-color: var(--accent-blue);
+}
+
+.field textarea { resize: vertical; min-height: 80px; }
+.field select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238a91b4' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 14px) center;
+    padding-right: 36px;
+}
+
+.field-hint {
+    font-size: .76rem;
+    color: var(--text-muted);
+    margin-top: 5px;
+}
+
+
+
+/* --------------------- TOGGLE --------------------- */
+
+.toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.toggle-row:last-child {
+    border-bottom: none;
+}
+.toggle-info h4 {
+    font-size: .9rem;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.toggle-info p {
+    font-size: .8rem;
+    color: var(--text-sidebar);
+}
+
+.toggle {
+    position: relative;
+    width: 42px; height: 24px;
+    flex-shrink: 0;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute; inset: 0;
+    background: var(--border);
+    border-radius: 24px;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    left: 3px; top: 3px;
+    background: var(--text-sidebar);
+    border-radius: 50%;
+    transition: transform .2s, background .2s;
+}
+
+.toggle input:checked + .toggle-slider {
+    background: var(--soft-blue);
+}
+
+.toggle input:checked + .toggle-slider::before {
+    transform: translateX(18px);
+    background: var(--accent-blue);
+}
+
+
+
+/* --------------------- BUTTONS --------------------- */
+
+.btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 20px;
+    border-radius: 6px;
+    font-family: var(--font-secondary);
+    font-size: .88rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: opacity .15s, transform .1s, box-shadow .15s;
+}
+
+.btn:active {
+    transform: scale(.97);
+}
+
+.btn-primary {
+    background: var(--accent-blue);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 4px 20px rgba(61,90,254,.4);
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-sidebar);
+}
+
+.btn-ghost:hover {
+    border-color: var(--text-sidebar);
+    color: var(--text-primary);
+}
+
+.btn-danger {
+    background: var(--soft-red);
+    color: var(--accent-red);
+    border: 1px solid rgba(239,83,80,.2);
+}
+
+.btn-danger:hover {
+    background: rgba(239,83,80,.2);
+}
+
+
+
+/* hidden file input trick */
+#inputPFP { display: none; }
+#uploadPFP { display: none; }
+
+
+
+/* --------------------- PASSWORD STRENGTH --------------------- */
+
+.strength-bar {
+    height: 3px;
+    border-radius: 3px;
+    background: var(--border);
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    border-radius: 3px;
+    width: 0%;
+    transition: width .3s, background .3s;
+}
+
+
+
+/* --------------------- DANGER ZONE --------------------- */
+
+.danger-card {
+    background: var(--soft-red);
+    border: 1px solid var(--accent-red);
+}
+
+.danger-card .card-title {
+    color: var(--accent-red);
+}
+
+
+
+/* --------------------- TOAST --------------------- */
+
+#toast {
+    position: fixed;
+    bottom: 32px; left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: .88rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s, transform .25s;
+    z-index: 999;
+    display: flex; align-items: center; gap: 10px;
+}
+
+#toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+#toast .toast-icon {
+    font-size: 1rem;
+}
+
+
+
+/* --------------------- RESPONSIVE --------------------- */
+
+@media (max-width: 720px) {
+    main {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+        margin: 24px auto;
+    }
+
+    .settings-nav {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding-right: 0;
+        padding-bottom: 12px;
+        display: flex;
+        gap: 4px;
+        overflow-x: auto;
+        margin-bottom: 24px;
+    }
+
+    .settings-nav-divider {
+        display: none;
+    }
+
+    .settings-nav-item {
+        white-space: nowrap;
+        margin-bottom: 0;
+    }
+
+    .settings-content {
+        padding-left: 0;
+    }
+
+    .field-row {
+        grid-template-columns: 1fr;
+    }
+
+    nav {
+        padding: 12px 20px;
+    }
+
+    .logo-area {
+        padding: 20px 20px 0;
+    }
+
+    .page-header {
+        margin-bottom: 20px;
+    }
+}

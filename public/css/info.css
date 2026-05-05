@@ -17,7 +17,7 @@
     padding: 14px 10px;
     color: var(--text-primary);
     text-decoration: none;
-    font-family: 'Lilita One', sans-serif;
+    font-family: var(--font-nav);
     font-size: 18px;
     letter-spacing: 1px;
     border-right: 1px solid var(--nav-border);

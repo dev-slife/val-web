@@ -15,6 +15,7 @@
     /* FONTS */
     --font-primary:     "Poppins", sans-serif;
     --font-secondary:   "Mulish", sans-serif;
+    --font-nav:         "Lilita One", sans-serif;
 
     /* FONT SIZES */
     --h1-size: 64px;
@@ -35,8 +36,11 @@
     --bg-nav:        #13131a;
     --bg-card:       #22223a;
     --accent-blue:   #5b9bd5;
+    --blue-glow:     #258ae9;
+    --soft-blue:     rgba(91, 155, 213, 0.2);
     --accent-yellow: #c8b96e;
     --accent-red:    #d95f6e;
+    --soft-red:      rgba(217, 95, 110, 0.2);
     --text-primary:  #e8e8f0;
     --text-muted:    #7a7a9a;
     --text-sidebar:  #c0c0d8;
@@ -81,9 +85,15 @@ h3 {
 /* --------------------- FOOTER --------------------- */
 
 footer {
-    margin: 2%;
-    font-size: var(--footer-size);
+    margin-top: 4%;
     text-align: center;
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: var(--footer-size);
+    font-family: var(--font-secondary);
+    position: relative;
+    z-index: 1;
 }
 
 
