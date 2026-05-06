@@ -1,0 +1,117 @@
+/**
+ * Author: jbeshir-umd
+ * Date Created: 5/6/26
+ * Date Updated: 5/6/26
+ * Description:
+ *      Handles session-based authentication using sessionStorage.
+ *      Included on every page — runs checkAuth() automatically on load.
+ */
+
+
+
+// --------------------------- CONSTANTS --------------------------- //
+
+const SESSION_KEY = 'val_user';
+
+
+
+// --------------------------- HELPER FUNCTIONS --------------------------- //
+
+function saveUser(user) {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(user));
+}
+
+
+function getUser() {
+    try {
+        return JSON.parse(sessionStorage.getItem(SESSION_KEY));
+    } catch {
+        return null;
+    }
+}
+
+
+function isLoggedIn() {
+    return getUser() !== null;
+}
+
+
+function logout() {
+    sessionStorage.removeItem(SESSION_KEY);
+    window.location.href = '/login';
+}
+
+
+
+// --------------------------- MODULE FUNCTIONS --------------------------- //
+
+async function login(username, password) {
+    try {
+        const url = `/api/credentials/login?user=${username}&pass=${password}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error("Account login failed.");
+        return false;
+    }
+}
+
+
+async function register(username, password) {
+    try {
+        const url = `/api/credentials/register?user=${username}&pass=${password}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error("Could not register account.");
+        return false;
+    }
+}
+
+
+
+// --------------------------- LOAD PAGE --------------------------- //
+
+document.addEventListener('DOMContentLoaded', () => {
+    const user = getUser();
+    const signInBtn = document.querySelector('.sign-in-btn');
+    const signInLink = document.querySelector('.sign-in-link');
+
+    if (user) {
+        if (signInBtn) {
+            signInBtn.textContent = user.username || 'Account';
+            signInBtn.title = 'Click to sign out';
+            signInBtn.addEventListener('click', logout);
+        }
+        if (signInLink) {
+            signInLink.textContent = user.username || 'Account';
+            signInLink.href = '/settings';
+        }
+    } else {
+        if (signInBtn) {
+            signInBtn.textContent = 'Sign In';
+            signInBtn.addEventListener('click', () => {
+                window.location.href = '/login';
+            });
+        }
+        if (signInLink) {
+            signInLink.textContent = 'Sign In';
+            signInLink.href = '/login';
+        }
+    }
+});
+
+
+
+// --------------------------- EXPORT --------------------------- //
+
+exports = {
+    login: login,
+    register: register,
+    logout: logout,
+    getUser: getUser,
+    isLoggedIn: isLoggedIn,
+    saveUser: saveUser
+};
