@@ -1,10 +1,16 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 5/2/26
+ * Date Updated: 5/6/26
  * Description:
  *      Handles main frontend interaction.
  */
+
+
+// --------------------------- CONSTANTS --------------------------- //
+
+const SESSION_KEY = 'val_user';
+
 
 
 // --------------------------- HELPER FUNCTIONS --------------------------- //
@@ -65,6 +71,51 @@ async function register(user, pass) {
 }
 
 
+async function validURL(url) {
+    try {
+        const response = await fetch(url);
+        return response.ok;
+    } catch (err) {
+        return false;
+    }
+}
+
+
+async function defaultPFP() {
+    try {
+        const url = "/api/storage/blob/pull?key=default_pfp.png";
+        const response = await fetch(url);
+        const result = await response.json()
+        if (response.status == 200) {
+            return result["url"];
+        }
+    } catch (err) {
+        console.error("Could not grab default avatar.");
+    }
+}
+
+
+async function getPFP(user, default_img=false) {
+    try {
+        const url = `/api/storage/pfp/pull?user=${user}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        if (response.status == 200 && await validURL(result["url"])) {
+            return result["url"];
+        } else {
+            return await defaultPFP();
+        }
+    } catch (err) {
+        console.error("Could not get pfp.");
+    }
+}
+
+
+function saveUser(user) {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(user));
+}
+
+
 
 // --------------------------- LOAD PAGE --------------------------- //
 
@@ -85,6 +136,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                 const result = await login(user.value, pass.value);
 
                 if (result["success"] && result["registered"]) {
+                    saveUser(user.value);
                     await changePage("home");
                 } else if (result["registered"]) {
                     errorMsg.textContent = "Incorrect username or password was given.";
@@ -107,6 +159,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                 const result = await register(user.value, pass.value);
                 
                 if (result["success"] && result["registered"]) {
+                    saveUser(user.value);
                     await changePage("home");
                 } else if (result["registered"]) {
                     errorMsg.textContent = "Username is already taken.";

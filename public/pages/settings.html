@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../css/settings.css">
     <script src="../js/main.js" defer></script>
     <script src="../js/temp_auth.js"></script>
-
     <script src="../js/settings.js" defer></script>
     <title>Account Settings — VAL</title>
 </head>
@@ -78,8 +77,8 @@
                     <div class="card-title">Avatar</div>
                     <div class="pfp-row">
                         <div class="pfp-wrapper">
-                            <div class="pfp-placeholder" id="pfpPlaceholder">🧮</div>
-                            <img id="testPFP" style="display:none;" alt="Profile picture">
+                            <div class="pfp-placeholder" id="pfpPlaceholder"></div>
+                            <img id="avatar" style="display:none;" alt="Profile picture">
                         </div>
                         <div class="pfp-meta">
                             <h3>Profile Picture</h3>
@@ -91,7 +90,7 @@
                         </div>
                     </div>
                     <!-- Hidden form kept for API compatibility -->
-                    <form id="uploadPFP" action="/api/storage/pfp/upload" method="POST" enctype="multipart/form-data">
+                    <form id="uploadPFP">
                         <input type="file" id="inputPFP" name="pfp" accept="image/*">
                     </form>
                 </div>
@@ -412,6 +411,16 @@
 
         </div><!-- /.settings-content -->
     </main>
+
+    <!-- Bottom Sign In -->
+    <div class="bottom-section">
+        <div class="bottom-divider"></div>
+        <div class="account-info">
+            <img id="accountPFP" src="">
+            <p id="accountName"></p>
+        </div>
+        <button class="sign-in-btn" onclick="changePage('login')">Sign In</button>
+    </div>
 
     <footer>
         <p>&copy; 2026 VAL</p>

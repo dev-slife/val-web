@@ -15,6 +15,7 @@ const express = require("express");
 const router = express.Router();
 
 const pfpBucket = "profiles";
+const valBlob = "val-blob";
 const upload = multer({ 
     storage: multer.memoryStorage(),
     limits: { fileSize: 10 * 1024 * 1024 } // 10MB
@@ -99,6 +100,35 @@ async function uploadPFP(key, file) {
 }
 
 
+async function getBlobItem(key) {
+    const client = new minio.Client({
+        endPoint: minioEndpoint(),
+        port: 9000,
+        useSSL: false,
+        forcePathStyle: true,
+        accessKey: process.env.MINIO_USER,
+        secretKey: process.env.MINIO_PASS
+    });
+
+    try {
+        const bucketFound = await client.bucketExists(valBlob);
+        if (bucketFound) {
+            const url = await client.presignedGetObject(valBlob, key, 60 * 5);
+            return url;
+        } else {
+            console.error(`${valBlob} does not exist as a storage bucket.`);
+        }
+    } catch (err) {
+        console.error('Error details:', {
+            message: err.message,
+            code: err.code,
+            cause: err.cause
+        });
+        throw err;
+    }
+}
+
+
 
 // --------------------------- ROUTING --------------------------- //
     
@@ -144,6 +174,27 @@ router.get('/pfp/pull', async(req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send("Could not retrieve pfp.");
+    }
+});
+
+
+router.get('/blob/pull', async(req, res) => {
+    try {
+        const { key } = req.query;
+
+        if (!key) {
+            res.status(400).send("No key was given.");
+        }
+
+        const url = await getBlobItem(key);
+
+        res.status(200).send({
+            "message": "Blob item successfully retrieved.",
+            "url": url
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Could not retrieve Blob item.");
     }
 });
 

@@ -164,7 +164,7 @@ footer {
 
 .page-label {
     text-align: center;
-    font-family: 'Lilita One', sans-serif;
+    font-family: var(--font-nav);
     font-size: var(--page-label-size);
     letter-spacing: 1px;
     color: var(--text-primary);
@@ -175,8 +175,28 @@ footer {
 
 /* --------------------- SIGN IN --------------------- */
 
+.account-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.account-info p {
+    margin-bottom: 5%;
+    font-size: 14px;
+    font-family: var(--font-primary);
+}
+
+#accountPFP {
+    max-height: 20px;
+    max-width: 20px;
+    border-radius: 50%;
+    background: var(--bg-main);
+    border: 2px dashed var(--border);
+}
+
 .sign-in-btn {
-    font-family: 'Lilita One', sans-serif;
+    font-family: var(--font-nav);
     font-size: var(--sign-in-size);
     letter-spacing: 2px;
     color: var(--text-primary);

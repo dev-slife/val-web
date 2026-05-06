@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/30/26
- * Date Updated: 5/5/26
+ * Date Updated: 5/6/26
  * Description:
  *      Manages all account settings.
  */
@@ -10,8 +10,8 @@
 // --------------------------- MODULE FUNCTIONS --------------------------- //
 
 async function changePFP() {
-    const user = "testUser";
-    const testPFP = document.getElementById("testPFP");
+    const user = getUser();
+    const avatar = document.getElementById("avatar");
     const fileInput = document.getElementById("inputPFP");
     const file = fileInput.files[0];
     
@@ -28,24 +28,18 @@ async function changePFP() {
             const result = await response.json();
 
             if (result) {
-                testPFP.src = result["url"];
+                avatar.src = result["url"];
+                avatar.style.cssText = 'display:block; width:84px; height:84px; border-radius:50%; object-fit:cover; border:2px solid var(--border);'
+                document.getElementById('pfpPlaceholder').style.display = 'none';
+                document.getElementById('removePFPBtn').style.display = '';
+                showToast('Profile picture updated!', '🖼️');
+            } else {
+                showToast('Upload failed — try again.', '⚠️');
             }
         } catch (err) {
             console.error(err);
+            showToast('Upload failed — try again.', '⚠️');
         }
-    }
-}
-
-async function getPFP(user) {
-    try {
-        const url = `/api/storage/pfp/pull?user=${user}`;
-        const response = await fetch(url);
-        const result = await response.json();
-        if (response.status == 200) {
-            return result["url"];
-        }
-    } catch (err) {
-        console.error("Could not get pfp.");
     }
 }
 
@@ -53,17 +47,16 @@ async function getPFP(user) {
 
 // --------------------------- EVENTS --------------------------- //
 
-document.addEventListener('DOMContentLoaded', async() => {
-    const pfpForm = document.getElementById("uploadPFP");
+document.addEventListener("DOMContentLoaded", async() => {
+    const pfpForm = document.getElementById("inputPFP");
+    const avatar = document.getElementById("avatar");
 
-    pfpForm.addEventListener("submit", async function(event) {
-       event.preventDefault();
-       await changePFP();
+    avatar.src = await getPFP(getUser(), true);
+
+    pfpForm.addEventListener('change', async function() {
+        await changePFP();
     });
 });
-
-
-
 
 
 
@@ -95,29 +88,9 @@ document.querySelectorAll('.settings-nav-item[data-target]').forEach(btn => {
 
 // --------------------------- PFP PREVIEW --------------------------- //
 
-document.getElementById('inputPFP').addEventListener('change', function () {
-    const file = this.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-        const img = document.getElementById('testPFP');
-        img.src = e.target.result;
-        img.style.cssText = 'display:block; width:84px; height:84px; border-radius:50%; object-fit:cover; border:2px solid var(--border);';
-        document.getElementById('pfpPlaceholder').style.display = 'none';
-        document.getElementById('removePFPBtn').style.display = '';
-    };
-    reader.readAsDataURL(file);
-    // Submit to API
-    const form = document.getElementById('uploadPFP');
-    const data = new FormData(form);
-    fetch(form.action, { method: 'POST', body: data })
-        .then(r => r.ok ? showToast('Profile picture updated!', '🖼️') : showToast('Upload failed — try again.', '⚠️'))
-        .catch(() => showToast('Preview saved (offline).', '🖼️'));
-});
-
 
 function removePFP() {
-    document.getElementById('testPFP').style.display = 'none';
+    document.getElementById('avatar').style.display = 'none';
     document.getElementById('pfpPlaceholder').style.display = '';
     document.getElementById('removePFPBtn').style.display = 'none';
     document.getElementById('inputPFP').value = '';

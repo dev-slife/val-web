@@ -205,7 +205,7 @@ main {
     flex-shrink: 0;
 }
 
-#testPFP {
+#avatar {
     width: 84px;
     height: 84px;
     border-radius: 50%;
