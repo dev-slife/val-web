@@ -13,7 +13,6 @@
 </head>
 <body class="settings-page">
 
-    <!-- Logo -->
     <div class="logo-area">
         <div class="logo-letters">
             <span class="logo-letter v">V</span>
@@ -23,7 +22,6 @@
         <div class="logo-subtitle">Virtual Arithmetic Luminary</div>
     </div>
 
-    <!-- Nav -->
     <nav>
         <button onclick="changePage('home')">Home</button>
         <button onclick="changePage('about')">About</button>
@@ -33,14 +31,12 @@
         <button class="active" onclick="changePage('settings')">Settings</button>
     </nav>
 
-    <!-- Main -->
     <main>
         <div class="page-header">
             <h2 class="page-label">Account Settings</h2>
             <p class="page-description">Manage your profile, preferences, and security options.</p>
         </div>
 
-        <!-- Sidebar Nav -->
         <aside class="settings-nav">
             <button class="settings-nav-item active" data-target="profile">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
@@ -59,104 +55,55 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                 Security
             </button>
-            <button class="settings-nav-item" data-target="danger">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                Danger Zone
-            </button>
         </aside>
 
-        <!-- Content Panels -->
         <div class="settings-content">
-
-            <!-- ── Profile ── -->
             <section class="settings-section active" id="section-profile">
                 <div class="section-title">Profile</div>
-                <p class="section-subtitle">Your public identity on VAL.</p>
+                <p class="section-subtitle"></p>
 
                 <div class="card">
                     <div class="card-title">Avatar</div>
                     <div class="pfp-row">
                         <div class="pfp-wrapper">
                             <div class="pfp-placeholder" id="pfpPlaceholder"></div>
-                            <img id="avatar" style="display:none;" alt="Profile picture">
+                            <img id="avatar" style="display:none;">
                         </div>
                         <div class="pfp-meta">
                             <h3>Profile Picture</h3>
-                            <p>JPG, PNG or WebP — max 5 MB. Will be cropped to a circle.</p>
+                            <p>Formats allowed: JPG, PNG or SVG</p>
                             <div class="btn-row">
                                 <button class="btn btn-ghost" onclick="document.getElementById('inputPFP').click()">Upload image</button>
                                 <button class="btn btn-ghost" id="removePFPBtn" style="display:none;" onclick="removePFP()">Remove</button>
                             </div>
                         </div>
                     </div>
-                    <!-- Hidden form kept for API compatibility -->
                     <form id="uploadPFP">
                         <input type="file" id="inputPFP" name="pfp" accept="image/*">
                     </form>
                 </div>
 
                 <div class="card">
-                    <div class="card-title">Personal Info</div>
-                    <div class="field-row">
-                        <div class="field">
-                            <label for="firstName">First Name</label>
-                            <input type="text" id="firstName" placeholder="Ada">
-                        </div>
-                        <div class="field">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" id="lastName" placeholder="Lovelace">
-                        </div>
-                    </div>
+                    <div class="card-title">Account Info</div>
                     <div class="field">
                         <label for="displayName">Display Name</label>
-                        <input type="text" id="displayName" placeholder="ada_luminary">
-                        <div class="field-hint">This is how others see you on leaderboards and challenges.</div>
+                        <input type="text" id="displayName" placeholder="Val">
+                        <div class="field-hint">Your display name will appear on public discussion posts and can be seen by others.</div>
                     </div>
                     <div class="field">
                         <label for="bio">Bio</label>
-                        <textarea id="bio" placeholder="Tell the community a little about yourself…"></textarea>
+                        <textarea id="bio" placeholder="Tell the community a little about yourself..."></textarea>
                     </div>
                     <div class="btn-row">
-                        <button class="btn btn-primary" onclick="saveSection('profile')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                            Save Changes
-                        </button>
+                        <button class="btn btn-primary" onclick="saveSection('profile')">Save Changes</button>
                         <button class="btn btn-ghost">Discard</button>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">Contact</div>
-                    <div class="field">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" placeholder="ada@example.com">
-                    </div>
-                    <div class="field">
-                        <label for="timezone">Timezone</label>
-                        <select id="timezone">
-                            <option value="UTC">UTC</option>
-                            <option value="America/New_York">Eastern Time (ET)</option>
-                            <option value="America/Chicago">Central Time (CT)</option>
-                            <option value="America/Denver">Mountain Time (MT)</option>
-                            <option value="America/Los_Angeles">Pacific Time (PT)</option>
-                            <option value="Europe/London">London (GMT)</option>
-                            <option value="Europe/Paris">Paris (CET)</option>
-                            <option value="Asia/Tokyo">Tokyo (JST)</option>
-                        </select>
-                    </div>
-                    <div class="btn-row">
-                        <button class="btn btn-primary" onclick="saveSection('contact')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                            Save Changes
-                        </button>
                     </div>
                 </div>
             </section>
 
-            <!-- ── Preferences ── -->
             <section class="settings-section" id="section-preferences">
                 <div class="section-title">Preferences</div>
-                <p class="section-subtitle">Customize your VAL experience.</p>
+                <p class="section-subtitle">Select your favorite theme, choose how VAL explains problems, and customize to your preferences.</p>
 
                 <div class="card">
                     <div class="card-title">Display</div>
@@ -169,18 +116,7 @@
                         </select>
                     </div>
                     <div class="field">
-                        <label for="language">Language</label>
-                        <select id="language">
-                            <option value="en">English</option>
-                            <option value="es">Español</option>
-                            <option value="fr">Français</option>
-                            <option value="de">Deutsch</option>
-                            <option value="ja">日本語</option>
-                            <option value="zh">中文</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label for="difficulty">Default Difficulty</label>
+                        <label for="difficulty">How VAL Explains</label>
                         <select id="difficulty">
                             <option value="auto">Auto (adaptive)</option>
                             <option value="beginner">Beginner</option>
@@ -188,17 +124,16 @@
                             <option value="advanced">Advanced</option>
                             <option value="expert">Expert</option>
                         </select>
+                        <div class="field-hint">This setting currently does not do anything.</div>
                     </div>
                     <div class="btn-row">
-                        <button class="btn btn-primary" onclick="saveSection('preferences')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                            Save Changes
-                        </button>
+                        <button class="btn btn-primary" onclick="saveSection('preferences')">Save Changes</button>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-title">Accessibility</div>
+                    <div class="field-hint">These settings are currently unavailable and will be added soon.</div>
                     <div class="toggle-row">
                         <div class="toggle-info">
                             <h4>Reduce Motion</h4>
@@ -232,57 +167,13 @@
                 </div>
             </section>
 
-            <!-- ── Notifications ── -->
             <section class="settings-section" id="section-notifications">
                 <div class="section-title">Notifications</div>
-                <p class="section-subtitle">Choose what you want to hear about.</p>
-
-                <div class="card">
-                    <div class="card-title">Email Notifications</div>
-                    <div class="toggle-row">
-                        <div class="toggle-info">
-                            <h4>Weekly Digest</h4>
-                            <p>A summary of your progress every Monday</p>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" id="emailDigest" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="toggle-row">
-                        <div class="toggle-info">
-                            <h4>Challenge Invites</h4>
-                            <p>When someone challenges you to a match</p>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" id="emailChallenges" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="toggle-row">
-                        <div class="toggle-info">
-                            <h4>New Achievements</h4>
-                            <p>Celebrate when you unlock a badge</p>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" id="emailAchievements">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="toggle-row">
-                        <div class="toggle-info">
-                            <h4>Product Updates</h4>
-                            <p>New features and announcements from VAL</p>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" id="emailUpdates">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
+                <p class="section-subtitle">Choose what you want to hear about and where you get messages.</p>
 
                 <div class="card">
                     <div class="card-title">In-App Notifications</div>
+                    <div class="field-hint">These settings are currently unavailable and will be added soon.</div>
                     <div class="toggle-row">
                         <div class="toggle-info">
                             <h4>Sound Effects</h4>
@@ -293,46 +184,32 @@
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
-                    <div class="toggle-row">
-                        <div class="toggle-info">
-                            <h4>Streak Reminders</h4>
-                            <p>Remind me to keep my daily streak alive</p>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" id="streakReminder" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
                 </div>
 
                 <div class="btn-row">
-                    <button class="btn btn-primary" onclick="saveSection('notifications')">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                        Save Preferences
-                    </button>
+                    <button class="btn btn-primary" onclick="saveSection('notifications')">Save Preferences</button>
                 </div>
             </section>
 
-            <!-- ── Security ── -->
             <section class="settings-section" id="section-security">
                 <div class="section-title">Security</div>
-                <p class="section-subtitle">Keep your account safe.</p>
+                <p class="section-subtitle"></p>
 
                 <div class="card">
                     <div class="card-title">Change Password</div>
                     <div class="field">
                         <label for="currentPassword">Current Password</label>
-                        <input type="password" id="currentPassword" placeholder="••••••••">
+                        <input type="password" id="currentPassword">
                     </div>
                     <div class="field">
                         <label for="newPassword">New Password</label>
-                        <input type="password" id="newPassword" placeholder="••••••••" oninput="updateStrength(this.value)">
+                        <input type="password" id="newPassword" oninput="updateStrength(this.value)">
                         <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
                         <div class="field-hint" id="strengthLabel">Enter a new password</div>
                     </div>
                     <div class="field">
                         <label for="confirmPassword">Confirm New Password</label>
-                        <input type="password" id="confirmPassword" placeholder="••••••••">
+                        <input type="password" id="confirmPassword">
                     </div>
                     <div class="btn-row">
                         <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
@@ -351,72 +228,28 @@
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
-                    <div class="toggle-row">
-                        <div class="toggle-info">
-                            <h4>Remember this device</h4>
-                            <p>Skip 2FA for 30 days on trusted devices</p>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" id="rememberDevice">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
+                    <div class="field-hint">This setting currently does not do anything.</div>
                 </div>
-
-                <div class="card">
-                    <div class="card-title">Active Sessions</div>
-                    <div class="toggle-row" style="border-bottom:none;">
-                        <div class="toggle-info">
-                            <h4>This device</h4>
-                            <p style="font-family:var(--font-mono); font-size:.76rem;">Current session · College Park, MD</p>
-                        </div>
-                        <span style="font-size:.75rem; color:var(--success); background:var(--success-soft); padding:3px 10px; border-radius:20px;">Active</span>
-                    </div>
-                    <div class="btn-row" style="margin-top:16px;">
-                        <button class="btn btn-ghost" onclick="showToast('All other sessions signed out.', '🔒')">Sign out all other devices</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ── Danger Zone ── -->
-            <section class="settings-section" id="section-danger">
-                <div class="section-title">Danger Zone</div>
-                <p class="section-subtitle">Irreversible actions — proceed carefully.</p>
 
                 <div class="card danger-card">
                     <div class="card-title">Danger Zone</div>
-                    <div class="toggle-row">
-                        <div class="toggle-info">
-                            <h4>Export My Data</h4>
-                            <p>Download a copy of all your stats, history, and settings</p>
-                        </div>
-                        <button class="btn btn-ghost" onclick="showToast('Export queued — check your email.', '📦')">Export</button>
-                    </div>
-                    <div class="toggle-row">
-                        <div class="toggle-info">
-                            <h4>Reset Progress</h4>
-                            <p>Wipe all scores, streaks, and achievements. Cannot be undone.</p>
-                        </div>
-                        <button class="btn btn-danger" onclick="confirmAction('reset')">Reset</button>
-                    </div>
                     <div class="toggle-row" style="border-bottom:none;">
                         <div class="toggle-info">
                             <h4>Delete Account</h4>
                             <p>Permanently delete your account and all associated data.</p>
                         </div>
-                        <button class="btn btn-danger" onclick="confirmAction('delete')">Delete</button>
+                        <button class="btn btn-danger" onclick="confirmAction()">Delete</button>
                     </div>
                 </div>
             </section>
-
-        </div><!-- /.settings-content -->
+        </div>
     </main>
 
     <!-- Bottom Sign In -->
     <div class="bottom-section">
         <div class="bottom-divider"></div>
         <div class="account-info">
-            <img id="accountPFP" src="">
+            <img id="accountPFP">
             <p id="accountName"></p>
         </div>
         <button class="sign-in-btn" onclick="changePage('login')">Sign In</button>
@@ -426,10 +259,9 @@
         <p>&copy; 2026 VAL</p>
     </footer>
 
-    <!-- Toast -->
     <div id="toast">
-        <span class="toast-icon" id="toastIcon">✓</span>
-        <span id="toastMsg">Saved successfully.</span>
+        <span class="toast-icon" id="toastIcon"></span>
+        <span id="toastMsg"></span>
     </div>
 </body>
 </html>

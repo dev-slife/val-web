@@ -8,6 +8,10 @@ main {
     height: 100%;
 }
 
+.account-info {
+    justify-content: center;
+}
+
 
 
 /* ---------------------- SIDEBAR ---------------------- */

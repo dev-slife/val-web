@@ -4,17 +4,16 @@
  * Date Updated: 5/6/26
  * Description:
  *      Handles session-based authentication using sessionStorage.
- *      Included on every page — runs checkAuth() automatically on load.
+ *      Included on every page - checks authentication automatically on load.
  */
 
 
 // --------------------------- HELPER FUNCTIONS --------------------------- //
 
 function getUser() {
-    try {
-        return JSON.parse(sessionStorage.getItem(SESSION_KEY));
-    } catch {
-        return null;
+    const user = sessionStorage.getItem(SESSION_ID);
+    if (user) {
+        return JSON.parse(user);
     }
 }
 
@@ -25,7 +24,7 @@ function isLoggedIn() {
 
 
 function logout() {
-    sessionStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem(SESSION_ID);
     changePage("login");
 }
 
@@ -33,16 +32,21 @@ function logout() {
 
 // --------------------------- LOAD PAGE --------------------------- //
 
-document.addEventListener('DOMContentLoaded', async() => {
+document.addEventListener("DOMContentLoaded", async() => {
     const user = getUser();
-    const signInBtn = document.querySelector('.sign-in-btn');
+    const signInBtn = document.querySelector(".sign-in-btn");
+    const accountInfo = document.querySelector(".account-info");
     const nameText = document.getElementById("accountName");
     const pfpImg = document.getElementById("accountPFP"); 
+    const settingsBtn = document.getElementById("settingsBtn")
 
     if (user) {
         if (signInBtn) {
-            signInBtn.textContent = 'Sign Out';
-            signInBtn.addEventListener('click', logout);
+            signInBtn.textContent = "Sign Out";
+            signInBtn.addEventListener("click", logout);
+        }
+        if (accountInfo) {
+            accountInfo.style.display = "";
             if (nameText) {
                 nameText.textContent = user;
             }
@@ -51,15 +55,18 @@ document.addEventListener('DOMContentLoaded', async() => {
                 pfpImg.src = pfpURL;
             }
         }
+        if (settingsBtn) {
+            settingsBtn.style.display = ""; 
+        }
     } else {
         if (signInBtn) {
-            signInBtn.textContent = 'Sign In';
+            signInBtn.textContent = "Sign In";
         }
-        if (nameText) {
-            nameText.textContent = "";
+        if (accountInfo) {
+            accountInfo.style.display = "none";
         }
-        if (pfpImg) {
-            pfpImg.src = "";
+        if (settingsBtn) {
+            settingsBtn.style.display = "none"; 
         }
     }
 });

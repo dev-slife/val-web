@@ -9,7 +9,7 @@
 
 // --------------------------- CONSTANTS --------------------------- //
 
-const SESSION_KEY = 'val_user';
+const SESSION_ID = "val_user";
 
 
 
@@ -31,7 +31,7 @@ async function expressPage(url) {
 
 async function changePage(page="home", is_index_file=false) {
     // First try to use the express route
-    const expressURL = (page == "home") ? '/': '/' + page;
+    const expressURL = (page == "home") ? "/": "/" + page;
     const route = await expressPage(expressURL);
 
     if (route) {
@@ -112,14 +112,14 @@ async function getPFP(user, default_img=false) {
 
 
 function saveUser(user) {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(user));
+    sessionStorage.setItem(SESSION_ID, JSON.stringify(user));
 }
 
 
 
 // --------------------------- LOAD PAGE --------------------------- //
 
-document.addEventListener('DOMContentLoaded', async() => {
+document.addEventListener("DOMContentLoaded", async() => {
     const loginBtn = document.getElementById("login");
     const registerBtn = document.getElementById("register");
     const user = document.getElementById("username");
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async() => {
     const errorMsg = document.getElementById("error-msg");
 
     if (loginBtn) {
-        loginBtn.addEventListener('click', async function (event) {
+        loginBtn.addEventListener("click", async function (event) {
             event.preventDefault();
             if (user.value.length == 0 || pass.value.length == 0) {
                 errorMsg.textContent = "Please enter a username and password.";
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', async() => {
     }
 
     if (registerBtn) {
-        registerBtn.addEventListener('click', async function (event) {
+        registerBtn.addEventListener("click", async function (event) {
             event.preventDefault();
             if (user.value.length == 0 || pass.value.length == 0) {
                 errorMsg.textContent = "Please enter a username and password.";

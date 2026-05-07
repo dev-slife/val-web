@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 4/25/26
+ * Date Updated: 5/6/26
  * Description:
  *      Communicates with the VAST system to handle all math logic.
  */
@@ -117,9 +117,9 @@ async function generateResponses(text) {
 }
 
 function showTyping(messages) {
-    const typingIndicator = document.createElement('div');
-    typingIndicator.className = 'message ai';
-    typingIndicator.innerHTML = '<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+    const typingIndicator = document.createElement("div");
+    typingIndicator.className = "message ai";
+    typingIndicator.innerHTML = "<div class='typing'><div class='dot'></div><div class='dot'></div><div class='dot'></div></div>";
     
     messages.appendChild(typingIndicator);
     messages.scrollTop = messages.scrollHeight;
@@ -137,11 +137,11 @@ function addMessage(text, sender, typingIndicator) {
     const messages = document.getElementById("messages");
     if (typingIndicator) hideTyping(messages, typingIndicator);
 
-    const message = document.createElement('div');
+    const message = document.createElement("div");
     message.className = `message ${sender.toLowerCase()}`;
     
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
     bubble.id = sender.toLowerCase();
     bubble.textContent = text;
     
@@ -154,7 +154,7 @@ function addMessage(text, sender, typingIndicator) {
 
 
 function messageSender() {
-    const userInput = document.getElementById('mathInput');
+    const userInput = document.getElementById("mathInput");
     const messages = document.getElementById("messages");
     let processing = false;
     let logoHidden = false;
@@ -197,7 +197,7 @@ function messageSender() {
                         await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 500));
     
                         if (mathMatch) {
-                            const expression = mathMatch.join('');
+                            const expression = mathMatch.join("");
                             if (expression.length != 0) {
                                 console.log(answers[i], expression);
                                 if (answers[i] == expression) {
@@ -230,7 +230,7 @@ function messageSender() {
             if (!logoHidden) {
                 const logo = document.getElementById("logo");
                 const homePage = document.getElementById("homePage");
-                const messages = document.getElementById('messages');
+                const messages = document.getElementById("messages");
                 logo.style.display = "none";
                 homePage.style.overflow = "auto";
                 homePage.style.height = "auto";
@@ -247,17 +247,17 @@ function messageSender() {
 
 // --------------------------- LOAD PAGE --------------------------- //
 
-document.addEventListener('DOMContentLoaded', async() => {
-    const userInput = document.getElementById('mathInput');
-    const sendBtn = document.getElementById('sendBtn');
+document.addEventListener("DOMContentLoaded", async() => {
+    const userInput = document.getElementById("mathInput");
+    const sendBtn = document.getElementById("sendBtn");
     const sendMessage = messageSender();
 
-    sendBtn.addEventListener('click', async() => {
+    sendBtn.addEventListener("click", async() => {
         await sendMessage();
     });
 
-    userInput.addEventListener('keypress', async(e) => {
-        if (e.key === 'Enter') {
+    userInput.addEventListener("keypress", async(e) => {
+        if (e.key === "Enter") {
             await sendMessage();
         }
     });

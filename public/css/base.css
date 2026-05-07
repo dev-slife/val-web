@@ -62,7 +62,6 @@ html, body {
 }
 
 
-
 /* --------------------- HEADINGS --------------------- */
 
 h1 {
@@ -177,12 +176,12 @@ footer {
 
 .account-info {
     display: flex;
-    justify-content: center;
+    margin-bottom: 5%;
     align-items: center;
+    gap: 5px;
 }
 
 .account-info p {
-    margin-bottom: 5%;
     font-size: 14px;
     font-family: var(--font-primary);
 }
@@ -191,8 +190,10 @@ footer {
     max-height: 20px;
     max-width: 20px;
     border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
     background: var(--bg-main);
-    border: 2px dashed var(--border);
+    display: block;
 }
 
 .sign-in-btn {

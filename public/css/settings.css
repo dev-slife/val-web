@@ -242,6 +242,7 @@ main {
     font-size: var(--content-card-size);
     color: var(--text-sidebar);
     margin-bottom: 12px;
+    margin-left: 1%;
 }
 
 
@@ -264,11 +265,11 @@ main {
 
 .field label {
     display: block;
-    font-size: .8rem;
+    font-size: 14px;
     font-weight: 600;
     color: var(--text-sidebar);
     margin-bottom: 7px;
-    letter-spacing: .03em;
+    letter-spacing: 0.1px;
 }
 
 .field input,
@@ -281,9 +282,9 @@ main {
     padding: 10px 14px;
     color: var(--text-primary);
     font-family: var(--font-secondary);
-    font-size: .9rem;
+    font-size: 14px;
     outline: none;
-    transition: border-color .2s, box-shadow .2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .field input:focus,
@@ -292,7 +293,11 @@ main {
     border-color: var(--accent-blue);
 }
 
-.field textarea { resize: vertical; min-height: 80px; }
+.field textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
 .field select {
     cursor: pointer;
     appearance: none;
