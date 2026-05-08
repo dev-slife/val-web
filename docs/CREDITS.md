@@ -15,6 +15,10 @@ There are multiple people who worked hard and dependencies used to make VAL poss
 - [selamfesseha](https://github.com/sfesseha)
     - Database DevOps
     - Project Mangement
+-[kabya2]
+      -Documentation
+      -Technical Writing
+      -README & Markdown Support
 
 
 ## Dependencies
