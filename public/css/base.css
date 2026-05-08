@@ -176,7 +176,7 @@ footer {
 
 .account-info {
     display: flex;
-    margin-bottom: 5%;
+    margin-bottom: 15px;
     align-items: center;
     gap: 5px;
 }

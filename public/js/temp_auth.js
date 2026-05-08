@@ -1,10 +1,9 @@
 /**
- * Author: jbeshir-umd
+ * Author: jbeshir-umd, dev.slife
  * Date Created: 5/6/26
- * Date Updated: 5/6/26
+ * Date Updated: 5/7/26
  * Description:
- *      Handles session-based authentication using sessionStorage.
- *      Included on every page - checks authentication automatically on load.
+ *      Handles session-based authentication using sessionStorage and checks automatically on load.
  */
 
 
@@ -70,13 +69,3 @@ document.addEventListener("DOMContentLoaded", async() => {
         }
     }
 });
-
-
-
-// --------------------------- EXPORT --------------------------- //
-
-exports = {
-    logout: logout,
-    getUser: getUser,
-    isLoggedIn: isLoggedIn
-};

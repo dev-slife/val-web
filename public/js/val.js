@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 5/6/26
+ * Date Updated: 5/7/26
  * Description:
  *      Communicates with the VAST system to handle all math logic.
  */
@@ -133,7 +133,7 @@ function hideTyping(messages, typingIndicator) {
     }
 }
 
-function addMessage(text, sender, typingIndicator) {
+async function addMessage(text, sender, typingIndicator) {
     const messages = document.getElementById("messages");
     if (typingIndicator) hideTyping(messages, typingIndicator);
 
@@ -145,6 +145,11 @@ function addMessage(text, sender, typingIndicator) {
     bubble.id = sender.toLowerCase();
     bubble.textContent = text;
     
+    const bubbleImg = document.createElement("img");
+    bubbleImg.id = sender.toLowerCase();
+    bubbleImg.src = (sender.toLowerCase() == "val") ? await getBlobItem("temp_val.png"): await getPFP(`${getUser()}.png`);
+    
+    message.appendChild(bubbleImg);
     message.appendChild(bubble);
     messages.appendChild(message);
     if (messages.scrollTop + messages.clientHeight >= messages.scrollHeight - 5) {

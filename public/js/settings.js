@@ -1,7 +1,7 @@
 /**
- * Author: dev.slife
+ * Author: dev.slife, sfesseha
  * Date Created: 4/30/26
- * Date Updated: 5/6/26
+ * Date Updated: 5/7/26
  * Description:
  *      Manages all account settings.
  */
@@ -130,7 +130,7 @@ async function changePFP() {
 
             if (result) {
                 showPFP(result["url"]);
-                showToast("Profile picture updated!", "🌠");
+                showToast("Profile picture updated!");
             } else {
                 showToast("Upload failed - please try again.", "⚠️");
             }

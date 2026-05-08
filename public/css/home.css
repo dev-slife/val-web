@@ -274,6 +274,11 @@ main {
     position: relative;
 }
 
+.bubble img {
+    max-height: 25px;
+    max-width: 25px;
+}
+
 .bubble#user {
     background: var(--accent-yellow);
     color: var(--bg-card);
