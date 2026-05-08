@@ -17,9 +17,9 @@ There are multiple people who worked hard and dependencies used to make VAL poss
     - Project Mangement
       
 -[kabya2]
-    -Documentation
-    -Technical Writing
-    -README & Markdown Support
+    - Documentation
+    - Technical Writing
+    - README & Markdown Support
 
 
 ## Dependencies
