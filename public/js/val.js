@@ -146,8 +146,8 @@ async function addMessage(text, sender, typingIndicator) {
     bubble.textContent = text;
     
     const bubbleImg = document.createElement("img");
-    bubbleImg.id = sender.toLowerCase();
-    bubbleImg.src = (sender.toLowerCase() == "val") ? await getBlobItem("temp_val.png"): await getPFP(`${getUser()}.png`);
+    bubbleImg.className = "bubble-img";
+    bubbleImg.src = (sender.toLowerCase() == "val") ? await getBlobItem("temp_val.png"): await getPFP(getUser());
     
     message.appendChild(bubbleImg);
     message.appendChild(bubble);
@@ -171,7 +171,7 @@ function messageSender() {
         if (!text) return;
         
         userInput.value = "";
-        addMessage(text, "user");
+        await addMessage(text, "user");
         
         if (responding) {
             userResponse = text;
@@ -185,7 +185,7 @@ function messageSender() {
                 const response = responses[i];
                 let typingIndicator = showTyping(messages);
                 await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
-                addMessage(response, "VAL", typingIndicator);
+                await addMessage(response, "VAL", typingIndicator);
                 if (response.includes("?")) {
                     let attempts = 0;
                     let correct = false;
@@ -207,15 +207,15 @@ function messageSender() {
                                 console.log(answers[i], expression);
                                 if (answers[i] == expression) {
                                     correct = true;
-                                    addMessage("Yes, nice job!", "VAL", typingIndicator);
+                                    await addMessage("Yes, nice job!", "VAL", typingIndicator);
                                 } else {
-                                    addMessage("Nope, that answer doesn't seem right.", "VAL", typingIndicator)
+                                    await addMessage("Nope, that answer doesn't seem right.", "VAL", typingIndicator)
                                 }
                             } else {
-                                addMessage("Hmm? Did you provide an answer?", "VAL", typingIndicator);
+                                await addMessage("Hmm? Did you provide an answer?", "VAL", typingIndicator);
                             }
                         } else {
-                            addMessage("Hmm? Did you provide an answer?", "VAL", typingIndicator);
+                            await addMessage("Hmm? Did you provide an answer?", "VAL", typingIndicator);
                         }
 
                         attempts++;

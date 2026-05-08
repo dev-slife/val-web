@@ -256,6 +256,7 @@ main {
     word-break: break-all;
     max-width: 90%;
     margin-bottom: 8px;
+    align-items: end;
 }
 
 .message.user {
@@ -274,9 +275,16 @@ main {
     position: relative;
 }
 
-.bubble img {
-    max-height: 25px;
-    max-width: 25px;
+.bubble-img {
+    max-height: 40px;
+    max-width: 40px;
+    margin-left: 8px;
+    margin-right: 8px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+    background: var(--bg-main);
+    display: block;
 }
 
 .bubble#user {
