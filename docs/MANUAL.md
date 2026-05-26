@@ -1,139 +1,188 @@
+# Developer Manual
+
+There are a lot of different systems and programs used to help make VAL possible. To help understand the overwhelming amount of components included in this repository, we made a manual which you can refer to when working on your own projects.
+
+## VAL Basics
+
 ### System Requirements
 
-Before you begin the setup, ensure that your system has the following prerequisites:
+Before you start anything, make sure that your system has the following prerequisites:
 
-Node.js: This is required to run the server-side application. Install the latest LTS version of Node.js from the official website
-.
-Docker: Docker is essential for running the web app in a containerized environment. If you don’t have Docker installed, you can download it from the Docker website
-.
-MongoDB: MongoDB is used for storing user data and conversation logs. Ensure you have MongoDB installed locally or have access to a MongoDB service. You can download MongoDB from here
-.
-MinIO: This is a high-performance object storage service used for storing files such as images or documents. MinIO should also be set up either locally or in the cloud. Download MinIO from here
-.
+[⚡Node.js](https://nodejs.org/en): A runtime environment used to run JavaScript programs. This is required for installing dependencies and running your web application. You can install the latest version of Node from their official website.
+
+> [!IMPORTANT]
+> Make sure to install Node.js with the `npm` package system.
+
+[🐳Docker](https://www.docker.com/): A popular container system used to help you run the environment for your web app. It's important to install this tool, so you can easily build a virtual network and manage all of your systems. You can download Docker from the official website.
+
+[🚂Express.js](https://expressjs.com/en/): A minimal and flexible node framework used to help create a backend for web applications. You may use other backends if preferred, but keep in mind that you may need to take different approaches that aren't discussed in this manual.
+
+[🍃MongoDB](https://www.mongodb.com/): A NoSQL database used to store unstructured data such as conversation history and system logs. Ensure the MongoDB [image](https://hub.docker.com/_/mongo) gets properly installed locally when building docker containers or you have access to their online service. Also make sure you have the `npm` package for API communication.
+
+[🔒bcrypt](https://www.npmjs.com/package/bcryptjs): A well known hashing package used to help keep passwords protected. It is **crucial** to have a proper hashing system, however if you have another preferred library feel free to use it. For proper password hashing, use an algorithm that follows the [OWASP](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) standard.
+
+[🦩MinIO](https://www.min.io/): This is a high performance object storage service used for storing files such as images or documents. MinIO should also be automatically set up locally when building your docker containers. Make sure you have the `npm` package installed as well.
+
+[📂Multer](https://www.npmjs.com/package/multer): A middleware for handling file uploads to the backend. This package is used to help users upload profile pictures to the web app.
+
+> [!TIP]
+> You can run `npm install` to quickly install every dependency included in [package.json](../package.json).
+
+
 ### Setting Up the Web App
 
-Clone the repository:
-First, you need to clone the web app repository to your local machine using Git.
+To create your own web app, first clone the repository to your local machine using [Git](https://git-scm.com/).
 
-git clone https://github.com/your-username/VAL.git
-cd VAL
+```bash
+git clone https://github.com/dev-slife/val-web.git
+```
 
-Install dependencies:
-The web app uses Node.js, so after navigating to the project directory, you’ll need to install all the required dependencies using npm.
+#### Building Docker Containers
+A `Dockerfile` and `docker-compose` file are already made in the [docker directory](../docker/) to handle building the images and running each container. To properly build each container, create a `.env` file in the docker folder and include the following variables:
+* APP_IMAGE
+  * The container image name and tag to be optionally pulled from your docker repo
+  * ex: devslife/image:latest
+    * devslife = username
+    * image = image name
+    * latest = grabs the latest tag
+* HOST_PORT
+  * The port to expose on the host machine when building the web app image
+  * ex: 3000
+* APP_PORT
+  * The port to expose on the web app
+  * ex: 3000
+* DB_USER
+  * The admin username for MongoDB
+  * ex: admin
+* DB_PASS
+  * The password to access the database
+  * ex: password123
+* DB_BASICAUTH_USER
+  * The username for mongo express (database console)
+  * ex: admin
+* DB_BASICAUTH_PASS
+  * The password for mongo express
+  * ex: password123
+* MINIO_USER
+  * The username for MinIO
+  * ex: admin
+* MINIO_PASS
+  * The password for managing MinIO's data
+  * ex: password123
+* MINIO_ENDPOINT
+  * The public endpoint to reach your MinIO server
+  * ex: host.docker.internal
+  * For Windows machines use the above example, Linux can use `localhost` or `127.0.0.1`
 
-npm install
+After installing Docker, open your terminal and type the following commands to build your images and run the containers on your local machine:
 
-Set up Docker:
-The application should be run inside a Docker container to simplify deployment. To do this, make sure you have Docker installed, then use the following steps:
+```bash
+cd val-web/docker # change to the path your docker folder resides in
+docker compose up
+```
 
-Create a Dockerfile in the root directory if not already present:
+This will expose the web app on `HOST_PORT`. You can access it by visiting `http://localhost:$HOST_PORT` in your browser (change `$HOST_PORT` with the actual number).
 
-FROM node:14
+> [!TIP]
+> You can add the flag `-d` to the `docker compose` command for "detached mode" to prevent the CLI from being taken over by your container's logs.
 
-WORKDIR /usr/src/app
 
-COPY package*.json ./
+### Noteable Functions
 
-RUN npm install
+The web app is structured around several key functions which are explained below. All API routes fall under the `/api` subdomain.
 
-COPY . .
+#### Account Management
 
-EXPOSE 3000
-
-CMD ["npm", "start"]
-
-Build the Docker container:
-
-docker build -t val-app .
-
-Run the container:
-
-docker run -p 3000:3000 val-app
-
-This will expose the web app on port 3000. You can access it by visiting http://localhost:3000 in your browser.
-
-### Configuring the Web App to Work with MongoDB and MinIO
-
-The VAL web app relies on MongoDB and MinIO for data storage and object storage respectively. Here's how to configure them:
-
-### MongoDB Configuration
-Install MongoDB (if not using a cloud service):
-Follow the instructions on the MongoDB website
- to install MongoDB on your local machine.
-
-Configure MongoDB connection:
-In the src/config.js file, configure the MongoDB connection URL. For example, if MongoDB is running locally on the default port, the URL might look like this:
-
-const mongoDBUrl = 'mongodb://localhost:27017/val_db';
-
-If you are using a cloud service like MongoDB Atlas, use the connection string provided by your service.
-
-Start MongoDB:
-Ensure MongoDB is running before starting the application. If you're running it locally, use the following command:
-
-mongod
-
-If using a cloud service, ensure the connection string is valid and MongoDB is accessible.
-
-### MinIO Configuration
-Install MinIO (if not using a cloud service):
-Download and install MinIO from the official site: MinIO
-.
-
-Configure MinIO:
-In the src/config.js file, set the appropriate values for MinIO's endpoint, access key, and secret key. Here’s an example configuration:
-
-const minioConfig = {
-  endpoint: 'localhost',
-  port: 9000,
-  accessKey: 'your-access-key',
-  secretKey: 'your-secret-key',
-  useSSL: false
-};
-
-Start MinIO:
-You can start MinIO locally using the following command:
-
-minio server /data
-
-This will start MinIO on port 9000. You can access it via http://localhost:9000. You’ll need to use the MinIO client or dashboard to create the necessary buckets for storage.
-
-### Important Functions in VAL Web App
-
-The web app is structured around several key functions that work together to provide a seamless experience for users. Below are the core components of the app, described in detail:
-
-### Handling User Accounts (/api/credentials)
+**Endpoint**: `/api/credentials`
 
 This endpoint is responsible for managing user authentication and credentials. It supports the following actions:
 
-Sign Up: Users can create an account by providing their details (email, password).
-Login: Users can log in to access their personalized experience and save their previous conversations.
-Session Management: The app uses JWT (JSON Web Tokens) for session management to ensure that only authenticated users can access certain features.
-### Algebra Processing and VAL Functions (/api/vast)
+* Register
+  * Users can create an account by providing their details
+  * Endpoint: `/register`
+  * Returns:
+    * status 200, 500, or 400
+    * success - could the user successfully register
+    * registered - whether the user is/was registered
+    * user - the user to register
+    * msg - a message explaining the output
+* Login
+  * Users can log in to access and update their personalized experience
+  * Endpoint: `/login`
+  * Returns the same variables as register
+* Session Management
+  * The web app currently uses session storage as a temporary authentication to keep users logged in
+  * This will change in the future for better security as the app continues to be worked on
 
-This is the core functionality of the web app. The /api/vast endpoint handles:
+> [!IMPORTANT]
+> All information is handled via the backend and all passwords are hashed before being sent to the database.
 
-Equation Parsing: When a user inputs an algebraic problem, the server parses the equation.
-Step-by-Step Solutions: VAL processes the equation using a set of algorithms and returns a step-by-step breakdown.
-Math Algorithms: VAL utilizes various algebraic algorithms, such as solving linear equations, quadratic equations, factorization, etc., to help users understand the concepts.
-### Conversation or File Storage (/api/storage)
 
-This endpoint manages the storage of conversations and other files:
+#### VAST
 
-Storing Conversations: If a user enables conversation history, their past queries and responses will be stored in MongoDB.
-File Management: The app allows users to upload and store files (such as math documents, images, etc.) using MinIO. These files are stored in a specified bucket, allowing easy access and retrieval.
-### Using the Web App
+**Endpoint**: `/api/vast`
 
-After setting up the system, here’s how to use the app:
+This endpoint is used to run VAST computations and solve math equations.
 
-Access the Web App: Open a browser and go to http://localhost:3000. You should see the home page.
-Create an Account or Log In: If you don’t have an account, sign up. If you have an account, log in to start using VAL.
-Ask VAL a Question: Once logged in, you can ask algebra-related questions. VAL will break down the problem and guide you through the solution.
-Manage Conversations: If you have enabled conversation history, you can view past interactions under the “Conversations” section.
-### Running the App
+* Simplifying
+  * For quick math simplification
+  * Endpoint: `/simplify`
+  * Returns:
+    * status 200, 400, or 500
+    * an error message or the answer
+* Solving
+  * For solving math equations
+  * Endpoint: `/solve`
+  * Returns the same variables as simplify
+* Asking Questions
+  * You can directly ask questions to VAL as if you are talking with another human being
+  * Endpoint: `/ask`
+  * Returns:
+    * status 200, 400, or 500
+    * answer - the solution to the given problem
+    * log - the steps to reach the answer
+    * slm - the generated messages
 
-Once all configurations are complete, you can start the application with:
+> [!NOTE]
+> VAL processes equations using a set of algorithms and returns a JSON containing the solution, the steps for reaching the answer, and generated messages.
 
+#### Object Storage
+
+**Endpoint**: `/api/storage`
+
+This endpoint is used to communicate with MinIO and store images.
+
+* Uploading PFPs
+  * Users can upload profile pictures to customize their account
+  * Endpoint: `/pfp/upload`
+  * Returns:
+    * status 200, 400, or 500
+    * msg - the server message
+    * url - the blob storage url of the uploaded image
+* Grabbing PFPs
+  * Users need to be able to see their pfps on the web app, so this endpoint is used to grab a working link to the image
+  * Endpoint: `pfp/pull`
+  * Returns the same variables as upload
+* Grabbing VAL's Images
+  * This is used to pull general images stored for the web app
+  * Endpoint: `blob/pull`
+  * Returns the same variables as upload
+
+
+### Running the App by Itself
+
+If you wish to quickly test the web app alone without using account features, you can run the following command in your VSCode terminal:
+
+```bash
 npm start
+```
 
-This will start the web server, and you should be able to access the app at http://localhost:3000.
+This will start the web server and you should be able to access the app at http://localhost:3000.
+
+> [!WARNING]
+> Testing the web app alone may break certain parts of the app, since some components rely on MongoDB and MinIO.
+
+
+## VAL's Simple Language Model
+
+*-- more will be added--*

@@ -1,5 +1,5 @@
 /**
- * Author: dev.slife, sfesseha
+ * Authors: dev.slife, sfesseha
  * Date Created: 4/30/26
  * Date Updated: 5/7/26
  * Description:

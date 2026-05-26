@@ -1,5 +1,5 @@
 /**
- * Author: jbeshir-umd, dev.slife
+ * Authors: dev.slife, jbeshir-umd
  * Date Created: 5/6/26
  * Date Updated: 5/7/26
  * Description:

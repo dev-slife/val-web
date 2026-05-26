@@ -1,0 +1,2 @@
+# Support
+In case you find any bugs, please use the bug report issue template. You can also use the feature request template for any new features you would like to see included. This helps us keep everything organized.

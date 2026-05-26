@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/16/26
- * Date Updated: 5/1/26
+ * Date Updated: 5/26/26
  * Description:
  *      Handles all MinIO communication.
  */
@@ -21,7 +21,10 @@ const upload = multer({
     limits: { fileSize: 10 * 1024 * 1024 } // 10MB
 });
 const minioEndpoint = () => {
-    if (process.env.MINIO_ENDPOINT) return process.env.MINIO_ENDPOINT;
+    // env
+    if (process.env.MINIO_ENDPOINT) {
+        return process.env.MINIO_ENDPOINT;
+    }
 
     // Windows
     if (process.env.NODE_ENV !== 'production' && process.platform === 'win32') {
@@ -67,7 +70,6 @@ async function grabPFP(key) {
 
 
 async function uploadPFP(key, file) {
-    console.log(minioEndpoint());
     const client = new minio.Client({
         endPoint: minioEndpoint(),
         port: 9000,

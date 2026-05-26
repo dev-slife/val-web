@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 4/25/26
+ * Date Updated: 5/26/26
  * Description:
  *      Works with the VAST system (C++) & VAL's SLM to generate responses and walk students through math problems.
  */
@@ -26,11 +26,7 @@ router.get('/simplify', async(req, res) => {
             const result = await algebra.simplify(decodeURIComponent(expression));
             res.status(200).send(result);
         } else {
-            res.status(400).send({
-                "answer": "Hi, I'm unable to help you without an equation to look at.",
-                "log": [],
-                "slm": []
-            });
+            res.status(400).send("Hi, I'm unable to help you without an equation to look at.");
         }
     } catch (err) {
         console.log(err);
@@ -46,11 +42,7 @@ router.get('/solve', async(req, res) => {
             const result = await algebra.solve(decodeURIComponent(expression));
             res.status(200).send(result);
         } else {
-            res.status(400).send({
-                "answer": "Hi, I'm unable to help you without an equation to look at.",
-                "log": [],
-                "slm": []
-            });
+            res.status(400).send("Hi, I'm unable to help you without an equation to look at.");
         }
     } catch (err) {
         console.log(err);

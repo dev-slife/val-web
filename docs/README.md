@@ -1,14 +1,21 @@
-﻿# VAL Web
+# Virtual Arithmetic Luminary
 
 VAL otherwise known as your Virtual Arithmetic Luminary, is a chatbot here to help you learn and better understand algebraic concepts!
 
-## How VAL Works
 
-VAL is a chatbot here to act as your mathemetical guide. If you're struggling to understand certain algebra concepts or are having difficulty solving an equation, you can ask VAL for help. As a math luminary, VAL will break down your problem into smaller chunks and walk you through the problem solving process. The goal is not to have VAL just give you answers, but to help you understand how to tackle algebraic problems.
+## VAL as a Tool
+
+### A Helpful Tutorbot
+
+VAL is a tutor chatbot here to act as your mathemetical guide. If you're struggling to understand certain algebra concepts or are having difficulty solving an equation, you can ask VAL for help. As a math luminary, VAL will break down your problem into smaller chunks and walk you through the problem solving process. The goal is not to have VAL just give you answers, but to help you understand how to tackle algebraic problems.
 
 In order to ask VAL questions, you have to head to a web app which is hosted on a [Docker container](https://www.docker.com/). From there you can navigate to the designated space for conversation with the chatbot. All questions given to VAL are handled directly through the backend. After some thinking, VAL will generate a response and walk you through the problem step by step. Past conversations will only be stored after the user enables the setting for their account and can be deleted at anytime.
 
-## Algorithms, NOT AI
+> [!IMPORTANT]
+> VAL is a WIP and currently does not have some features such as chat history.
+
+
+### Algorithms, NOT AI
 
 It's important to note that VAL is not an AI chatbot like other well known LLMs. Instead, VAL uses multiple different algorithms in order to solve math equations and know how to respond to certain inputs. This means that:
 
@@ -19,33 +26,35 @@ It's important to note that VAL is not an AI chatbot like other well known LLMs.
 5. NO DATA IS COLLECTED FOR TRAINING
 
 
-## Backend Overview
+## VAL as a Service
 
-The main server file is located at `src/index.js`. It manages communication between the frontend, backend, and web services.
+### Server Overview
 
-The application uses Express.js to serve pages and handle API requests.
+The backend uses multiple different scripts and libraries to help run the web app with the main file being [`index.js`](../src/index.js).
 
-## Main Routes
+The application uses the [Express.js](https://expressjs.com/en/) framework to serve pages and handle API requests.
 
-### Pages
+#### Page Routes
+- Home (`/`)
+- About (`/about`)
+- TOS (`/terms`)
+- Privacy Policy (`/privacy`)
+- Copyright (`/copyright`)
 
-- `/` Home page  
-- `/about` About page  
-- `/terms` Terms page  
-- `/privacy` Privacy page  
-- `/copyright` Copyright page  
+#### API Routes
+- User Accounts (`/api/credentials`)
+- Math (`/api/vast`) 
+- Object Storage (`/api/storage`)
 
-### API
+### Running the App
 
-- `/api/credentials` User account requests  
-- `/api/vast` Algebra processing and VAL functions  
-- `/api/storage` Conversation or file storage  
-
-## Running the App
+To run the web app alone, you can use these commands to install every dependency and start the service.
 
 ```bash
 npm install
 npm start
 ```
 
-## [See CREDITS](CREDITS.md#acknowledgments)
+This should expose the web app on port 3000 and you should be able to visit the home page with this link: http://localhost:3000
+
+If you want to use account features and save information, you will need to prepare a docker environment to run the web app along with MongoDB and MinIO. Information for setting up this environment and more can be found in the [developer manual](./MANUAL.md).

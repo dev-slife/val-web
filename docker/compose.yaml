@@ -10,10 +10,6 @@ services:
             dockerfile: ./docker/val.Dockerfile
         ports:
             - "${HOST_PORT}:${APP_PORT}"
-        networks:
-            default:
-                aliases:
-                    - val.dev-slife.test
         environment:
             NODE_ENV: development
             MONGO_CONN: mongodb://${DB_USER}:${DB_PASS}@mongodb:27017/?authSource=admin
@@ -73,6 +69,7 @@ services:
             MINIO_ROOT_PASSWORD: ${MINIO_PASS}
             MINIO_API_CORS_ALLOW_ORIGIN: 'http://localhost:${APP_PORT},http://127.0.0.1:${APP_PORT},http://localhost:*'
             MINIO_API_CORS_ALLOW_CREDENTIALS_WITH_WILDCARD: 'on'
+            MINIO_SERVER_URL: http://localhost:9000
         volumes:
             - minio-data:/data
         command: server /data --console-address ":9001"
