@@ -1,0 +1,6 @@
+.private
+.github
+.gitignore
+*.pyc
+__pycache__
+node_modules

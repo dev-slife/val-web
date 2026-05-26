@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/home.css">
+    <script src="../js/main.js"></script>
+    <script src="../js/temp_auth.js"></script>
+    <script src="../js/val.js"></script>
+    <title>VAL</title>
+</head>
+<body class="home-page" id="homePage">
+    <aside>
+        <div class="sidebar-header">
+            <span class="sidebar-header-btn">Chat History</span>
+        </div>
+
+        <div class="chat-history-list">
+            <div style="text-align:center; color: var(--text-muted); font-size: 0.82rem; font-weight: 600; padding: 24px 18px; letter-spacing: 0.05em;">Currently Unavailable</div>
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-footer">
+            <div class="account-info">
+                <img id="accountPFP">
+                <p id="accountName"></p>
+            </div>
+            <button class="sign-in-btn" onclick="changePage('login')">Sign In</button>
+        </div>
+    </aside>
+
+    <nav>
+        <button class="active" onclick="changePage('home')">Home</button>
+        <button onclick="changePage('about')">About</button>
+        <button onclick="changePage('privacy')">Privacy</button>
+        <button onclick="changePage('terms')">Terms &amp; Services</button>
+        <button onclick="changePage('copyright')">Copyright</button>
+        <button id="settingsBtn" onclick="changePage('settings')">Settings</button>
+    </nav>
+
+    <main>
+        <div class="logo-area" id="logo">
+            <div class="logo-letters">
+                <span class="logo-letter v">V</span>
+                <span class="logo-letter a">A</span>
+                <span class="logo-letter l">L</span>
+            </div>
+            <div class="logo-subtitle">Virtual Arithmetic Luminary</div>
+        </div>
+        
+        <div class="input-area">
+            <div id="messages" class="messages"></div>
+            <div class="input-wrapper">
+                <input type="text" placeholder="Type your equation here" id="mathInput" />
+                <button class="send-btn" id="sendBtn" aria-label="Send">Send</button>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

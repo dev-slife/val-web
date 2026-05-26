@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/info.css">
+    <script src="../js/main.js"></script>
+    <script src="../js/temp_auth.js"></script>
+    <title>Terms Of Service - VAL</title>
+</head>
+<body class="info-page">
+    <div class="logo-area">
+        <div class="logo-letters">
+            <span class="logo-letter v">V</span>
+            <span class="logo-letter a">A</span>
+            <span class="logo-letter l">L</span>
+        </div>
+        <div class="logo-subtitle">Virtual Arithmetic Luminary</div>
+    </div>
+
+    <nav>
+        <button onclick="changePage('home')">Home</button>
+        <button onclick="changePage('about')">About</button>
+        <button onclick="changePage('privacy')">Privacy</button>
+        <button class="active" onclick="changePage('terms')">Terms &amp; Services</button>
+        <button onclick="changePage('copyright')">Copyright</button>
+        <button id="settingsBtn" onclick="changePage('settings')">Settings</button>
+    </nav>
+
+    <main>
+        <div class="page-label">Terms &amp; Services Page</div>
+
+        <div class="content-card">
+            <p>
+                By accessing or using VAL (Virtual Arithmetic Luminary), you agree to be bound
+                by these Terms of Service. VAL is provided for educational and personal use only.
+                You may not misuse the platform, attempt to reverse-engineer it, or use it for
+                any unlawful purpose. We reserve the right to suspend or terminate access for
+                violations of these terms. VAL is provided "as is" without warranties of any kind.
+                We are not liable for any inaccuracies in generated content. These terms may be
+                updated at any time, and continued use constitutes acceptance of any changes.
+            </p>
+        </div>
+    </main>
+
+    <div class="bottom-section">
+        <div class="bottom-divider"></div>
+        <div class="account-info">
+            <img id="accountPFP">
+            <p id="accountName"></p>
+        </div>
+        <button class="sign-in-btn" onclick="changePage('login')">Sign In</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 VAL</p>
+    </footer>
+</body>
+</html>

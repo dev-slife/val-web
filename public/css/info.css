@@ -1,0 +1,59 @@
+.info-page nav {
+    margin: 0 auto 32px;
+    max-width: 960px;
+    background: #0d0d14;
+    border-radius: 999px;
+    border: 1px solid var(--nav-border);
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+.info-page nav button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 10px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-family: var(--font-nav);
+    font-size: 18px;
+    letter-spacing: 1px;
+    border-right: 1px solid var(--nav-border);
+    background: rgba(255,255,255,0);
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.info-page nav button:last-child {
+    border-right: none;
+}
+
+.info-page nav button:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+.info-page nav button.active {
+    color: var(--accent-blue);
+}
+
+.info-page main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+}
+
+.info-page main div h1 {
+    display: none;
+}
+
+.info-page .title {
+    display: none;
+}
+
+
+/* Make logo slightly smaller on info pages */
+.logo-letter {
+    font-size: 96px;
+}

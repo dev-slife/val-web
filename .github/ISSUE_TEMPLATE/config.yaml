@@ -1,0 +1,6 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Documentation
+    about: Please check the documentation before opening any issues
+    url: https://github.com/dev-slife/val-web/blob/main/docs/README.md
