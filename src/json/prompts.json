@@ -1,0 +1,493 @@
+{
+    "name": "VAL Response Bank",
+    "version": "1.0.0",
+    "description": "VAL's tutor responses organized by category and step type",
+    "messages": [
+        {
+            "id": "guided_001",
+            "category": "guidance",
+            "step_type": "start",
+            "difficulty": "beginner",
+            "tone": "friendly",
+            "text": "Let's start by identifying what we're trying to find.",
+            "tags": ["start", "planning"]
+        },
+        {
+            "id": "guided_002",
+            "category": "guidance",
+            "step_type": "start",
+            "difficulty": "beginner",
+            "tone": "friendly",
+            "text": "Before calculating, what should we do first?",
+            "tags": ["planning", "strategy"]
+        },
+        {
+            "id": "guided_003",
+            "category": "guidance",
+            "step_type": "simplify",
+            "difficulty": "beginner",
+            "tone": "friendly",
+            "text": "Can we rewrite this equation in a simpler form?",
+            "tags": ["simplify", "rewrite"]
+        },
+        {
+            "id": "guided_004",
+            "category": "guidance",
+            "step_type": "isolate_variable",
+            "difficulty": "intermediate",
+            "tone": "direct",
+            "text": "What's the first step to isolate the variable?",
+            "tags": ["isolate", "variable"]
+        },
+        {
+            "id": "guided_005",
+            "category": "guidance",
+            "step_type": "combine_like_terms",
+            "difficulty": "beginner",
+            "tone": "friendly",
+            "text": "Do you see any like terms we can combine?",
+            "tags": ["like_terms", "combine"]
+        },
+        {
+            "id": "guided_006",
+            "category": "guidance",
+            "step_type": "distribute",
+            "difficulty": "beginner",
+            "tone": "friendly",
+            "text": "Can we eliminate any parentheses first?",
+            "tags": ["parentheses", "distribute"]
+        },
+        {
+            "id": "steps_001",
+            "category": "next_step",
+            "step_type": "combine_like_terms",
+            "difficulty": "beginner",
+            "tone": "neutral",
+            "text": "First, combine like terms where possible.",
+            "tags": ["simplify", "like_terms"]
+        },
+        {
+            "id": "steps_002",
+            "category": "next_step",
+            "step_type": "isolate_variable",
+            "difficulty": "intermediate",
+            "tone": "neutral",
+            "text": "Now let's isolate the variable step by step.",
+            "tags": ["isolate", "process"]
+        },
+        {
+            "id": "steps_003",
+            "category": "next_step",
+            "step_type": "inverse_operation",
+            "difficulty": "intermediate",
+            "tone": "neutral",
+            "text": "We'll undo operations in reverse order.",
+            "tags": ["inverse", "order"]
+        },
+        {
+            "id": "steps_004",
+            "category": "next_step",
+            "step_type": "distribute",
+            "difficulty": "beginner",
+            "tone": "neutral",
+            "text": "Let's get rid of any parentheses by distributing.",
+            "tags": ["distribute", "parentheses"]
+        },
+        {
+            "id": "steps_005",
+            "category": "next_step",
+            "step_type": "isolate_variable",
+            "difficulty": "intermediate",
+            "tone": "neutral",
+            "text": "Now move all variable terms to one side.",
+            "tags": ["variables", "grouping"]
+        },
+        {
+            "id": "steps_006",
+            "category": "next_step",
+            "step_type": "isolate_variable",
+            "difficulty": "intermediate",
+            "tone": "neutral",
+            "text": "Next, move constants to the other side.",
+            "tags": ["constants", "grouping"]
+        },
+        {
+            "id": "steps_007",
+            "category": "next_step",
+            "step_type": "simplify",
+            "difficulty": "beginner",
+            "tone": "neutral",
+            "text": "Let's simplify again before the next step.",
+            "tags": ["simplify", "cleanup"]
+        },
+        {
+            "id": "steps_008",
+            "category": "next_step",
+            "step_type": "finish",
+            "difficulty": "intermediate",
+            "tone": "neutral",
+            "text": "Now divide both sides to solve for the variable.",
+            "tags": ["solve", "divide"]
+        },
+        {
+            "id": "hint_001",
+            "category": "hint",
+            "step_type": "combine_like_terms",
+            "difficulty": "beginner",
+            "tone": "friendly",
+            "text": "Try combining like terms first.",
+            "tags": ["like_terms", "hint"]
+        },
+        {
+            "id": "hint_002",
+            "category": "hint",
+            "step_type": "isolate_variable",
+            "difficulty": "intermediate",
+            "tone": "direct",
+            "text": "Watch the signs when moving terms across the equation.",
+            "tags": ["signs", "moving_terms"]
+        },
+        {
+            "id": "hint_003",
+            "category": "hint",
+            "step_type": "distribute",
+            "difficulty": "beginner",
+            "tone": "direct",
+            "text": "Distribute carefully across everything inside the parentheses.",
+            "tags": ["distribute", "parentheses"]
+        },
+        {
+            "id": "hint_004",
+            "category": "hint",
+            "step_type": "inverse_operation",
+            "difficulty": "intermediate",
+            "tone": "friendly",
+            "text": "Think about inverse operations here.",
+            "tags": ["inverse", "operations"]
+        },
+        {
+            "id": "hint_005",
+            "category": "hint",
+            "step_type": "simplify",
+            "difficulty": "beginner",
+            "tone": "friendly",
+            "text": "Check if anything cancels out.",
+            "tags": ["cancel", "simplify"]
+        },
+        {
+            "id": "hint_006",
+            "category": "hint",
+            "step_type": "isolate_variable",
+            "difficulty": "intermediate",
+            "tone": "direct",
+            "text": "Try isolating the variable term before simplifying further.",
+            "tags": ["isolate", "order"]
+        },
+        {
+            "id": "hint_007",
+            "category": "hint",
+            "step_type": "finish",
+            "difficulty": "intermediate",
+            "tone": "direct",
+            "text": "Be careful when dividing by a coefficient.",
+            "tags": ["divide", "coefficient"]
+        },
+        {
+            "id": "correct_001",
+            "category": "error_check",
+            "step_type": "isolate_variable",
+            "difficulty": "intermediate",
+            "tone": "direct",
+            "text": "Check your signs, did anything flip incorrectly?",
+            "tags": ["signs", "error"]
+        },
+        {
+            "id": "correct_002",
+            "category": "error_check",
+            "step_type": "inverse_operation",
+            "difficulty": "intermediate",
+            "tone": "direct",
+            "text": "Make sure you applied the operation to every term.",
+            "tags": ["operations", "complete"]
+        },
+        {
+            "id": "correct_003",
+            "category": "error_check",
+            "step_type": "distribute",
+            "difficulty": "beginner",
+            "tone": "direct",
+            "text": "Did you distribute to all terms inside the parentheses?",
+            "tags": ["distribute", "complete"]
+        },
+        {
+            "id": "correct_004",
+            "category": "error_check",
+            "step_type": "simplify",
+            "difficulty": "beginner",
+            "tone": "direct",
+            "text": "Double check your calculation here.",
+            "tags": ["arithmetic", "error"]
+        },
+        {
+            "id": "correct_005",
+            "category": "error_check",
+            "step_type": "combine_like_terms",
+            "difficulty": "beginner",
+            "tone": "direct",
+            "text": "Did you combine like terms correctly?",
+            "tags": ["like_terms", "error"]
+        },
+        {
+            "id": "correct_006",
+            "category": "error_check",
+            "step_type": "simplify",
+            "difficulty": "beginner",
+            "tone": "direct",
+            "text": "Make sure nothing was accidentally dropped.",
+            "tags": ["terms", "missing"]
+        },
+        {
+            "id": "correct_007",
+            "category": "error_check",
+            "step_type": "finish",
+            "difficulty": "intermediate",
+            "tone": "direct",
+            "text": "Check if you divided every term properly.",
+            "tags": ["divide", "complete"]
+        },
+        {
+            "id": "correct_008",
+            "category": "error_check",
+            "step_type": "simplify",
+            "difficulty": "intermediate",
+            "tone": "direct",
+            "text": "Be careful with negative numbers in this step.",
+            "tags": ["negatives", "signs"]
+        },
+        {
+            "id": "correct_009",
+            "category": "error_check",
+            "step_type": "simplify",
+            "difficulty": "intermediate",
+            "tone": "direct",
+            "text": "Let's verify that simplification again.",
+            "tags": ["verify", "simplify"]
+        },
+        {
+            "id": "pace_001",
+            "category": "encouragement",
+            "step_type": "simplify",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "You're on the right track.",
+            "tags": ["progress", "positive"]
+        },
+        {
+            "id": "pace_002",
+            "category": "encouragement",
+            "step_type": "simplify",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "Nice, that step simplifies things a lot.",
+            "tags": ["progress", "simplify"]
+        },
+        {
+            "id": "pace_003",
+            "category": "encouragement",
+            "step_type": "simplify",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "Good catch, that helps move us forward.",
+            "tags": ["progress", "insight"]
+        },
+        {
+            "id": "pace_004",
+            "category": "encouragement",
+            "step_type": "inverse_operation",
+            "difficulty": "intermediate",
+            "tone": "encouraging",
+            "text": "This is the tricky step, but you've got it.",
+            "tags": ["challenge", "success"]
+        },
+        {
+            "id": "lead_001",
+            "category": "next_step",
+            "step_type": "simplify",
+            "difficulty": "beginner",
+            "tone": "friendly",
+            "text": "Now that we simplified, what's the next move?",
+            "tags": ["next", "planning"]
+        },
+        {
+            "id": "lead_002",
+            "category": "next_step",
+            "step_type": "isolate_variable",
+            "difficulty": "intermediate",
+            "tone": "friendly",
+            "text": "What's left preventing the variable from being isolated?",
+            "tags": ["isolate", "blockers"]
+        },
+        {
+            "id": "lead_003",
+            "category": "next_step",
+            "step_type": "simplify",
+            "difficulty": "beginner",
+            "tone": "friendly",
+            "text": "How can we simplify this even further?",
+            "tags": ["simplify", "next"]
+        },
+        {
+            "id": "lead_004",
+            "category": "next_step",
+            "step_type": "finish",
+            "difficulty": "intermediate",
+            "tone": "friendly",
+            "text": "What's the final step to solve this?",
+            "tags": ["finish", "final"]
+        },
+        {
+            "id": "lead_005",
+            "category": "next_step",
+            "step_type": "simplify",
+            "difficulty": "beginner",
+            "tone": "friendly",
+            "text": "Is there anything left to clean up?",
+            "tags": ["cleanup", "next"]
+        },
+        {
+            "id": "lead_006",
+            "category": "next_step",
+            "step_type": "simplify",
+            "difficulty": "beginner",
+            "tone": "friendly",
+            "text": "Can we reduce this expression more?",
+            "tags": ["reduce", "simplify"]
+        },
+        {
+            "id": "lead_007",
+            "category": "next_step",
+            "step_type": "finish",
+            "difficulty": "intermediate",
+            "tone": "friendly",
+            "text": "What's stopping us from getting the answer right now?",
+            "tags": ["blockers", "finish"]
+        },
+        {
+            "id": "feedback_001",
+            "category": "good_job",
+            "step_type": "any",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "Nice work!",
+            "tags": ["positive", "short"]
+        },
+        {
+            "id": "feedback_002",
+            "category": "good_job",
+            "step_type": "any",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "Great job!",
+            "tags": ["positive", "short"]
+        },
+        {
+            "id": "feedback_003",
+            "category": "good_job",
+            "step_type": "any",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "That's correct!",
+            "tags": ["positive", "correct"]
+        },
+        {
+            "id": "feedback_004",
+            "category": "good_job",
+            "step_type": "any",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "Well done!",
+            "tags": ["positive", "short"]
+        },
+        {
+            "id": "feedback_005",
+            "category": "good_job",
+            "step_type": "any",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "You got it!",
+            "tags": ["positive", "success"]
+        },
+        {
+            "id": "feedback_006",
+            "category": "good_job",
+            "step_type": "any",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "Exactly right!",
+            "tags": ["positive", "precise"]
+        },
+        {
+            "id": "feedback_007",
+            "category": "good_job",
+            "step_type": "any",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "Perfect!",
+            "tags": ["positive", "short"]
+        },
+        {
+            "id": "feedback_008",
+            "category": "good_job",
+            "step_type": "any",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "Good thinking!",
+            "tags": ["positive", "process"]
+        },
+        {
+            "id": "feedback_009",
+            "category": "good_job",
+            "step_type": "any",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "You handled that well.",
+            "tags": ["positive", "skill"]
+        },
+        {
+            "id": "feedback_010",
+            "category": "good_job",
+            "step_type": "any",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "That's exactly how to do it.",
+            "tags": ["positive", "method"]
+        },
+        {
+            "id": "feedback_011",
+            "category": "good_job",
+            "step_type": "any",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "Solid work.",
+            "tags": ["positive", "reliable"]
+        },
+        {
+            "id": "feedback_012",
+            "category": "good_job",
+            "step_type": "any",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "Great progress!",
+            "tags": ["positive", "progress"]
+        },
+        {
+            "id": "feedback_013",
+            "category": "good_job",
+            "step_type": "simplify",
+            "difficulty": "beginner",
+            "tone": "encouraging",
+            "text": "Nice simplification!",
+            "tags": ["positive", "simplify"]
+        }
+    ]
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/info.css">
+    <script src="../js/main.js"></script>
+    <script src="../js/temp_auth.js"></script>
+    <title>Privacy Policy - VAL</title>
+</head>
+<body class="info-page">
+    <div class="logo-area">
+        <div class="logo-letters">
+            <span class="logo-letter v">V</span>
+            <span class="logo-letter a">A</span>
+            <span class="logo-letter l">L</span>
+        </div>
+        <div class="logo-subtitle">Virtual Arithmetic Luminary</div>
+    </div>
+
+    <nav>
+        <button onclick="changePage('home')">Home</button>
+        <button onclick="changePage('about')">About</button>
+        <button class="active" onclick="changePage('privacy')">Privacy</button>
+        <button onclick="changePage('terms')">Terms &amp; Services</button>
+        <button onclick="changePage('copyright')">Copyright</button>
+        <button id="settingsBtn" onclick="changePage('settings')">Settings</button>
+    </nav>
+
+    <main>
+        <div class="page-label">Privacy Page</div>
+
+        <div class="content-card">
+            <p>
+                It's crucial to keep track of what data you share and what information is being
+                collected. To keep as much of your data private, VAL will only collect information
+                that is necessary to provide and improve your experience. Some examples of this
+                include your account details if you choose to register for an account and any errors
+                VAL encounters when you converse with the virtual luminary. Conversation history
+                is only collected if you choose to enable the setting. Please do not provide or enter
+                any sensitive or personal information! We will never ask for your password or other
+                sensitive info! Your data is never sold to third parties and keep your data encrypted
+                with industry standard methods to keep your data safe. By using VAL, you agree to the
+                collection and use of information in accordance with this policy. You may request
+                deletion of your data at any time by contacting us.
+            </p>
+        </div>
+    </main>
+
+    <div class="bottom-section">
+        <div class="bottom-divider"></div>
+        <div class="account-info">
+            <img id="accountPFP">
+            <p id="accountName"></p>
+        </div>
+        <button class="sign-in-btn" onclick="changePage('login')">Sign In</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 VAL</p>
+    </footer>
+</body>
+</html>

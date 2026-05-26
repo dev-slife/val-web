@@ -1,0 +1,143 @@
+name: VAST Download
+env:
+  VAST_BUILD: "vast-linux"
+on:
+  push:
+    branches: [ main ]
+    
+permissions:
+  contents: write
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Current Repo
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Checkout VAST Repo
+      uses: actions/checkout@v4
+      with:
+        repository: dev-slife/val-ast
+        token: ${{ secrets.VAST_DOWNLOAD }}
+        path: val-ast
+
+    - name: Grab Latest Tag
+      id: latest-tag
+      working-directory: val-ast
+      run: |
+        git fetch --tags --unshallow
+        echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+
+    - name: Grab Latest Workflow Run
+      id: latest-run
+      env:
+        GITHUB_TOKEN: ${{ secrets.VAST_DOWNLOAD }}
+      run: |
+        RUN_ID=$(gh api \
+          -H "Accept: application/vnd.github+json" \
+          /repos/dev-slife/val-ast/actions/runs?per_page=1 \
+          | jq -r '.workflow_runs[0].id')
+
+        if [ -z "$RUN_ID" ]; then
+          echo "No workflow runs found - check if val-ast has Actions enabled"
+          exit 1
+        fi
+
+        echo "run-id=$RUN_ID" >> $GITHUB_OUTPUT
+
+    - name: Grab VAST Build
+      id: latest-artifact
+      env:
+        GITHUB_TOKEN: ${{ secrets.VAST_DOWNLOAD }}
+      run: |
+        ARTIFACT_ID=$(gh api \
+          -H "Accept: application/vnd.github+json" \
+          /repos/dev-slife/val-ast/actions/runs/${{ steps.latest-run.outputs.run-id }}/artifacts \
+          | jq -r --arg substr "$VAST_BUILD" '.artifacts[] | select(.name | contains($substr)) | .id // empty')
+
+        if [ -z "$ARTIFACT_ID" ] || [ "$ARTIFACT_ID" = "null" ]; then
+          echo "No artifact containing '$VAST_BUILD' found"
+          exit 1
+        fi
+
+        echo "artifact-id=$ARTIFACT_ID" >> $GITHUB_OUTPUT
+
+    - name: Set Tag Data
+      run: |
+        echo "VAST_VER=${{ steps.latest-tag.outputs.tag }}" >> $GITHUB_ENV
+        echo "VAST_ID=${{ steps.latest-artifact.outputs.artifact-id }}" >> $GITHUB_ENV
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '24'
+
+    - name: Cache VAST
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: src/libs/vast
+        key: vast-${{ env.VAST_ID }}
+        restore-keys: vast-
+    
+    - name: Download VAST
+      if: steps.cache.outputs.cache-hit != 'true'
+      env:
+        GITHUB_TOKEN: ${{ secrets.VAST_DOWNLOAD }}
+      run: |
+        rm -rf src/libs/vast || true
+
+        echo "Downloading artifact..."
+        curl -L -H "Authorization: token $GITHUB_TOKEN" \
+          "https://api.github.com/repos/dev-slife/val-ast/actions/artifacts/${{ env.VAST_ID }}/zip" \
+          -o vast.zip
+
+        mkdir -p src/libs/vast
+        unzip -o vast.zip -d src/libs/vast/
+        rm vast.zip
+        ls -la src/libs/vast/
+
+    - name: Test New VAST
+      if: steps.cache.outputs.cache-hit != 'true'
+      id: vast-test
+      shell: bash
+      run: |
+        npm ci
+        npm start &
+        npx wait-on http://localhost:3000/ || sleep 5
+        npm test
+        npm audit fix
+
+    - name: Commit VAST Files
+      if: steps.cache.outputs.cache-hit != 'true' && steps.vast-test.outcome == 'success'
+      env:
+        GITHUB_TOKEN: ${{ secrets.VAST_UPLOAD }}
+        GIT_AUTHOR_NAME: VAL
+        GIT_AUTHOR_EMAIL: val-slife@users.noreply.github.com
+        GIT_COMMITTER_NAME: VAL
+        GIT_COMMITTER_EMAIL: val-slife@users.noreply.github.com
+      run: |
+        git config user.name "$GIT_AUTHOR_NAME"
+        git config user.email "$GIT_AUTHOR_EMAIL"
+        git add src/libs/vast/*
+        git commit -m "Updated Dependency: VAST ${{ env.VAST_VER }}" || echo "No changes"
+        git remote set-url origin https://x-access-token:$GITHUB_TOKEN@github.com/dev-slife/val-web.git
+        git push origin HEAD:main
+
+    - name: Revert VAST
+      if: steps.cache.outputs.cache-hit != 'true' && steps.vast-test.outcome == 'failure'
+      env:
+        GITHUB_TOKEN: ${{ secrets.VAST_UPLOAD }}
+        GIT_AUTHOR_NAME: VAL
+        GIT_AUTHOR_EMAIL: val-slife@users.noreply.github.com
+        GIT_COMMITTER_NAME: VAL
+        GIT_COMMITTER_EMAIL: val-slife@users.noreply.github.com
+      run: |
+        git config user.name "$GIT_AUTHOR_NAME"
+        git config user.email "$GIT_AUTHOR_EMAIL"
+        git revert HEAD --no-edit
+        git remote set-url origin https://x-access-token:$GITHUB_TOKEN@github.com/dev-slife/val-web.git
+        git push origin HEAD:main

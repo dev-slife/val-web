@@ -1,0 +1,87 @@
+name: val
+
+services:
+    val-web:
+        image: ${APP_IMAGE}
+        container_name: web-app
+        restart: always
+        build:
+            context: ..
+            dockerfile: ./docker/val.Dockerfile
+        ports:
+            - "${HOST_PORT}:${APP_PORT}"
+        environment:
+            NODE_ENV: development
+            MONGO_CONN: mongodb://${DB_USER}:${DB_PASS}@mongodb:27017/?authSource=admin
+            MINIO_USER: ${MINIO_USER}
+            MINIO_PASS: ${MINIO_PASS}
+            MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+            PORT: ${APP_PORT}
+        depends_on:
+            mongodb:
+                condition: service_healthy
+            minio:
+                condition: service_healthy
+
+    mongo-express:
+        image: mongo-express:latest
+        container_name: mongo-express
+        restart: always
+        ports:
+            - "8081:8081"
+        environment:
+            ME_CONFIG_MONGODB_ADMINUSERNAME: ${DB_USER}
+            ME_CONFIG_MONGODB_ADMINPASSWORD: ${DB_PASS}
+            ME_CONFIG_MONGODB_URL: mongodb://${DB_USER}:${DB_PASS}@mongodb:27017/?authSource=admin
+            ME_CONFIG_BASICAUTH_USERNAME: ${DB_BASICAUTH_USER}
+            ME_CONFIG_BASICAUTH_PASSWORD: ${DB_BASICAUTH_PASS}
+        depends_on:
+            mongodb:
+                condition: service_healthy
+
+    mongodb:
+        image: mongo:latest
+        container_name: mongodb
+        restart: unless-stopped
+        ports:
+            - "27017:27017"
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+            MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
+        volumes:
+            - mongo-data:/data/db
+            - mongo-config:/data/configdb
+        healthcheck:
+            test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 })"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    minio:
+        image: quay.io/minio/minio:latest
+        container_name: minio
+        restart: always
+        ports:
+            - "9000:9000"
+            - "9001:9001"
+        environment:
+            MINIO_ROOT_USER: ${MINIO_USER}
+            MINIO_ROOT_PASSWORD: ${MINIO_PASS}
+            MINIO_API_CORS_ALLOW_ORIGIN: 'http://localhost:${APP_PORT},http://127.0.0.1:${APP_PORT},http://localhost:*'
+            MINIO_API_CORS_ALLOW_CREDENTIALS_WITH_WILDCARD: 'on'
+            MINIO_SERVER_URL: http://localhost:9000
+        volumes:
+            - minio-data:/data
+        command: server /data --console-address ":9001"
+        healthcheck:
+            test: ["CMD-SHELL", "bash -c ':> /dev/tcp/127.0.0.1/9000' || exit 1"]
+            interval: 10s
+            timeout: 5s
+            retries: 3
+            start_period: 5s
+        
+
+volumes:
+    mongo-data:
+    mongo-config:
+    minio-data:

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/account.css">
+    <script src="../js/main.js"></script>
+    <title>Login - VAL</title>
+</head>
+<body class="account-page">
+    <div class="logo-area">
+        <div class="logo-letters">
+            <span class="logo-letter v">V</span>
+            <span class="logo-letter a">A</span>
+            <span class="logo-letter l">L</span>
+        </div>
+        <div class="logo-subtitle">Virtual Arithmetic Luminary</div>
+    </div>
+
+    <main>
+        <div class="account-card">
+            <h1>Sign In</h1>
+            <form id="login-form">
+                <input type="text" placeholder="Username" id="username" name="username">
+                <input type="password" placeholder="Password" id="pass" name="pass">
+                <button id="login">Login</button>
+            </form>
+            <p id="error-msg">Incorrect username or password was given.</p>
+        </div>
+
+        <div class="account-footer">
+            <p>Don't have an account? <a onclick="changePage('register')">Register</a></p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 VAL</p>
+    </footer>
+</body>
+</html>
