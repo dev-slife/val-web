@@ -1,4 +1,4 @@
-﻿# Virtual Arithmetic Luminary
+# Virtual Arithmetic Luminary
 
 VAL otherwise known as your Virtual Arithmetic Luminary, is a chatbot here to help you learn and better understand algebraic concepts!
 
