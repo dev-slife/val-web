@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/16/26
- * Date Updated: 5/26/26
+ * Date Updated: 5/29/26
  * Description:
  *      Handles all MinIO communication.
  */
@@ -53,7 +53,10 @@ async function grabPFP(key) {
     try {
         const bucketFound = await client.bucketExists(pfpBucket);
         if (bucketFound) {
-            const url = await client.presignedGetObject(pfpBucket, key, 60 * 5);
+            const url = await client.presignedGetObject(
+                pfpBucket, key, 60 * 5,
+                {'response-content-disposition': 'inline'}
+            );
             return url;
         } else {
             console.error(`${pfpBucket} does not exist as a storage bucket.`);
@@ -115,7 +118,10 @@ async function getBlobItem(key) {
     try {
         const bucketFound = await client.bucketExists(valBlob);
         if (bucketFound) {
-            const url = await client.presignedGetObject(valBlob, key, 60 * 5);
+            const url = await client.presignedGetObject(
+                valBlob, key, 10,
+                {'response-content-disposition': 'inline'}
+            );
             return url;
         } else {
             console.error(`${valBlob} does not exist as a storage bucket.`);
@@ -144,9 +150,7 @@ router.post('/pfp/upload', upload.single('pfp'), async(req, res) => {
             res.status(400).send("No user was given.");
         }
         
-        console.log('Uploading to bucket:', pfpBucket, 'key:', key);
         const url = await uploadPFP(key, file);
-
         res.status(200).send({
             "message": 'Profile picture uploaded successfully',
             "url": url

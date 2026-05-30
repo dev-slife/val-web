@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 5/7/26
+ * Date Updated: 5/29/26
  * Description:
  *      Handles main frontend interaction.
  */
@@ -47,10 +47,19 @@ async function changePage(page="home", is_index_file=false) {
 
 async function login(user, pass) {
     try {
-        const url = `/api/credentials/login?user=${user}&pass=${pass}`;
-        const response = await fetch(url);
-        const result = await response.json();
-        return result;
+        const url = "/api/db/user/login";
+        const payload = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "user": user,
+                "pass": pass
+            })
+        }
+        const response = await fetch(url, payload);
+        return response.json();
     } catch (error) {
         console.error("Account login failed.");
         return false;
@@ -60,10 +69,19 @@ async function login(user, pass) {
 
 async function register(user, pass) {
     try {
-        const url = `/api/credentials/register?user=${user}&pass=${pass}`;
-        const response = await fetch(url);
-        const result = await response.json();
-        return result;
+        const url = "/api/db/user/register";
+        const payload = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "user": user,
+                "pass": pass
+            })
+        }
+        const response = await fetch(url, payload);
+        return response.json();
     } catch (error) {
         console.error("Could not register account.");
         return false;
@@ -113,6 +131,11 @@ async function getPFP(user, default_img=false) {
 
 function saveUser(user) {
     sessionStorage.setItem(SESSION_ID, JSON.stringify(user));
+}
+
+
+function getUser(user) {
+    return JSON.parse(sessionStorage.getItem(SESSION_ID));
 }
 
 
@@ -170,5 +193,12 @@ document.addEventListener("DOMContentLoaded", async() => {
                 }
             }
         })
+    }
+});
+
+
+document.addEventListener('contextmenu', (e) => {
+    if (e.target.tagName === 'CANVAS') {
+        e.preventDefault();
     }
 });

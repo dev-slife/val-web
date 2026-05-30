@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 5/2/26
+ * Date Updated: 5/26/26
  * Description:
  *      Handles all main API communication between the frontend, backend, and web app services.
  */
@@ -21,7 +21,7 @@ const options = {
     extensions: ['html']
 }
 
-const credRouter = require("./libs/app/credentials");
+const db = require("./libs/app/db.js");
 const vastRouter = require("./libs/app/vast");
 const storeRouter = require("./libs/app/storage");
 const msgGen = require("./libs/app/slm.js");
@@ -36,7 +36,7 @@ app.use(express.static(__public, options));
 app.use(express.json());
 
 // Mount routers
-app.use('/api/credentials', credRouter);
+app.use('/api/db', db.router);
 app.use('/api/vast', vastRouter);
 app.use('/api/storage', storeRouter);
 
@@ -84,19 +84,4 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, async () => {
     console.log(`App listening on port ${PORT}`);
-    console.log("Matches Schema: " + JSON.stringify(msgGen.validatePrompts()));
-
-    // try {
-    //     const model = new msgGen.SLM();
-    //     const question = "Hey VAL, could you help me simplify this: 5x-3x+2";
-    //     const eq = msgGen.analyzeMsg(question)["equation"];
-    //     console.log("Equation: ", eq);
-    //     const answer = await algebra.solve(eq);
-    //     console.log("TutorLog: ", answer["log"]);
-    //     const result = model.ask(question, answer["log"]);
-    //     console.log("Randomly Generated Message(s):");
-    //     console.log(result);
-    // } catch (err) {
-    //     console.error(err);
-    // }
 });

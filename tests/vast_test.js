@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/23/26
- * Date Updated: 4/23/26
+ * Date Updated: 5/26/26
  * Description:
  *      Tests the VAST system
  */
@@ -14,7 +14,7 @@ async function testSimplify() {
     const response = await fetch('localhost:3000/api/vast/simplify?expression=5x-3x%2B2');
     const data = await response.json();
     console.assert(response.status == 200, 'Status should be 200');
-    console.assert(data.answer == "2x+2", 'Simplify failed')
+    console.assert(data.answer == "2x+2", 'Simplify failed');
 }
 
 

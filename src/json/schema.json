@@ -41,7 +41,10 @@
                         "encouragement",
                         "next_step",
                         "final_check",
-                        "good_job"
+                        "good_job",
+                        "server_error",
+                        "no_equation",
+                        "confused"
                     ]
                 },
                 "step_type": {
@@ -55,6 +58,7 @@
                         "inverse_operation",
                         "check_work",
                         "finish",
+                        "error",
                         "any"
                     ]
                 },

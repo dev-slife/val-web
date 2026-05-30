@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 5/26/26
+ * Date Updated: 5/29/26
  * Description:
  *      Works with the VAST system (C++) & VAL's SLM to generate responses and walk students through math problems.
  */
@@ -13,7 +13,9 @@
 const express = require("express");
 const router = express.Router();
 const algebra = require("../vast/api/algebra.js");
-const { SLM, analyzeMsg } = require("../app/slm.js");
+const { saveChat, pullChat } = require("../app/db.js");
+const { ModelManager, SLM } = require("../app/slm.js");
+const MODELS = new ModelManager();
 
 
 
@@ -51,25 +53,37 @@ router.get('/solve', async(req, res) => {
 });
 
 
-router.get('/ask', async(req, res) => {
+router.post('/ask', async(req, res) => {
     try {
-        const { question } = req.query;
-        const response = analyzeMsg(question);
-        const expression = response["equation"];
-        if (expression) {
-            const result = await algebra.solve(decodeURIComponent(expression));
-            const model = new SLM();
-            const msgList = model.ask(decodeURIComponent(question), result["log"]);
+        const { user, guest_id, question } = req.body;
+        if (user) {
+            const model = MODELS.find(user) ?? MODELS.create(user).model;
+            const reply = await model.generate(decodeURIComponent(question));
+            const msgPayload = [["user", decodeURIComponent(question)]];
+            for (const msg of reply) {
+                msgPayload.push(["val", msg]);
+            }
+
+            // await saveChat(user, model.title, msgPayload, model.context.NOUNS, model.context.VERBS);
             res.status(200).send({
-                "answer": result["answer"],
-                "log": result["log"],
-                "slm": msgList
+                "reply": reply,
+                "chat_title": model.title,
+                "msg": "Successfully responded to message."
             });
         } else {
-            res.status(400).send({
-                "answer": "Hi, I'm unable to help you without an equation to look at.",
-                "log": [],
-                "slm": []
+            let id;
+            let model = MODELS.find(guest_id);
+            if (!model) {
+                ({model, id} = MODELS.create());
+            }
+            console.log(model, id);
+            const reply = await model.generate(decodeURIComponent(question));
+
+            res.status(200).send({
+                "reply": reply,
+                "chat_title": model.title,
+                "model_id": id,
+                "msg": "Successfully responded to message."
             });
         }
     } catch (err) {

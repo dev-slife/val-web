@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/22/26
- * Date Updated: 4/25/26
+ * Date Updated: 5/29/26
  * Description:
  *      Works with the VAST system (C++) to parse and solve math equations.
  */
@@ -144,5 +144,10 @@ async function solve(expression) {
 
 module.exports = {
     simplify: simplify,
-    solve: solve
+    solve: solve,
+    InvalidType: InvalidType,
+    UndefinedVariable: UndefinedVariable,
+    InvalidEquation: InvalidEquation,
+    NotEstablishedYet: NotEstablishedYet,
+    VASTError: VASTError
 }

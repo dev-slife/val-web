@@ -488,6 +488,42 @@
             "tone": "encouraging",
             "text": "Nice simplification!",
             "tags": ["positive", "simplify"]
+        },
+        {
+            "id": "feedback_014",
+            "category": "guidance",
+            "step_type": "check_work",
+            "difficulty": "beginner",
+            "tone": "neutral",
+            "text": "That's not quite right, what might be wrong here?",
+            "tags": ["positive", "arithmetic"]
+        },
+        {
+            "id": "error_001",
+            "category": "server_error",
+            "step_type": "error",
+            "difficulty": "beginner",
+            "tone": "neutral",
+            "text": "Sorry, I ran into an unexpected error and am not able to respond to your question at the moment.",
+            "tags": ["error", "issue"]
+        },
+        {
+            "id": "error_002",
+            "category": "no_equation",
+            "step_type": "error",
+            "difficulty": "beginner",
+            "tone": "neutral",
+            "text": "I can only help you with math related questions, please provide a mathematical problem for us to look at.",
+            "tags": ["error", "issue"]
+        },
+        {
+            "id": "error_002",
+            "category": "confused",
+            "step_type": "error",
+            "difficulty": "beginner",
+            "tone": "neutral",
+            "text": "Sorry, I'm having trouble understanding your message.",
+            "tags": ["error", "issue"]
         }
     ]
 }
