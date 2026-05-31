@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 5/29/26
+ * Date Updated: 5/30/26
  * Description:
  *      Handles all message generation for VAL.
  */
@@ -11,11 +11,11 @@
 // --------------------------- IMPORTS & CONSTANTS --------------------------- //
 
 const path = require("path");
+const algebra = require("../../vast/api/algebra.js");
 
-const VAL_JSON = path.join(__dirname, '..', '..', 'json');
-const VAL_prompts = require(path.join(VAL_JSON, 'prompts.json'));
-const VAL_dictionary = require(path.join(VAL_JSON, 'dictionary.json'));
-const algebra = require("../vast/api/algebra.js");
+const VAL_JSON = path.join(__dirname, "..", "..", "..", "json");
+const VAL_prompts = require(path.join(VAL_JSON, "prompts.json"));
+const VAL_dictionary = require(path.join(VAL_JSON, "dictionary.json"));
 const PUNCTUATION = ['.', ',', '?', ':', ';'];
 const SLM_MODEL = "MQnA";
 const MAX_ATTEMPTS = 3;
@@ -94,6 +94,7 @@ class SLM {
         this.attempts = 0;
         this.step = 0;
         this.hist = [];
+        this.convo_id = null;
         this.context = (c && c.constructor == Object) ? c: {
             "EQUATION": "",
             "ANSWER": "",
@@ -284,7 +285,7 @@ class SLM {
             const nouns = await this.extract_nouns();
             const verbs = await this.extract_verbs();
             const expression = analyzeMsg(this.input);
-
+            
             if (nouns.length > 0 || expression) {
                 await this.update_context(nouns, "NOUNS");
                 
@@ -298,7 +299,9 @@ class SLM {
                             await this.update_context(expression, "EQUATION");
                             await this.update_context(solution.answer, "ANSWER");
                             await this.update_context(solution.log, "STEPS", true);
-                            return await this.next_response();
+                            const responses = await this.next_response();
+                            this.convo_id = null; // change to be whenever a new convo is made by user
+                            return responses;
                         } catch (err) {
                             if (err instanceof algebra.InvalidType) {
                                 return [await this.choose_response("error", "server_error")];

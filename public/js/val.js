@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 5/29/26
+ * Date Updated: 5/30/26
  * Description:
  *      Communicates with the VAST system to handle all math logic.
  */
@@ -12,9 +12,12 @@
 
 async function simplify(expression) {
     try {
-        const url = `/api/vast/simplify?expression=${encodeURIComponent(expression)}`;
+        const url = `/api/val/simplify?expression=${encodeURIComponent(expression)}`;
         const response = await fetch(url);
-        return response.json();
+        const result = response.json();
+        if (result) {
+            return result.solution;
+        }
     } catch (err) {
         console.error("Could not simplify math equation.");
         return false;
@@ -24,9 +27,12 @@ async function simplify(expression) {
 
 async function solve(expression) {
     try {
-        const url = `/api/vast/solve?expression=${encodeURIComponent(expression)}`;
+        const url = `/api/val/solve?expression=${encodeURIComponent(expression)}`;
         const response = await fetch(url);
-        return response.json();
+        const result = response.json();
+        if (result) {
+            return result.solution;
+        }
     } catch (err) {
         console.error("Could not solve math equation.");
         return false;
@@ -36,7 +42,7 @@ async function solve(expression) {
 
 async function ask(question, model_id) {
     try {
-        const url = "/api/vast/ask";
+        const url = "/api/val/ask";
         const payload = {
             method: "POST",
             headers: {
@@ -60,9 +66,11 @@ async function ask(question, model_id) {
 async function grabHist() {
     try {
         const user = getUser();
-        const url = `/api/db/user/pull_chat?user=${encodeURIComponent(user)}`;
-        const response = await fetch(url);
-        return response.json();
+        if (user) {
+            const url = `/api/db/user/pull_chat?user=${encodeURIComponent(user)}`;
+            const response = await fetch(url);
+            return response.json();
+        }
     } catch (err) {
         console.error(`An unexpected error occurred when grabbing the message history: ${err}`);
         return false;
@@ -112,6 +120,7 @@ function showTyping(messages) {
     return typingIndicator;
 }
 
+
 function hideTyping(messages, typingIndicator) {
     if (typingIndicator) {
         messages.removeChild(typingIndicator);
@@ -152,7 +161,6 @@ function messageSender() {
     let logoHidden = false;
     let userResponse = "";
     let guest_id = null;
-
     
     async function addMessage(text, sender, typingIndicator) {
         const messages = document.getElementById("messages");
@@ -166,7 +174,7 @@ function messageSender() {
         bubble.id = sender.toLowerCase();
         bubble.textContent = text;
         
-        const imgUrl = (sender.toLowerCase() == "val") ? await getBlobItem("FullLV002.png"): await getPFP(getUser());
+        const imgUrl = (sender.toLowerCase() == "val") ? await getBlobItem("FullLV002.png"): await getPFP();
         const bubbleImg = loadImage(imgUrl);
         bubbleImg.className = "bubble-img";
         
@@ -194,7 +202,7 @@ function messageSender() {
                 await addMessage(msg, "VAL", typingIndicator);
             }
         } else {
-            await addMessage("CLIENT: Sorry, I ran into an unexpected error and am not able to respond to your question at the moment.", "VAL", typingIndicator);
+            await addMessage("Sorry, I'm having trouble connecting with the server right now, please try again later.'.", "VAL", typingIndicator);
         }
     }
 

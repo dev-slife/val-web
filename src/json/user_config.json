@@ -1,0 +1,11 @@
+{
+    "history": false,
+    "bio": "",
+    "theme": "dark",
+    "sound": true,
+    "accessibility": {
+        "reduce_motion": false,
+        "high_contrast": false,
+        "hints": false
+    }
+}

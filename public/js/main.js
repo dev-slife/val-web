@@ -1,10 +1,11 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 5/29/26
+ * Date Updated: 5/30/26
  * Description:
  *      Handles main frontend interaction.
  */
+
 
 
 // --------------------------- CONSTANTS --------------------------- //
@@ -113,16 +114,18 @@ async function getBlobItem(imgName="default_pfp.png") {
 }
 
 
-async function getPFP(user, default_img=false) {
+async function getPFP(default_img=false) {
     try {
-        const url = `/api/storage/pfp/pull?user=${user}`;
-        const response = await fetch(url);
-        const result = await response.json();
-        if (response.status == 200 && await validURL(result["url"])) {
-            return result["url"];
-        } else {
-            return await getBlobItem();
+        const user = getUser();
+        if (user) {
+            const url = `/api/storage/pfp/pull?user=${user}`;
+            const response = await fetch(url);
+            const result = await response.json();
+            if (response.status == 200 && await validURL(result["url"])) {
+                return result["url"];
+            }
         }
+        return await getBlobItem();
     } catch (err) {
         console.error("Could not get pfp.");
     }
@@ -130,12 +133,15 @@ async function getPFP(user, default_img=false) {
 
 
 function saveUser(user) {
-    sessionStorage.setItem(SESSION_ID, JSON.stringify(user));
+    if (user) {
+        sessionStorage.setItem(SESSION_ID, JSON.stringify(user));
+    }
 }
 
 
-function getUser(user) {
-    return JSON.parse(sessionStorage.getItem(SESSION_ID));
+function getUser() {
+    const raw = sessionStorage.getItem(SESSION_ID);
+    return (raw) ? JSON.parse(raw): null;
 }
 
 

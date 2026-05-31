@@ -1,7 +1,7 @@
 /**
  * Authors: dev.slife, sfesseha
  * Date Created: 4/30/26
- * Date Updated: 5/7/26
+ * Date Updated: 5/30/26
  * Description:
  *      Manages all account settings.
  */
@@ -147,7 +147,7 @@ async function changePFP() {
 
 document.addEventListener("DOMContentLoaded", async() => {
     const pfpForm = document.getElementById("inputPFP");
-    const url = await getPFP(getUser(), true);
+    const url = await getPFP(true);
 
     showPFP(url);
 

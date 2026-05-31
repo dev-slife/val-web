@@ -1,9 +1,9 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 5/26/26
+ * Date Updated: 5/30/26
  * Description:
- *      Handles all main API communication between the frontend, backend, and web app services.
+ *      Handles all of the main routing and communication for the entire web app.
  */
 
 
@@ -21,11 +21,9 @@ const options = {
     extensions: ['html']
 }
 
-const db = require("./libs/app/db.js");
-const vastRouter = require("./libs/app/vast");
-const storeRouter = require("./libs/app/storage");
-const msgGen = require("./libs/app/slm.js");
-const algebra = require("./libs/vast/api/algebra.js");
+const dbRouter = require("./libs/app/routes/db.js");
+const vastRouter = require("./libs/app/routes/vast.js");
+const storeRouter = require("./libs/app/routes/storage.js");
 
 
 
@@ -36,8 +34,8 @@ app.use(express.static(__public, options));
 app.use(express.json());
 
 // Mount routers
-app.use('/api/db', db.router);
-app.use('/api/vast', vastRouter);
+app.use('/api/db', dbRouter);
+app.use('/api/val', vastRouter);
 app.use('/api/storage', storeRouter);
 
 

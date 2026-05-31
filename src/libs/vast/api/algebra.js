@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/22/26
- * Date Updated: 5/29/26
+ * Date Updated: 5/30/26
  * Description:
  *      Works with the VAST system (C++) to parse and solve math equations.
  */
@@ -10,7 +10,7 @@
 
 // --------------------------- IMPORTS & CONSTANTS --------------------------- //
 
-const { spawn } = require('node:child_process');
+const {spawn} = require('node:child_process');
 const pyLib = "py.vast"
 
 
@@ -143,11 +143,11 @@ async function solve(expression) {
 // --------------------------- EXPORTS --------------------------- //
 
 module.exports = {
-    simplify: simplify,
-    solve: solve,
-    InvalidType: InvalidType,
-    UndefinedVariable: UndefinedVariable,
-    InvalidEquation: InvalidEquation,
-    NotEstablishedYet: NotEstablishedYet,
-    VASTError: VASTError
+    simplify,
+    solve,
+    InvalidType,
+    UndefinedVariable,
+    InvalidEquation,
+    NotEstablishedYet,
+    VASTError
 }

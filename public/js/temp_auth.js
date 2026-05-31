@@ -1,7 +1,7 @@
 /**
  * Authors: dev.slife, jbeshir-umd
  * Date Created: 5/6/26
- * Date Updated: 5/7/26
+ * Date Updated: 5/30/26
  * Description:
  *      Handles session-based authentication using sessionStorage and checks automatically on load.
  */
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                 nameText.textContent = user;
             }
             if (pfpImg) {
-                const pfpURL = await getPFP(user, true);
+                const pfpURL = await getPFP(true);
                 pfpImg.src = pfpURL;
             }
         }
