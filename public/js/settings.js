@@ -1,28 +1,87 @@
 /**
  * Authors: dev.slife, sfesseha
  * Date Created: 4/30/26
- * Date Updated: 5/30/26
+ * Date Updated: 6/1/26
  * Description:
  *      Manages all account settings.
  */
 
 
+
 // --------------------------- HELPER FUNCTIONS --------------------------- //
 
 let toastTimer;
-function showToast(msg, icon = "🌠") {
+function showToast(msg, icon="🌠", lifetime=3) {
     clearTimeout(toastTimer);
     document.getElementById("toastMsg").textContent = msg;
     document.getElementById("toastIcon").textContent = icon;
     const t = document.getElementById("toast");
     t.classList.add("show");
-    toastTimer = setTimeout(() => t.classList.remove("show"), 3000);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 1000 * lifetime);
 }
 
 
-function saveSection(section) {
+async function updateConfig(config) {
+    try {
+        const url = "/api/db/user/update_config";
+        const payload = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "user": getUser(),
+                "config": config
+            })
+        }
+        const response = await fetch(url, payload);
+        return response.json();
+    } catch(err) {
+        console.error(`An unexpected error occurred when attempting to update user settings: ${err}`);
+    }
+}
+
+
+async function formatConfig(config) {
+    for (const key of Object.keys(config)) {
+        if (typeof config[key] == "object") {
+            await formatConfig(config[key]);
+        } else if (typeof config[key] == "string") {
+            const keyArray = config[key].toLowerCase().split("");
+            console.log(keyArray);
+            for (let i = 0; i < keyArray.length; i++) {
+                if (keyArray[i] == '_' && i+1 < keyArray.length) {
+                    keyArray[i+1] = keyArray[i+1].toUpperCase();
+                    console.log(keyArray);
+                    return keyArray.join("").replaceAll('_', '');
+                }
+            }
+        }
+    }
+}
+
+
+async function grabConfig() {
+    try {
+        const url = `/api/db/user/pull_config?user=${getUser()}`;
+        const response = await fetch(url);
+        const data = response.json();
+
+        await formatConfig(data)
+        return data;
+    } catch(err) {
+        console.error(`An unexpected error occurred when attempting to grab user settings: ${err}`);
+    }
+}
+
+
+async function saveSection(section) {
+    if (section == 'preferences') {
+        const chatHist = document.getElementById("chatHistory");
+        await updateConfig({chat_history: chatHist.checked});
+    }
+
     showToast("Changes saved successfully.");
-    // TODO: hook into settings.js API calls
 }
 
 
@@ -148,12 +207,24 @@ async function changePFP() {
 document.addEventListener("DOMContentLoaded", async() => {
     const pfpForm = document.getElementById("inputPFP");
     const url = await getPFP(true);
+    const config = await grabConfig();
 
+
+    // PFP
     showPFP(url);
-
     pfpForm.addEventListener("change", async function() {
         await changePFP();
     });
+
+
+    // TOGGLES
+    if (config) {
+        console.log(config);
+        document.querySelectorAll(".toggle input[type=checkbox]").forEach(inp => {
+            console.log(inp.checked, inp.id, config[inp.id]);
+            inp.checked = config[inp.id];
+        })
+    }
 
 
     // SIDEBAR

@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 5/30/26
+ * Date Updated: 6/1/26
  * Description:
  *      Communicates with the VAST system to handle all math logic.
  */
@@ -20,7 +20,6 @@ async function simplify(expression) {
         }
     } catch (err) {
         console.error("Could not simplify math equation.");
-        return false;
     }
 }
 
@@ -35,7 +34,6 @@ async function solve(expression) {
         }
     } catch (err) {
         console.error("Could not solve math equation.");
-        return false;
     }
 }
 
@@ -58,7 +56,6 @@ async function ask(question, model_id) {
         return response.json();
     } catch (err) {
         console.error(`An unexpected error occurred when asking VAL your question: ${err}`);
-        return false;
     }
 }
 
@@ -196,6 +193,9 @@ function messageSender() {
 
         if (response) {
             messageTitle = response.chat_title;
+            if (response.model_id) {
+                guest_id = response.model_id;
+            }
             for (const msg of response.reply) {
                 let typingIndicator = showTyping(messages);
                 await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));

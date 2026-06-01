@@ -1,11 +1,12 @@
 {
-    "history": false,
+    "chat_history": false,
     "bio": "",
     "theme": "dark",
-    "sound": true,
+    "sound_effects": true,
+    "two_factor": false,
     "accessibility": {
         "reduce_motion": false,
         "high_contrast": false,
-        "hints": false
+        "screen_reader": false
     }
 }

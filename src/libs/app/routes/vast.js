@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 5/30/26
+ * Date Updated: 6/1/26
  * Description:
  *      Works with the VAST system (C++) & VAL's SLM to generate responses and walk students through math problems.
  */
@@ -117,8 +117,8 @@ router.get('/solve', async(req, res) => {
 
 
 router.post('/ask', async(req, res) => {
-    const {user, guest_id, question} = req.body;
-    const {model, id} = findModel(user, guest_id);
+    const {user, model_id, question} = req.body;
+    const {model, id} = findModel(user, model_id);
 
     try {
         const reply = await model.generate(decodeURIComponent(question));

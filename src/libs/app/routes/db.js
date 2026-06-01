@@ -31,7 +31,7 @@ function validQuery(dataType, ...values) {
 
 
 
-// --------------------------- ROUTING FUNCTIONS --------------------------- //
+// --------------------------- USER ACCOUNT ROUTES --------------------------- //
 
 router.post('/user/login', async(req, res) => {
     const {user, pass} = req.body;
@@ -144,6 +144,9 @@ router.post('/user/register', async(req, res) => {
 });
 
 
+
+// --------------------------- CHAT HISTORY ROUTES --------------------------- //
+
 router.post('/user/save_chat', async(req, res) => {
     const {user, title, msgs, nouns, verbs} = req.body;
 
@@ -244,7 +247,7 @@ router.get('/user/pull_chat', async(req, res) => {
                     hist: hist
                 });
             } else {
-                res.status(200).send({
+                res.status(500).send({
                     success: false,
                     message: "Could not pull chat history."
                 });
@@ -272,6 +275,84 @@ router.get('/user/pull_chat', async(req, res) => {
                 message: `The server ran into an unexpected error when trying to grab the chat history for ${user}, caught: ${err.name}.`
             });
         }
+    }
+});
+
+
+
+// --------------------------- USER CONFIG ROUTES --------------------------- //
+
+router.post('/user/update_config', async(req, res) => {
+    const {user, config} = req.body;
+
+    try {
+        if (validQuery("string", user) && validQuery("object", config)) {
+            const updated = await dbUtils.updateUserConfig(user, config);
+            if (updated) {
+                res.status(200).send({
+                    success: true,
+                    message: "Successfully updated user settings.",
+                });
+            } else {
+                res.status(500).send({
+                    success: false,
+                    message: "The server ran into an unexpected error when attempting to update the user's settings.",
+                });
+            }
+        } else {
+            res.status(400).send({
+                success: false,
+                message: "Incomplete body given, missing user and/or bad config given.",
+            });
+        }
+    } catch(err) {
+        console.error(`Server error on updating the settings of user: ${user}`, {
+            name: err.name,
+            message: err.message
+        });
+
+        res.status(500).send({
+            success: false,
+            message: `The server ran into an unexpected error when trying to update the settings for ${user}, caught: ${err.name}.`
+        });
+    }
+});
+
+
+router.get('/user/pull_config', async(req, res) => {
+    const {user} = req.query;
+
+    try {
+        if (validQuery("string", user)) {
+            const config = await dbUtils.userConfig(user);
+            if (config) {
+                res.status(200).send({
+                    success: true,
+                    message: "Successfully pulled user setttings.",
+                    config: config
+                })
+            } else {
+                res.status(500).send({
+                    success: false,
+                    message: "The server ran into an unexpected error when trying to pull user settings."
+                })
+            }
+        } else {
+            res.status(400).send({
+                success: false,
+                message: "Incomplete query given, missing `?user=`"
+            })
+        }
+    } catch(err) {
+        console.error(`Server error on pulling the settings of user: ${user}`, {
+            name: err.name,
+            message: err.message
+        });
+
+        res.status(500).send({
+            success: false,
+            message: `The server ran into an unexpected error when trying to pull the settings for ${user}, caught: ${err.name}.`
+        });
     }
 });
 

@@ -125,8 +125,19 @@
                         </select>
                         <div class="field-hint">This setting currently does not do anything.</div>
                     </div>
-                    <div class="btn-row">
-                        <button class="btn btn-primary" onclick="saveSection('preferences')">Save Changes</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Account Data</div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <h4>Chat History</h4>
+                            <p>Keep track of your previous conversations with VAL.</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="chatHistory">
+                            <span class="toggle-slider"></span>
+                        </label>
                     </div>
                 </div>
 
@@ -164,6 +175,10 @@
                         </label>
                     </div>
                 </div>
+
+                <div class="btn-row">
+                    <button class="btn btn-primary" onclick="saveSection('preferences')">Save Changes</button>
+                </div>
             </section>
 
             <section class="settings-section" id="section-notifications">
@@ -186,7 +201,7 @@
                 </div>
 
                 <div class="btn-row">
-                    <button class="btn btn-primary" onclick="saveSection('notifications')">Save Preferences</button>
+                    <button class="btn btn-primary" onclick="saveSection('notifications')">Save Changes</button>
                 </div>
             </section>
 

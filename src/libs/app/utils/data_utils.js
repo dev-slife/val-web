@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 5/30/26
+ * Date Updated: 6/1/26
  * Description:
  *      Utility functions to use for database management.
  */
@@ -10,17 +10,24 @@
 
 // --------------------------- IMPORTS & CONSTANTS --------------------------- //
 
+
 const path = require("path");
+const {readFile} = require("fs/promises");
 const {MongoClient} = require("mongodb");
 const {UserDNE} = require("../errors.js");
 
 const DB = "VAL_DATA";
-const VAL_JSON = path.join(__dirname, "..", "..", "json");
-const VAL_CONFIG = path.join(VAL_JSON, "user_config.json");
+const VAL_JSON = path.join(__dirname, "..", "..", "..", "json");
+const VAL_CONFIG = require(path.join(VAL_JSON, "user_config.json"));
 
 
 
 // --------------------------- HELPER FUNCTIONS --------------------------- //
+
+function exists(value) {
+    return (value !== undefined && value !== null);
+}
+
 
 async function ascii(code) {
     if (code % 2 == 0) {
@@ -86,7 +93,7 @@ async function userConfig(user) {
 
 async function histEnabled(user) {
     const config = await userConfig(user);
-    return (config && config.history);
+    return (config && config.chat_history);
 }
 
 
@@ -101,6 +108,31 @@ async function initUser(user, hash) {
         "pass": hash,
         "config": VAL_CONFIG
     });
+
+    await client.close();
+    return (result) ? true: false;
+}
+
+
+async function updateUserConfig(user, config) {
+    const client = new MongoClient(process.env.MONGO_CONN);
+    await client.connect();
+
+    const defaultConfig = VAL_CONFIG;
+    let repairedConfig = defaultConfig;
+    for (const name of Object.keys(defaultConfig)) {
+        if (exists(config[name])) {
+            repairedConfig[name] = config[name];
+        }
+    }
+
+    const db = client.db(DB);
+    const users = db.collection("users");
+    const result = await users.updateOne(
+        {user: user},
+        {$set: {["config"]: repairedConfig}},
+        {upsert: false}
+    );
 
     await client.close();
     return (result) ? true: false;
@@ -194,6 +226,7 @@ module.exports = {
     userConfig,
     histEnabled,
     initUser,
+    updateUserConfig,
     saveChat,
     clearChat,
     pullChat

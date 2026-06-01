@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 5/30/26
+ * Date Updated: 6/1/26
  * Description:
  *      Handles all message generation for VAL.
  */
@@ -11,6 +11,7 @@
 // --------------------------- IMPORTS & CONSTANTS --------------------------- //
 
 const path = require("path");
+const {readFile} = require("fs/promises");
 const algebra = require("../../vast/api/algebra.js");
 
 const VAL_JSON = path.join(__dirname, "..", "..", "..", "json");
@@ -31,6 +32,19 @@ function genSeed(min, max) {
 }
 
 
+function analyzeMsg(text) {
+    const pattern = /(?:\d\w+|[\-\+\*\/\^\(\)]\s*\w+|\d+|\s*[\-\+\*\/\(\)]\s*)/gm;
+    const mathMatch = text.match(pattern);
+
+    if (mathMatch) {
+        const expression = mathMatch.join('');
+        if (expression.length != 0) {
+            return expression;
+        }
+    }
+}
+
+
 async function preloadMsgs(msgType, cat=null) {
     const messages = VAL_prompts["messages"];
     const filteredMsgs = [];
@@ -45,40 +59,27 @@ async function preloadMsgs(msgType, cat=null) {
 }
 
 
-function analyzeMsg(text) {
-    const pattern = /(?:\d\w+|[\-\+\*\/\^\(\)]\s*\w+|\d+|\s*[\-\+\*\/\(\)]\s*)/gm;
-    const mathMatch = text.match(pattern);
-
-    if (mathMatch) {
-        const expression = mathMatch.join('');
-        if (expression.length != 0) {
-            return expression;
-        }
-    }
-}
-
-
 
 // --------------------------- CLASSES --------------------------- //
 
 class ModelManager {
     constructor() {
         this.models = {};
-        this.anonymous = 0;
+        this.anonymous = 1;
     }
 
-    create(user=null, title="", context=null) {
+    create(key=null, title="", context=null) {
         const model = new SLM(title, context);
         const id = this.anonymous;
-        if (user) {
-            this.models[user] = model;
+        if (key) {
+            this.models[key] = model;
         } else {
-            this.anonymous++;
             this.models[id] = model;
+            this.anonymous++;
         }
         return { model, id };
     }
-
+    
     find(model_id) {
         return this.models[model_id];
     }
