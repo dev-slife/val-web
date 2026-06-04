@@ -21,6 +21,17 @@ function showToast(msg, icon="🌠", lifetime=3) {
 }
 
 
+function findConfig(config, name) {
+    for (const key of Object.keys(config)) {
+        if (typeof config[key] == "object") {
+            return findConfig(config[key], name);
+        } else if (key == name) {
+            return config[key];
+        }
+    }
+}
+
+
 async function updateConfig(config) {
     try {
         const url = "/api/db/user/update_config";
@@ -43,21 +54,33 @@ async function updateConfig(config) {
 
 
 async function formatConfig(config) {
+    let newConfig = {};
+
     for (const key of Object.keys(config)) {
-        if (typeof config[key] == "object") {
-            await formatConfig(config[key]);
-        } else if (typeof config[key] == "string") {
-            const keyArray = config[key].toLowerCase().split("");
-            console.log(keyArray);
+        const keyArray = key.toLowerCase().split("");
+        const _Index = keyArray.indexOf("_");
+
+        if (_Index != -1 && _Index != keyArray.length - 1) {
             for (let i = 0; i < keyArray.length; i++) {
-                if (keyArray[i] == '_' && i+1 < keyArray.length) {
+                if (keyArray[i] == '_') {
                     keyArray[i+1] = keyArray[i+1].toUpperCase();
-                    console.log(keyArray);
-                    return keyArray.join("").replaceAll('_', '');
+                    const formattedKey = keyArray.join("").replaceAll('_', '');
+                    
+                    if (typeof config[key] == "object") {
+                        newConfig[formattedKey] = await formatConfig(config[key]);
+                    } else {
+                        newConfig[formattedKey] = config[key];
+                    }
                 }
             }
+        } else if (typeof config[key] == "object") {
+            newConfig[key] = await formatConfig(config[key]);
+        } else {
+            newConfig[key] = config[key];
         }
     }
+
+    return newConfig;
 }
 
 
@@ -65,10 +88,8 @@ async function grabConfig() {
     try {
         const url = `/api/db/user/pull_config?user=${getUser()}`;
         const response = await fetch(url);
-        const data = response.json();
-
-        await formatConfig(data)
-        return data;
+        const data = await response.json();
+        return await formatConfig(data.config);
     } catch(err) {
         console.error(`An unexpected error occurred when attempting to grab user settings: ${err}`);
     }
@@ -78,7 +99,17 @@ async function grabConfig() {
 async function saveSection(section) {
     if (section == 'preferences') {
         const chatHist = document.getElementById("chatHistory");
-        await updateConfig({chat_history: chatHist.checked});
+        const reduceMotion = document.getElementById("reduceMotion");
+        const highContrast = document.getElementById("highContrast");
+        const screenReader = document.getElementById("screenReader");
+        await updateConfig({
+            chat_history: chatHist.checked,
+            accessibility: {
+                reduce_motion: reduceMotion.checked,
+                high_contrast: highContrast.checked,
+                screen_reader: screenReader.checked
+            }
+        });
     }
 
     showToast("Changes saved successfully.");
@@ -219,11 +250,9 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     // TOGGLES
     if (config) {
-        console.log(config);
         document.querySelectorAll(".toggle input[type=checkbox]").forEach(inp => {
-            console.log(inp.checked, inp.id, config[inp.id]);
-            inp.checked = config[inp.id];
-        })
+            inp.checked = findConfig(config, inp.id);
+        });
     }
 
 
