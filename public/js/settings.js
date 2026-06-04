@@ -1,7 +1,7 @@
 /**
  * Authors: dev.slife, sfesseha
  * Date Created: 4/30/26
- * Date Updated: 6/1/26
+ * Date Updated: 6/4/26
  * Description:
  *      Manages all account settings.
  */
