@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 6/1/26
+ * Date Updated: 6/5/26
  * Description:
  *      Works with the VAST system (C++) & VAL's SLM to generate responses and walk students through math problems.
  */
@@ -67,7 +67,8 @@ router.get('/simplify', async(req, res) => {
     } catch (err) {
         console.log(`Could not simplify the given expression: ${expression}`, {
             name: err.name,
-            message: err.message
+            message: err.message,
+            stack: err.stack
         });
 
         res.status(500).send({
@@ -105,7 +106,8 @@ router.get('/solve', async(req, res) => {
     } catch (err) {
         console.log(`Could not solve the given expression: ${expression}`, {
             name: err.name,
-            message: err.message
+            message: err.message,
+            stack: err.stack
         });
 
         res.status(500).send({
@@ -144,7 +146,8 @@ router.post('/ask', async(req, res) => {
     } catch (err) {
         console.log(`VAL was unable to answer the given question: ${question}`, {
             name: err.name,
-            message: err.message
+            message: err.message,
+            stack: err.stack
         });
 
         res.status(500).send({

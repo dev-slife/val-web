@@ -1,7 +1,7 @@
 /**
  * Authors: dev.slife, sfesseha
  * Date Created: 4/30/26
- * Date Updated: 6/4/26
+ * Date Updated: 6/5/26
  * Description:
  *      Manages all account settings.
  */
@@ -97,12 +97,14 @@ async function grabConfig() {
 
 
 async function saveSection(section) {
-    if (section == 'preferences') {
+    let success;
+
+    if (section == "preferences") {
         const chatHist = document.getElementById("chatHistory");
         const reduceMotion = document.getElementById("reduceMotion");
         const highContrast = document.getElementById("highContrast");
         const screenReader = document.getElementById("screenReader");
-        await updateConfig({
+        const response = await updateConfig({
             chat_history: chatHist.checked,
             accessibility: {
                 reduce_motion: reduceMotion.checked,
@@ -110,9 +112,26 @@ async function saveSection(section) {
                 screen_reader: screenReader.checked
             }
         });
+        success = (response && response.success);
+    } else if (section == "notifications") {
+        const sound = document.getElementById("soundEffects");
+        const response = await updateConfig({
+            sound_effects: sound.checked
+        });
+        success = (response && response.success);
+    } else if (section == "profile") {
+        const bio = document.getElementById("bio");
+        const response = await updateConfig({
+            bio: bio.value
+        });
+        success = (response && response.success);
     }
 
-    showToast("Changes saved successfully.");
+    if (success) {
+        showToast("Changes saved successfully.");
+    } else {
+        showToast("Something went wrong, could not save changes.", "⚠️");
+    }
 }
 
 
@@ -248,10 +267,15 @@ document.addEventListener("DOMContentLoaded", async() => {
     });
 
 
-    // TOGGLES
     if (config) {
+        // TOGGLES
         document.querySelectorAll(".toggle input[type=checkbox]").forEach(inp => {
             inp.checked = findConfig(config, inp.id);
+        });
+
+        // TEXT BOXES
+        document.querySelectorAll(".field textarea").forEach(textBox => {
+            textBox.value = findConfig(config, textBox.id);
         });
     }
 

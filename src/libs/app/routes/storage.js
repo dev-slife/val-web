@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/16/26
- * Date Updated: 5/30/26
+ * Date Updated: 6/5/26
  * Description:
  *      Handles all object storage API calls.
  */
@@ -54,7 +54,8 @@ router.post('/pfp/upload', upload.single('pfp'), async(req, res) => {
     } catch(err) {
         console.error(`Could not upload profile picture for ${user}`, {
             name: err.name,
-            message: err.message
+            message: err.message,
+            stack: err.stack
         });
 
         res.status(500).send({
@@ -98,7 +99,8 @@ router.get('/pfp/pull', async(req, res) => {
 
         console.error(`Could not grab profile picture of ${user}`, {
             name: err.name,
-            message: err.message
+            message: err.message,
+            stack: err.stack
         });
 
         res.status(500).send({
@@ -140,7 +142,8 @@ router.get('/blob/pull', async(req, res) => {
 
         console.error(`Could not grab requested blob item with the key: ${key}`, {
             name: err.name,
-            message: err.message
+            message: err.message,
+            stack: err.stack
         });
 
         res.status(500).send({

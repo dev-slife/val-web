@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 5/30/26
+ * Date Updated: 6/5/26
  * Description:
  *      Handles all database API calls.
  */
@@ -76,7 +76,8 @@ router.post('/user/login', async(req, res) => {
     } catch (err) {
         console.error(`Server error on login for user: ${user}`, {
             name: err.name,
-            message: err.message
+            message: err.message,
+            stack: err.stack
         });
 
         res.status(500).send({
@@ -132,7 +133,8 @@ router.post('/user/register', async(req, res) => {
     } catch (err) {
         console.error(`Server error on registration of user: ${user}`, {
             name: err.name,
-            message: err.message
+            message: err.message,
+            stack: err.stack
         });
 
         res.status(500).send({
@@ -179,7 +181,8 @@ router.post('/user/save_chat', async(req, res) => {
         } else {
             console.error(`Server error on saving ${title} chat history of user: ${user}`, {
                 name: err.name,
-                message: err.message
+                message: err.message,
+                stack: err.stack
             });
     
             res.status(500).send({
@@ -222,7 +225,8 @@ router.post('/user/clear_chat', async(req, res) => {
         } else {
             console.error(`Server error on clearing the chat history of user: ${user}`, {
                 name: err.name,
-                message: err.message
+                message: err.message,
+                stack: err.stack
             });
     
             res.status(500).send({
@@ -267,7 +271,8 @@ router.get('/user/pull_chat', async(req, res) => {
         } else {
             console.error(`Server error on grabbing the chat history of user: ${user}`, {
                 name: err.name,
-                message: err.message
+                message: err.message,
+                stack: err.stack
             });
     
             res.status(500).send({
@@ -308,7 +313,8 @@ router.post('/user/update_config', async(req, res) => {
     } catch(err) {
         console.error(`Server error on updating the settings of user: ${user}`, {
             name: err.name,
-            message: err.message
+            message: err.message,
+            stack: err.stack
         });
 
         res.status(500).send({
@@ -346,7 +352,8 @@ router.get('/user/pull_config', async(req, res) => {
     } catch(err) {
         console.error(`Server error on pulling the settings of user: ${user}`, {
             name: err.name,
-            message: err.message
+            message: err.message,
+            stack: err.stack
         });
 
         res.status(500).send({

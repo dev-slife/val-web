@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 6/1/26
+ * Date Updated: 6/5/26
  * Description:
  *      Handles all message generation for VAL.
  */
@@ -117,7 +117,9 @@ class SLM {
                 this.context[contextType] = [];
             }
             for (const v of value) {
-                this.context[contextType].push(v);
+                if (!this.context[contextType].includes(v)) {
+                    this.context[contextType].push(v);
+                }
             }
         }
     }

@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 6/1/26
+ * Date Updated: 6/5/26
  * Description:
  *      Communicates with the VAST system to handle all math logic.
  */
@@ -99,6 +99,31 @@ async function updateHist(title, hist) {
 }
 
 
+async function addMessage(text, sender, typingIndicator) {
+    const messages = document.getElementById("messages");
+    if (typingIndicator) hideTyping(messages, typingIndicator);
+
+    const message = document.createElement("div");
+    message.className = `message ${sender.toLowerCase()}`;
+    
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.id = sender.toLowerCase();
+    bubble.textContent = text;
+    
+    const imgUrl = (sender.toLowerCase() == "val") ? await getBlobItem("FullLV002.png"): await getPFP();
+    const bubbleImg = loadImage(imgUrl);
+    bubbleImg.className = "bubble-img";
+    
+    message.appendChild(bubbleImg);
+    message.appendChild(bubble);
+    messages.appendChild(message);
+    if (messages.scrollTop + messages.clientHeight >= messages.scrollHeight - 5) {
+        messages.scrollTop = messages.scrollHeight;
+    }
+}
+
+
 
 // --------------------------- MODULE FUNCTIONS --------------------------- //
 
@@ -144,9 +169,52 @@ function loadImage(url) {
 }
 
 
+function messageState(on=true) {
+    if (on) {
+        const logo = document.getElementById("logo");
+        const homePage = document.getElementById("homePage");
+        logo.style.display = "none";
+        homePage.style.overflow = "auto";
+        homePage.style.height = "auto";
+        
+        const msgHolder = document.getElementById("messages");
+        msgHolder.style.height = "68vh";
+        msgHolder.replaceChildren();
+    }
+}
+
+
+async function loadConvo(msgs) {
+    messageState();
+    for (const msg of msgs) {
+        await addMessage(msg[1], msg[0]);
+    }
+}
+
+
 async function loadMessages() {
+    const histList = document.querySelector(".chat-history-list");
     const data = await grabHist();
-    console.log(data);
+    
+    if (data && data.hist) { 
+        console.log(data.hist);
+        const histDisabled = document.getElementById("histDisabled");
+        const histKeys = Object.keys(data.hist);
+
+        if (histKeys.length > 0) {
+            histDisabled.hidden = true;
+            for (const msgID of Object.keys(data.hist)) {
+                const msgDiv = document.createElement("div");
+                msgDiv.className = "chat-item";
+
+                msgDiv.textContent = data.hist[msgID].title;
+                msgDiv.onclick = async() => await loadConvo(data.hist[msgID].messages);
+                histList.appendChild(msgDiv);
+            }
+        } else {
+            histDisabled.hidden = false;
+        }
+    }
 }
 
 
@@ -158,30 +226,7 @@ function messageSender() {
     let logoHidden = false;
     let userResponse = "";
     let guest_id = null;
-    
-    async function addMessage(text, sender, typingIndicator) {
-        const messages = document.getElementById("messages");
-        if (typingIndicator) hideTyping(messages, typingIndicator);
-    
-        const message = document.createElement("div");
-        message.className = `message ${sender.toLowerCase()}`;
-        
-        const bubble = document.createElement("div");
-        bubble.className = "bubble";
-        bubble.id = sender.toLowerCase();
-        bubble.textContent = text;
-        
-        const imgUrl = (sender.toLowerCase() == "val") ? await getBlobItem("FullLV002.png"): await getPFP();
-        const bubbleImg = loadImage(imgUrl);
-        bubbleImg.className = "bubble-img";
-        
-        message.appendChild(bubbleImg);
-        message.appendChild(bubble);
-        messages.appendChild(message);
-        if (messages.scrollTop + messages.clientHeight >= messages.scrollHeight - 5) {
-            messages.scrollTop = messages.scrollHeight;
-        }
-    }
+
 
     async function processMessage() {
         const text = userInput.value.trim();
@@ -211,13 +256,7 @@ function messageSender() {
         processing = true;
 
         if (!logoHidden) {
-            const logo = document.getElementById("logo");
-            const homePage = document.getElementById("homePage");
-            const messages = document.getElementById("messages");
-            logo.style.display = "none";
-            homePage.style.overflow = "auto";
-            homePage.style.height = "auto";
-            messages.style.height = "68vh";
+            messageState();
             logoHidden = true;
         }
         
