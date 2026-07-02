@@ -1,29 +1,40 @@
 {
-    "Guided": [
+    "Guiding": [
         "Let's start by identifying what we're trying to find.",
         "Before calculating, what should we do first?",
         "Can we rewrite this equation in a simpler form?",
         "What's the first step to isolate the variable?",
         "Do you see any like terms we can combine?",
-        "Can we eliminate any parentheses first?"
+        "Can we eliminate any parentheses first?",
+        "Now that we simplified, what's the next move?",
+        "How can we simplify this even further?",
+        "What's the final step to solve this?",
+        "What's stopping us from getting the answer right now?"
     ],
-    "Steps": [
+    "Combine": [
         "First, combine like terms where possible.",
-        "Now let's isolate the variable step by step.",
-        "We'll undo operations in reverse order.",
         "Let's get rid of any parentheses by distributing.",
+        "Let's simplify this before the next step."
+    ],
+    "Isolate": [
+        "Now let's isolate the variable step by step.",
         "Now move all variable terms to one side.",
         "Next, move constants to the other side.",
-        "Let's simplify again before the next step.",
         "Now divide both sides to solve for the variable."
+    ],
+    "Inverse": [
+        "We'll undo operations in reverse order."
     ],
     "Hinting": [
         "Try combining like terms first.",
+        "What's left preventing the variable from being isolated?",
         "Watch the signs when moving terms across the equation.",
         "Distribute carefully across everything inside the parentheses.",
         "Think about inverse operations here.",
         "Check if anything cancels out.",
         "Try isolating the variable term before simplifying further.",
+        "Is there anything left to clean up?",
+        "Can we reduce this expression more?",
         "Be careful when dividing by a coefficient."
     ],
     "Correcting": [
@@ -37,22 +48,11 @@
         "Be careful with negative numbers in this step.",
         "Let's verify that simplification again."
     ],
-    "Pacing": [
+    "Encouragement": [
         "You're on the right track.",
         "Nice, that step simplifies things a lot.",
         "Good catch, that helps move us forward.",
-        "This is the tricky step, but you've got it."
-    ],
-    "Leading": [
-        "Now that we simplified, what's the next move?",
-        "What's left preventing the variable from being isolated?",
-        "How can we simplify this even further?",
-        "What's the final step to solve this?",
-        "Is there anything left to clean up?",
-        "Can we reduce this expression more?",
-        "What's stopping us from getting the answer right now?"
-    ],
-    "Feedback": [
+        "This is the tricky step, but you've got it.",
         "Nice work!",
         "Great job!",
         "That's correct!",

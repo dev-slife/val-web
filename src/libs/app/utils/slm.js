@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 6/5/26
+ * Date Updated: 6/25/26
  * Description:
  *      Handles all message generation for VAL.
  */
@@ -17,8 +17,7 @@ const algebra = require("../../vast/api/algebra.js");
 const VAL_JSON = path.join(__dirname, "..", "..", "..", "json");
 const VAL_prompts = require(path.join(VAL_JSON, "prompts.json"));
 const VAL_dictionary = require(path.join(VAL_JSON, "dictionary.json"));
-const PUNCTUATION = ['.', ',', '?', ':', ';'];
-const SLM_MODEL = "MQnA";
+const PUNCTUATION = [`.`, `,`, `?`, `:`, `;`, `'`];
 const MAX_ATTEMPTS = 3;
 
 
@@ -45,17 +44,21 @@ function analyzeMsg(text) {
 }
 
 
-async function preloadMsgs(msgType, cat=null) {
-    const messages = VAL_prompts["messages"];
-    const filteredMsgs = [];
-
-    for (const msg of messages) {
-        if (msg["step_type"] == msgType && (!cat || msg["category"] == cat)) {
-            filteredMsgs.push(msg);
+async function preloadMsgs(cat=null, state=null, dif=null, tone=null, tags=[]) {
+    if (cat != null || state != null || dif != null || tone != null || tags.length > 0) {
+        const messages = VAL_prompts["messages"];
+        const filteredMsgs = [];
+    
+        for (const msg of messages) {
+            if ((!cat || msg["category"] == cat) && (!state || msg["state"] == state || state == "any") &&
+                (!dif || msg["difficulty"] == dif) && (!tone || msg["tone"] == tone) &&
+                (tags.length == 0 || tags.every(tag => msg["tags"].includes(tag)))) {
+                filteredMsgs.push(msg);
+            }
         }
+    
+        return filteredMsgs;
     }
-
-    return filteredMsgs;
 }
 
 
@@ -124,22 +127,14 @@ class SLM {
         }
     }
 
-    async get_known(known_types) {
-        const messages = VAL_prompts;
-        const SLM_dict = VAL_dictionary[SLM_MODEL]
-        if (known_types.length > 1) {
-            let known_map = {}
-            for (const known_type of known_types) {
-                known_map[known_type] = SLM_dict[known_type];
-            }
-            return known_map;
-        } else {
-            return SLM_dict[known_types[0]];
+    async get_known(known_type) {
+        if (known_type) {
+            return VAL_dictionary[known_type];
         }
     }
 
     async normalize_known_noun(word) {
-        const known_nouns = await this.get_known(["NOUNS"]);
+        const known_nouns = await this.get_known("NOUNS");
         if (known_nouns.includes(word)) {
             return word;
         } else if (PUNCTUATION.includes(word.charAt(word.length - 1)) && known_nouns.includes(word.substring(0, word.length - 1))) {
@@ -161,7 +156,7 @@ class SLM {
 
     async extract_verbs() {
         const words = this.input.split(" ");
-        const known_verbs = await this.get_known(["VERBS"])
+        const known_verbs = await this.get_known("VERBS");
         let verbs = [];
         for (const word of words) {
             if (known_verbs.includes(word)) {
@@ -171,8 +166,20 @@ class SLM {
         return verbs;
     }
 
+    async extract_adj() {
+        const words = this.input.split(" ");
+        const known_adj = await this.get_known("ADJECTIVES");
+        let adj = [];
+        for (const word of words) {
+            if (known_adj.includes(word)) {
+                adj.push(word);
+            }
+        }
+        return adj;
+    }
+
     async resolve_pronouns() {
-        const known_pronouns = await this.get_known(["PRONOUNS"]);
+        const known_pronouns = await this.get_known("PRONOUNS");
         for (const [pronoun, nouns] of Object.entries(known_pronouns)) {
             for (const noun of nouns) {
                 if (this.input.includes(pronoun) && this.context["NOUNS"].includes(noun) && !this.input.includes(noun)) {
@@ -183,8 +190,22 @@ class SLM {
         return this.input;
     }
 
+    async choose_state(verbs, adj=null) {
+        if (verbs.includes("solve", "find", "isolate", "analyze", "determine", "separate", "evaluate")) {
+            return "SOLVE"
+        } else if (verbs.includes("simplify", "factor", "combine", "compose", "group", "round", "represent", "modify", "eliminate")) {
+            return "SIMPLIFY"
+        } else if (adj) {
+            if (adj.includes("simple", "simpler", "symbolic")) {
+                return "SIMPLIFY"
+            } else {
+                return "SOLVE"
+            }
+        }
+    }
+
     async resolve_references() {
-        const known_references = await this.get_known(["REFERENCES"]);
+        const known_references = await this.get_known("REFERENCES");
         for (const [reference, verbs] of Object.entries(known_references)) {
             for (const verb of verbs) {
                 if (this.input.includes(reference) && this.context["VERBS"].includes(verb) && !this.input.includes(verb)) {
@@ -195,10 +216,13 @@ class SLM {
         return this.input;
     }
 
-    async choose_response(state, cat=null) {
-        const messages = await preloadMsgs(state, cat);
-        const index = (genSeed(1, messages.length)) - 1;
-        return messages[index].text;
+    async choose_response(cat=null, state=null, dif=null, tone=null, tags=[]) {
+        const messages = await preloadMsgs(cat, state, dif, tone, tags);
+        if (messages && messages.length > 0) {
+            const index = (genSeed(1, messages.length)) - 1;
+            return messages[index].text;
+        }
+        return "";
     }
 
     async polish_response(chosenMsg, log=null) {
@@ -234,21 +258,22 @@ class SLM {
                     this.asking = false;
                     this.attempts = 0;
                     if (isCorrect) {
-                        responses.push(await this.choose_response("any", "good_job"));
+                        responses.push(await this.choose_response("encouragement"));
                     }
                     responses = responses.concat(await this.next_response());
                 } else {
                     this.attempts++;
-                    responses.push(await this.choose_response("check_work", "guidance"));
+                    const state = (this.phase == "simplify") ? "simplify": (this.phase == "solving") ? "isolate": "error"
+                    responses.push(await this.choose_response("feedback", state));
                 }
             } else if (!this.phase) {
                 this.phase = "simplify";
-                const chosenMsg = await this.choose_response("start") + "\n" + this.context["EQUATION"];
+                const chosenMsg = await this.choose_response("guidance", "start") + "\n" + this.context["EQUATION"];
                 responses = responses.concat(await this.polish_response(chosenMsg));
             } else if (this.step >= tutorLog.length - 1) {
                 this.phase = "solved";
                 this.step = 0;
-                const chosenMsg = await this.choose_response("finish");
+                const chosenMsg = await this.choose_response("guidance", "finish");
                 responses = responses.concat(await this.polish_response(chosenMsg, log));
             } else if (this.phase == "solved") {
                 this.phase = null;
@@ -256,7 +281,7 @@ class SLM {
                 responses.push(chosenMsg);
             } else if (this.phase == "solving") {
                 this.step++;
-                const chosenMsg = await this.choose_response("isolate_variable");
+                const chosenMsg = await this.choose_response("guidance", "isolate");
                 responses = responses.concat(await this.polish_response(chosenMsg, log));
             } else if (this.phase == "simplify") {
                 this.step++;
@@ -264,17 +289,36 @@ class SLM {
                     this.phase = "solving";
                     responses = responses.concat(await this.next_response(responses));
                 } else {
-                    const chosenMsg = await this.choose_response("simplify");
+                    const chosenMsg = await this.choose_response("guidance", "simplify", null, null, ["simplifying"]);
                     responses = responses.concat(await this.polish_response(chosenMsg, log));
                 }
             } else {
-                responses.push(await this.choose_response("error", "server_error"));
+                responses.push(await this.choose_response("server_error", "error"));
             }
             
             return responses;
         } else {
             throw new Error("There are no math steps to walk through.");
         }
+    }
+
+    async reason(error, ...tags) {
+        if (error) {
+            if (error instanceof algebra.InvalidType) {
+                return [await this.choose_response("client_error", "error", null, null, ["bad-type"].concat(tags))];
+            } else if (error instanceof algebra.UndefinedVariable) {
+                return [await this.choose_response("client_error", "error", null, null, ["undefined"].concat(tags))];
+            } else if (error instanceof algebra.InvalidEquation) {
+                return [await this.choose_response("client_error", "error", null, null, ["bad-equation"].concat(tags))];
+            } else if (error instanceof algebra.NotEstablishedYet) {
+                return [await this.choose_response("client_error", "error", null, null, ["not-established"].concat(tags))];
+            } else if (error instanceof algebra.VASTError) {
+                return [await this.choose_response("client_error", "error", null, null, ["VAST-error"].concat(tags))];
+            } else {
+                return [await this.choose_response("server_error", "error", null, null, tags)];
+            }
+        }
+        return [await this.choose_response("client_error", "error", null, null, tags)];
     }
 
     async generate(text) {
@@ -287,6 +331,7 @@ class SLM {
         } else {
             const nouns = await this.extract_nouns();
             const verbs = await this.extract_verbs();
+            const adj = await this.extract_adj();
             const expression = analyzeMsg(this.input);
             
             if (nouns.length > 0 || expression) {
@@ -296,7 +341,7 @@ class SLM {
                     await this.update_context(verbs, "VERBS");
                     this.title = verbs[0] + ": " + expression;
                     
-                    if (verbs.includes("solve")) {
+                    if (await this.choose_state(verbs, adj) == "SOLVE") {
                         try {
                             const solution = await algebra.solve(expression);
                             await this.update_context(expression, "EQUATION");
@@ -306,28 +351,18 @@ class SLM {
                             this.convo_id = null; // change to be whenever a new convo is made by user
                             return responses;
                         } catch (err) {
-                            if (err instanceof algebra.InvalidType) {
-                                return [await this.choose_response("error", "server_error")];
-                            } else if (err instanceof algebra.UndefinedVariable) {
-                                return [await this.choose_response("error", "server_error")];
-                            } else if (err instanceof algebra.InvalidEquation) {
-                                return [await this.choose_response("error", "server_error")];
-                            } else if (err instanceof algebra.NotEstablishedYet) {
-                                return [await this.choose_response("error", "server_error")];
-                            } else if (err instanceof algebra.VASTError) {
-                                return [await this.choose_response("error", "server_error")];
-                            } else {
-                                return [await this.choose_response("error", "server_error")];
-                            }
+                            const errMsg = err.message.toLowerCase();
+                            const tag = (errMsg.includes("division")) ? "division": (errMsg.includes("exponents")) ? "exponents": null;
+                            return await this.reason(err, tag);
                         }
                     } else {
-                        return [await this.choose_response("error", "confused")];
+                        return await this.reason(null, "confused");
                     }
                 } else {
-                    return [await this.choose_response("error", "confused")];
+                    return await this.reason(null, "confused");
                 }
             } else {
-                return [await this.choose_response("error", "no_equation")];
+                return await this.reason(null, "no-equation");
             }
         }
     }

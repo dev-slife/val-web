@@ -7,47 +7,31 @@
         "am", "are", "can", "did", "do", "does", "has", "had", "have", "is", "should", "was", "were"
     ],
 
-    "MQnA": {
-        "NOUNS": [
-            "answer",
-            "equation",
-            "formula", "function",
-            "number",
-            "pattern", "problem"
-        ],
+    "NOUNS": [
+        "answer", "equation", "formula", "function", "number", "pattern", "problem"
+    ],
 
-        "PRONOUNS": {
-            "it": ["equation", "formula", "function", "problem"],
-            "that": ["equation", "formula", "function", "problem", "pattern", "answer"],
-            "these": ["equations", "formulas", "functions", "problems", "answers"],
-            "this": ["equation", "formula", "function", "problem", "pattern", "answer"],
-            "those": ["equations", "formulas", "functions", "problems", "answers"]
-        },
-    
-        "VERBS": [
-            "add",
-            "calculate", "combine",
-            "decide", "divide",
-            "evaluate",
-            "factor",
-            "give",
-            "multiply",
-            "simplify", "solve", "subtract",
-            "tell"
-        ],
+    "VERBS": [
+        "simplify", "factor", "combine", "compose", "group", "round", "represent", "modify", "eliminate",
+        "solve", "find", "isolate", "analyze", "determine", "separate", "evaluate",
+        "compute", "generate", "identify", "explain", "calculate", "add", "subtract", "multiply", "divide", "figure out", "show", "specify", "tell", "translate"
+    ],
 
-        "REFERENCES": {
-            "what about": ["simplify", "solve"],
-            "how about": ["simplify", "solve"]
-        },
-    
-        "ADJECTIVES": [
-            "basic",
-            "complex", "complicated",
-            "difficult",
-            "new",
-            "quick",
-            "simple", "simplified", "symbolic"
-        ]
+    "ADJECTIVES": [
+        "simple", "simpler", "symbolic",
+        "exact", "precise", "accurate"
+    ],
+
+    "PRONOUNS": {
+        "it": ["equation", "formula", "function", "problem"],
+        "that": ["equation", "formula", "function", "problem", "pattern", "answer"],
+        "these": ["equations", "formulas", "functions", "problems", "answers"],
+        "this": ["equation", "formula", "function", "problem", "pattern", "answer"],
+        "those": ["equations", "formulas", "functions", "problems", "answers"]
+    },
+
+    "REFERENCES": {
+        "what about": ["simplify", "solve"],
+        "how about": ["simplify", "solve"]
     }
 }
