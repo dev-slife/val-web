@@ -79,6 +79,10 @@ main {
     transition: background 0.15s, color 0.15s;
 }
 
+.chat-item.new {
+    margin: 10px 2px 20px 2px;
+}
+
 .chat-item:hover {
     background: rgba(255,255,255,0.05);
     color: var(--text-primary);

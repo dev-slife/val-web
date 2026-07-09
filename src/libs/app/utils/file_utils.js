@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/16/26
- * Date Updated: 5/30/26
+ * Date Updated: 7/9/26
  * Description:
  *      Utility functions to use for object storage.
  */
@@ -15,10 +15,14 @@ const {BucketDNE} = require("../errors.js");
 const PFP_BUCKET = "profiles";
 const VAL_BLOB = "val-blob";
 
-const endpoint = () => {
+const internalEndpoint = () => {
+    return process.env.MINIO_INTERNAL_ENDPOINT || "minio"
+};
+
+const publicEndpoint = () => {
     // env
-    if (process.env.MINIO_ENDPOINT) {
-        return process.env.MINIO_ENDPOINT;
+    if (process.env.MINIO_PUBLIC_ENDPOINT) {
+        return process.env.MINIO_PUBLIC_ENDPOINT;
     }
 
     // Windows
@@ -30,21 +34,31 @@ const endpoint = () => {
     return '127.0.0.1';
 };
 
+const internalClient = new minio.Client({
+    endPoint: internalEndpoint(),
+    port: 9000,
+    useSSL: false,
+    accessKey: process.env.MINIO_USER,
+    secretKey: process.env.MINIO_PASS,
+    region: "us-east-1"
+});
+
+const publicClient = new minio.Client({
+    endPoint: publicEndpoint(),
+    port: 9000,
+    useSSL: false,
+    accessKey: process.env.MINIO_USER,
+    secretKey: process.env.MINIO_PASS,
+    region: "us-east-1"
+});
+
 
 
 // --------------------------- HELPER FUNCTIONS --------------------------- //
 
 async function dump(bucket, key, lifetime=(60*5)) {
-    const client = new minio.Client({
-        endPoint: endpoint(),
-        port: 9000,
-        useSSL: false,
-        accessKey: process.env.MINIO_USER,
-        secretKey: process.env.MINIO_PASS
-    });
-
-    if (await client.bucketExists(bucket)) {
-        return await client.presignedGetObject(
+    if (await internalClient.bucketExists(bucket)) {
+        return await publicClient.presignedGetObject(
             bucket, key, lifetime,
             {'response-content-disposition': 'inline'}
         );
@@ -55,20 +69,12 @@ async function dump(bucket, key, lifetime=(60*5)) {
 
 
 async function fill(bucket, key, file) {
-    const client = new minio.Client({
-        endPoint: endpoint(),
-        port: 9000,
-        useSSL: false,
-        accessKey: process.env.MINIO_USER,
-        secretKey: process.env.MINIO_PASS
-    });
-
-    const bucketFound = await client.bucketExists(bucket);
+    const bucketFound = await internalClient.bucketExists(bucket);
     if (!bucketFound) {
-        await client.makeBucket(bucket);
+        await internalClient.makeBucket(bucket);
     }
 
-    await client.putObject(bucket, key, file.buffer, {
+    await internalClient.putObject(bucket, key, file.buffer, {
         'Content-Type': file.mimetype
     });
 

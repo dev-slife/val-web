@@ -73,7 +73,6 @@ router.get('/pfp/pull', async(req, res) => {
     try {
         if (user) {
             const url = await storageUtil.getPFP(key);
-            
             if (url) {
                 res.status(200).send({
                     success: true,

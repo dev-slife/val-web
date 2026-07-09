@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 6/5/26
+ * Date Updated: 7/9/26
  * Description:
  *      Communicates with the VAST system to handle all math logic.
  */
@@ -200,6 +200,12 @@ async function loadMessages() {
         console.log(data.hist);
         const histDisabled = document.getElementById("histDisabled");
         const histKeys = Object.keys(data.hist);
+
+        const newConvo = document.createElement("div");
+        newConvo.className = "chat-item new";
+        newConvo.textContent = "New Conversation";
+        newConvo.onclick = async() => await loadConvo();
+        histList.appendChild(newConvo);
 
         if (histKeys.length > 0) {
             histDisabled.hidden = true;

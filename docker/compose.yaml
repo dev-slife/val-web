@@ -15,7 +15,8 @@ services:
             MONGO_CONN: mongodb://${DB_USER}:${DB_PASS}@mongodb:27017/?authSource=admin
             MINIO_USER: ${MINIO_USER}
             MINIO_PASS: ${MINIO_PASS}
-            MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+            MINIO_PUBLIC_ENDPOINT: ${MINIO_PUBLIC_ENDPOINT}
+            MINIO_INTERNAL_ENDPOINT: ${MINIO_INTERNAL_ENDPOINT}
             PORT: ${APP_PORT}
         depends_on:
             mongodb:
