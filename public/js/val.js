@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 7/9/26
+ * Date Updated: 7/23/26
  * Description:
  *      Communicates with the VAST system to handle all math logic.
  */
@@ -192,34 +192,43 @@ async function loadConvo(msgs) {
 }
 
 
-async function loadMessages() {
-    const histList = document.querySelector(".chat-history-list");
-    const data = await grabHist();
+async function loadMessages(config) {
+    const histDisabled = document.getElementById("histDisabled");
     
-    if (data && data.hist) { 
-        console.log(data.hist);
-        const histDisabled = document.getElementById("histDisabled");
-        const histKeys = Object.keys(data.hist);
-
-        const newConvo = document.createElement("div");
-        newConvo.className = "chat-item new";
-        newConvo.textContent = "New Conversation";
-        newConvo.onclick = async() => await loadConvo();
-        histList.appendChild(newConvo);
-
-        if (histKeys.length > 0) {
-            histDisabled.hidden = true;
-            for (const msgID of Object.keys(data.hist)) {
-                const msgDiv = document.createElement("div");
-                msgDiv.className = "chat-item";
-
-                msgDiv.textContent = data.hist[msgID].title;
-                msgDiv.onclick = async() => await loadConvo(data.hist[msgID].messages);
-                histList.appendChild(msgDiv);
+    if (findConfig(config, "chatHistory")) {
+        const histList = document.querySelector(".chat-history-list");
+        const data = await grabHist();
+        
+        if (data && data.hist) {
+            const histKeys = Object.keys(data.hist);
+    
+            const newConvo = document.createElement("div");
+            newConvo.className = "chat-item new";
+            newConvo.textContent = "New Conversation";
+            newConvo.onclick = async() => await loadConvo();
+            histList.appendChild(newConvo);
+    
+            if (histKeys.length > 0) {
+                histDisabled.hidden = true;
+                for (const msgID of Object.keys(data.hist)) {
+                    const msgDiv = document.createElement("div");
+                    msgDiv.className = "chat-item";
+    
+                    msgDiv.textContent = data.hist[msgID].title;
+                    msgDiv.onclick = async() => await loadConvo(data.hist[msgID].messages);
+                    histList.appendChild(msgDiv);
+                }
+            } else {
+                histDisabled.hidden = false;
+                histDisabled.textContent = "No Chat History";
             }
         } else {
             histDisabled.hidden = false;
+            histDisabled.textContent = "No Chat History";
         }
+    } else {
+        histDisabled.hidden = false;
+        histDisabled.textContent = "Disabled";
     }
 }
 
@@ -278,8 +287,11 @@ function messageSender() {
 document.addEventListener("DOMContentLoaded", async() => {
     const userInput = document.getElementById("mathInput");
     const sendBtn = document.getElementById("sendBtn");
-    await loadMessages();
     const sendMessage = messageSender();
+    const config = await grabConfig();
+    if (config) {
+        await loadMessages(config);
+    }
 
     sendBtn.addEventListener("click", async() => {
         await sendMessage();

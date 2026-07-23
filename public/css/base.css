@@ -35,6 +35,8 @@
     --bg-input:      #0d0d12;
     --bg-nav:        #13131a;
     --bg-card:       #22223a;
+    --bg-btn:        #2a2a4a;
+    --hover-blue:    #7ab0e0;
     --accent-blue:   #5b9bd5;
     --blue-glow:     #258ae9;
     --soft-blue:     rgba(91, 155, 213, 0.2);
@@ -45,6 +47,7 @@
     --text-muted:    #7a7a9a;
     --text-sidebar:  #c0c0d8;
     --border:        #2a2a3a;
+    --btn-border:    #3a3a5a;
     --nav-border:    #2e2e3e;
     --sidebar-width: 230px;
     --nav-height:    58px;

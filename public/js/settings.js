@@ -1,7 +1,7 @@
 /**
  * Authors: dev.slife, sfesseha
  * Date Created: 4/30/26
- * Date Updated: 6/5/26
+ * Date Updated: 7/23/26
  * Description:
  *      Manages all account settings.
  */
@@ -18,17 +18,6 @@ function showToast(msg, icon="🌠", lifetime=3) {
     const t = document.getElementById("toast");
     t.classList.add("show");
     toastTimer = setTimeout(() => t.classList.remove("show"), 1000 * lifetime);
-}
-
-
-function findConfig(config, name) {
-    for (const key of Object.keys(config)) {
-        if (typeof config[key] == "object") {
-            return findConfig(config[key], name);
-        } else if (key == name) {
-            return config[key];
-        }
-    }
 }
 
 
@@ -53,65 +42,25 @@ async function updateConfig(config) {
 }
 
 
-async function formatConfig(config) {
-    let newConfig = {};
-
-    for (const key of Object.keys(config)) {
-        const keyArray = key.toLowerCase().split("");
-        const _Index = keyArray.indexOf("_");
-
-        if (_Index != -1 && _Index != keyArray.length - 1) {
-            for (let i = 0; i < keyArray.length; i++) {
-                if (keyArray[i] == '_') {
-                    keyArray[i+1] = keyArray[i+1].toUpperCase();
-                    const formattedKey = keyArray.join("").replaceAll('_', '');
-                    
-                    if (typeof config[key] == "object") {
-                        newConfig[formattedKey] = await formatConfig(config[key]);
-                    } else {
-                        newConfig[formattedKey] = config[key];
-                    }
-                }
-            }
-        } else if (typeof config[key] == "object") {
-            newConfig[key] = await formatConfig(config[key]);
-        } else {
-            newConfig[key] = config[key];
-        }
-    }
-
-    return newConfig;
-}
-
-
-async function grabConfig() {
-    try {
-        const url = `/api/db/user/pull_config?user=${getUser()}`;
-        const response = await fetch(url);
-        const data = await response.json();
-        return await formatConfig(data.config);
-    } catch(err) {
-        console.error(`An unexpected error occurred when attempting to grab user settings: ${err}`);
-    }
-}
-
-
 async function saveSection(section) {
     let success;
 
     if (section == "preferences") {
+        const theme = document.getElementById("theme");
         const chatHist = document.getElementById("chatHistory");
         const reduceMotion = document.getElementById("reduceMotion");
         const highContrast = document.getElementById("highContrast");
         const screenReader = document.getElementById("screenReader");
         const response = await updateConfig({
             chat_history: chatHist.checked,
+            theme: theme.value,
             accessibility: {
                 reduce_motion: reduceMotion.checked,
                 high_contrast: highContrast.checked,
                 screen_reader: screenReader.checked
             }
         });
+        await updateBackground(theme.value);
         success = (response && response.success);
     } else if (section == "notifications") {
         const sound = document.getElementById("soundEffects");
@@ -276,6 +225,14 @@ document.addEventListener("DOMContentLoaded", async() => {
         // TEXT BOXES
         document.querySelectorAll(".field textarea").forEach(textBox => {
             textBox.value = findConfig(config, textBox.id);
+        });
+
+        // DROPDOWNS
+        document.querySelectorAll(".field select").forEach(dropDown => {
+            const val = findConfig(config, dropDown.id);
+            if (val) {
+                dropDown.value = findConfig(config, dropDown.id);
+            }
         });
     }
 

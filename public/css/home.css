@@ -38,14 +38,14 @@ main {
 
 .sidebar-header-btn {
     display: inline-block;
-    background: #2a2a4a;
+    background: var(--bg-btn);
     color: var(--text-primary);
     font-family: 'Lilita One', sans-serif;
     font-size: 18px;
     letter-spacing: 1px;
     padding: 8px 20px;
     border-radius: 999px;
-    border: 1px solid #3a3a5a;
+    border: 1px solid var(--btn-border);
 }
 
 .chat-history-list {
@@ -247,7 +247,7 @@ main {
 }
 
 .send-btn:hover {
-    background: #7ab0e0;
+    background: var(--hover-blue);
     transform: scale(1.06);
 }
 

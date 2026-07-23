@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 5/30/26
+ * Date Updated: 7/23/26
  * Description:
  *      Handles main frontend interaction.
  */
@@ -11,6 +11,52 @@
 // --------------------------- CONSTANTS --------------------------- //
 
 const SESSION_ID = "val_user";
+const THEMES = {
+    "DARK": {
+        "--bg-deep":       "#13131a",
+        "--bg-sidebar":    "#0f0f15",
+        "--bg-main":       "#1a1a24",
+        "--bg-input":      "#0d0d12",
+        "--bg-nav":        "#13131a",
+        "--bg-card":       "#22223a",
+        "--bg-btn":        "#2a2a4a",
+        "--hover-blue":    "#7ab0e0",
+        "--accent-blue":   "#5b9bd5",
+        "--blue-glow":     "#258ae9",
+        "--soft-blue":     "rgba(91, 155, 213, 0.2)",
+        "--accent-yellow": "#c8b96e",
+        "--accent-red":    "#d95f6e",
+        "--soft-red":      "rgba(217, 95, 110, 0.2)",
+        "--text-primary":  "#e8e8f0",
+        "--text-muted":    "#7a7a9a",
+        "--text-sidebar":  "#c0c0d8",
+        "--border":        "#2a2a3a",
+        "--btn-border":    "#3a3a5a",
+        "--nav-border":    "#2e2e3e"
+    },
+    "LIGHT": {
+        "--bg-deep":       "#f5f5f8",
+        "--bg-sidebar":    "#eeeef3",
+        "--bg-main":       "#ffffff",
+        "--bg-input":      "#ffffff",
+        "--bg-nav":        "#f5f5f8",
+        "--bg-card":       "#f0f0f7",
+        "--bg-btn":        "#e4e4f0",
+        "--hover-blue":    "#2f6fb0",
+        "--accent-blue":   "#3a7fc1",
+        "--blue-glow":     "#1a6fd1",
+        "--soft-blue":     "rgba(58, 127, 193, 0.12)",
+        "--accent-yellow": "#a68f3d",
+        "--accent-red":    "#c0394a",
+        "--soft-red":      "rgba(192, 57, 74, 0.12)",
+        "--text-primary":  "#1c1c26",
+        "--text-muted":    "#6b6b85",
+        "--text-sidebar":  "#33334a",
+        "--border":        "#dcdce4",
+        "--btn-border":    "#c8c8dc",
+        "--nav-border":    "#d5d5e0"
+    }
+}
 
 
 
@@ -27,14 +73,11 @@ async function expressPage(url) {
 }
 
 
-
-// --------------------------- MODULE FUNCTIONS --------------------------- //
-
 async function changePage(page="home", is_index_file=false) {
     // First try to use the express route
     const expressURL = (page == "home") ? "/": "/" + page;
     const route = await expressPage(expressURL);
-
+    
     if (route) {
         window.location.href = route;
     } else {
@@ -45,6 +88,56 @@ async function changePage(page="home", is_index_file=false) {
     }
 }
 
+
+async function validURL(url) {
+    try {
+        const response = await fetch(url);
+        return response.ok;
+    } catch (err) {
+        return false;
+    }
+}
+
+
+function findConfig(config, name) {
+    for (const key of Object.keys(config)) {
+        if (typeof config[key] == "object") {
+            return findConfig(config[key], name);
+        } else if (key == name) {
+            return config[key];
+        }
+    }
+}
+
+
+async function updateBackground(theme) {
+    if (theme) {
+        const root = document.documentElement;
+        for (const [prop, val] of Object.entries(THEMES[theme.toUpperCase()])) {
+            root.style.setProperty(prop, val);
+        }
+    }
+}
+
+
+
+// --------------------------- SESSION DATA --------------------------- //
+
+function saveUser(user) {
+    if (user) {
+        sessionStorage.setItem(SESSION_ID, JSON.stringify(user));
+    }
+}
+
+
+function getUser() {
+    const raw = sessionStorage.getItem(SESSION_ID);
+    return (raw) ? JSON.parse(raw): null;
+}
+
+
+
+// --------------------------- ACCOUNT REQUESTS --------------------------- //
 
 async function login(user, pass) {
     try {
@@ -90,15 +183,8 @@ async function register(user, pass) {
 }
 
 
-async function validURL(url) {
-    try {
-        const response = await fetch(url);
-        return response.ok;
-    } catch (err) {
-        return false;
-    }
-}
 
+// --------------------------- BLOB REQUESTS --------------------------- //
 
 async function getBlobItem(imgName="default_pfp.png") {
     try {
@@ -132,16 +218,49 @@ async function getPFP(default_img=false) {
 }
 
 
-function saveUser(user) {
-    if (user) {
-        sessionStorage.setItem(SESSION_ID, JSON.stringify(user));
+
+// --------------------------- DATABASE REQUESTS --------------------------- //
+
+async function formatConfig(config) {
+    let newConfig = {};
+
+    for (const key of Object.keys(config)) {
+        const keyArray = key.toLowerCase().split("");
+        const _Index = keyArray.indexOf("_");
+
+        if (_Index != -1 && _Index != keyArray.length - 1) {
+            for (let i = 0; i < keyArray.length; i++) {
+                if (keyArray[i] == '_') {
+                    keyArray[i+1] = keyArray[i+1].toUpperCase();
+                    const formattedKey = keyArray.join("").replaceAll('_', '');
+                    
+                    if (typeof config[key] == "object") {
+                        newConfig[formattedKey] = await formatConfig(config[key]);
+                    } else {
+                        newConfig[formattedKey] = config[key];
+                    }
+                }
+            }
+        } else if (typeof config[key] == "object") {
+            newConfig[key] = await formatConfig(config[key]);
+        } else {
+            newConfig[key] = config[key];
+        }
     }
+
+    return newConfig;
 }
 
 
-function getUser() {
-    const raw = sessionStorage.getItem(SESSION_ID);
-    return (raw) ? JSON.parse(raw): null;
+async function grabConfig() {
+    try {
+        const url = `/api/db/user/pull_config?user=${getUser()}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return await formatConfig(data.config);
+    } catch(err) {
+        console.error(`An unexpected error occurred when attempting to grab user settings: ${err}`);
+    }
 }
 
 
@@ -154,6 +273,11 @@ document.addEventListener("DOMContentLoaded", async() => {
     const user = document.getElementById("username");
     const pass = document.getElementById("pass");
     const errorMsg = document.getElementById("error-msg");
+    const config = await grabConfig();
+
+    if (config) {
+        await updateBackground(findConfig(config, "theme"));
+    }
 
     if (loginBtn) {
         loginBtn.addEventListener("click", async function (event) {
