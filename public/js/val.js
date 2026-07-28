@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 7/23/26
+ * Date Updated: 7/28/26
  * Description:
  *      Communicates with the VAST system to handle all math logic.
  */
@@ -40,20 +40,23 @@ async function solve(expression) {
 
 async function ask(question, model_id) {
     try {
-        const url = "/api/val/ask";
-        const payload = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "user": getUser(),
-                "model_id": model_id,
-                "question": question
-            })
+        const user = getUser();
+        if (user) {
+            const url = "/api/val/ask";
+            const payload = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "user": user,
+                    "model_id": model_id,
+                    "question": question
+                })
+            }
+            const response = await fetch(url, payload);
+            return response.json();
         }
-        const response = await fetch(url, payload);
-        return response.json();
     } catch (err) {
         console.error(`An unexpected error occurred when asking VAL your question: ${err}`);
     }
@@ -78,20 +81,22 @@ async function grabHist() {
 async function updateHist(title, hist) {
     try {
         const user = getUser();
-        const url = "/api/db/user/save_chat";
-        const payload = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "user": user,
-                "title": title,
-                "msgs": hist
-            })
+        if (user) {
+            const url = "/api/db/user/save_chat";
+            const payload = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "user": user,
+                    "title": title,
+                    "msgs": hist
+                })
+            }
+            const response = await fetch(url, payload);
+            return response.json();
         }
-        const response = await fetch(url, payload);
-        return response.json();
     } catch (err) {
         console.error(`An unexpected error occurred when updating the chat history: ${err}`);
         return false;
@@ -186,8 +191,10 @@ function messageState(on=true) {
 
 async function loadConvo(msgs) {
     messageState();
-    for (const msg of msgs) {
-        await addMessage(msg[1], msg[0]);
+    if (msgs) {
+        for (const msg of msgs) {
+            await addMessage(msg[1], msg[0]);
+        }
     }
 }
 

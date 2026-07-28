@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 6/1/26
+ * Date Updated: 7/28/26
  * Description:
  *      Utility functions to use for database management.
  */
@@ -108,6 +108,19 @@ async function initUser(user, hash) {
         "pass": hash,
         "config": VAL_CONFIG
     });
+
+    await client.close();
+    return (result) ? true: false;
+}
+
+
+async function removeUser(user) {
+    const client = new MongoClient(process.env.MONGO_CONN);
+    await client.connect();
+
+    const db = client.db(DB);
+    const users = db.collection("users");
+    const result = await users.deleteOne({"user": user});
 
     await client.close();
     return (result) ? true: false;
@@ -226,6 +239,7 @@ module.exports = {
     userConfig,
     histEnabled,
     initUser,
+    removeUser,
     updateUserConfig,
     saveChat,
     clearChat,

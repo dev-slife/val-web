@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 7/23/26
+ * Date Updated: 7/28/26
  * Description:
  *      Handles main frontend interaction.
  */
@@ -117,22 +117,6 @@ async function updateBackground(theme) {
             root.style.setProperty(prop, val);
         }
     }
-}
-
-
-
-// --------------------------- SESSION DATA --------------------------- //
-
-function saveUser(user) {
-    if (user) {
-        sessionStorage.setItem(SESSION_ID, JSON.stringify(user));
-    }
-}
-
-
-function getUser() {
-    const raw = sessionStorage.getItem(SESSION_ID);
-    return (raw) ? JSON.parse(raw): null;
 }
 
 
@@ -254,10 +238,13 @@ async function formatConfig(config) {
 
 async function grabConfig() {
     try {
-        const url = `/api/db/user/pull_config?user=${getUser()}`;
-        const response = await fetch(url);
-        const data = await response.json();
-        return await formatConfig(data.config);
+        const user = getUser();
+        if (user) {
+            const url = `/api/db/user/pull_config?user=${user}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            return await formatConfig(data.config);
+        }
     } catch(err) {
         console.error(`An unexpected error occurred when attempting to grab user settings: ${err}`);
     }

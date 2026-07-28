@@ -1,7 +1,7 @@
 .info-page nav {
     margin: 0 auto 32px;
     max-width: 960px;
-    background: #0d0d14;
+    background: var(--bg-input);
     border-radius: 999px;
     border: 1px solid var(--nav-border);
     display: flex;

@@ -1,7 +1,7 @@
 /**
  * Authors: dev.slife, sfesseha
  * Date Created: 4/30/26
- * Date Updated: 7/23/26
+ * Date Updated: 7/28/26
  * Description:
  *      Manages all account settings.
  */
@@ -21,21 +21,50 @@ function showToast(msg, icon="🌠", lifetime=3) {
 }
 
 
+function popup(title="", msg="", inputLabel="", open=true) {
+    const popup = document.getElementById("popup");
+    
+    if (open) {
+        const header = document.getElementById("popup-title");
+        const info = document.getElementById("popup-info");
+        const label = document.getElementById("popup-label");
+        const field = document.getElementById("popup-field");
+        const textBox =  document.getElementById("popup-input");
+
+        document.getElementById("popup-error").hidden = true;
+        
+        header.textContent = title;
+        info.innerHTML = msg;
+        label.textContent = inputLabel;
+        textBox.value = "";
+        field.style.display = (inputLabel == "") ? "none": "block";
+        popup.showModal();
+        popup.classList.add("show");
+    } else {
+        popup.classList.remove("show");
+        popup.close();
+    }
+}
+
+
 async function updateConfig(config) {
     try {
-        const url = "/api/db/user/update_config";
-        const payload = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "user": getUser(),
-                "config": config
-            })
+        const user = getUser();
+        if (user) {
+            const url = "/api/db/user/update_config";
+            const payload = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "user": user,
+                    "config": config
+                })
+            }
+            const response = await fetch(url, payload);
+            return response.json();
         }
-        const response = await fetch(url, payload);
-        return response.json();
     } catch(err) {
         console.error(`An unexpected error occurred when attempting to update user settings: ${err}`);
     }
@@ -84,10 +113,46 @@ async function saveSection(section) {
 }
 
 
-function confirmAction() {
-    const msg = "Are you sure you want to permanently delete your account? This action is irreversible!";
-    if (confirm(msg)) {
-        showToast("Account deleted.", "🗑️");
+async function deleteAccount() {
+    const msg = document.getElementById("popup-error");
+    const pass = document.getElementById("popup-input").value;
+    const user = getUser();
+
+    if (user) {
+        if (pass) {
+            const url = "/api/db/user/delete";
+            const payload = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "user": user,
+                    "pass": pass
+                })
+            }
+            const response = await fetch(url, payload);
+            const result = response.json();
+    
+            if (result.success) {
+                popup(null, null, null, false);
+                showToast("Account deleted.", "🗑️");
+                setTimeout(() => {
+                    logout();
+                }, 2000);
+            } else if (!result.authorized) {
+                msg.textContent = "The password you entered was incorrect.";
+                msg.hidden = false;
+            } else {
+                msg.textContent = "The server ran into an unexpected error, try again later.";
+            }
+        } else {
+            msg.textContent = "No password was given.";
+            msg.hidden = false;
+        }
+    } else {
+        msg.textContent = "How did you do that? Login buddy.";
+        msg.hidden = false;
     }
 }
 

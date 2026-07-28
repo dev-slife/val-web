@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 6/5/26
+ * Date Updated: 7/28/26
  * Description:
  *      Handles all database API calls.
  */
@@ -141,6 +141,77 @@ router.post('/user/register', async(req, res) => {
             success: false,
             user: user,
             message: `The server ran into an unexpected error when trying to register ${user}, caught: ${err.name}.`
+        });
+    }
+});
+
+
+router.post('/user/delete', async(req, res) => {
+    const {user, pass} = req.body;
+
+    try {
+        if (validQuery("string", user, pass)) {
+            if (await dbUtils.isRegistered(user)) {
+                const hash = await dbUtils.userSecret(user);
+
+                await bcrypt.compare(pass, hash, async function(err, result) {
+                    if (result) {
+                        if (await dbUtils.removeUser(user)) {
+                            res.status(200).send({
+                                success: true,
+                                authorized: true,
+                                registered: true,
+                                user: user,
+                                message: "User successfully removed from database."
+                            });
+                        } else {
+                            res.status(500).send({
+                                success: false,
+                                authorized: true,
+                                registered: true,
+                                user: user,
+                                message: "The server ran into an unexpected error when attempting to delete the user."
+                            });
+                        }
+                    } else {
+                        res.status(400).send({
+                            success: false,
+                            authorized: false,
+                            registered: true,
+                            user: user,
+                            message: "An incorrect password was given."
+                        });
+                    }
+                });
+            } else {
+                res.status(400).send({
+                    success: false,
+                    authorized: false,
+                    registered: false,
+                    user: user,
+                    message: "The given user is not registered."
+                });
+            }
+        } else {
+            res.status(400).send({
+                success: false,
+                authorized: false,
+                user: user,
+                message: "Incomplete body given, missing username and/or password."
+            });
+        }
+    } catch (err) {
+        console.error(`Server error on deletion of account for: ${user}`, {
+            name: err.name,
+            message: err.message,
+            stack: err.stack
+        });
+
+        res.status(500).send({
+            success: false,
+            authorized: false,
+            user: user,
+            message: `The server ran into an unexpected error when trying to delete the account for ${user}, caught: ${err.name}.`
         });
     }
 });

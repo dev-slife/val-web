@@ -6,8 +6,8 @@
     <link rel="icon" href="../favicon.ico">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/settings.css">
-    <script src="../js/main.js" defer></script>
     <script src="../js/temp_auth.js"></script>
+    <script src="../js/main.js" defer></script>
     <script src="../js/settings.js" defer></script>
     <title>Settings - VAL</title>
 </head>
@@ -252,12 +252,26 @@
                             <h4>Delete Account</h4>
                             <p>Permanently delete your account and all associated data.</p>
                         </div>
-                        <button class="btn btn-danger" onclick="confirmAction()">Delete</button>
+                        <button class="btn btn-danger" onclick="popup('Are you sure?', 'The action you are about to take will remove all data associated to you and is <b>irreversible</b>.', 'Enter Password')">Delete</button>
                     </div>
                 </div>
             </section>
         </div>
     </main>
+
+    <dialog id="popup">
+        <div class="popup card danger-card">
+            <div class="card-title" id="popup-title">Are you sure?</div>
+            <p id="popup-info">The action you are about to take will remove all data associated to you and is <b>irreversible</b>.</p>
+            <div class="field" id="popup-field">
+                <label id="popup-label" for="popup-input">Enter Password</label>
+                <input type="password" id="popup-input">
+            </div>
+            <p id="popup-error" style="color: var(--accent-red)" hidden>An unexpected error occurred.</p>
+            <button class="btn btn-danger" onclick="deleteAccount()">Confirm Deletion</button>
+            <button class="btn btn-ghost" onclick="popup(null, null, null, false)">Keep Account</button>
+        </div>
+    </dialog>
 
     <div class="bottom-section">
         <div class="bottom-divider"></div>

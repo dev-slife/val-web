@@ -479,6 +479,44 @@ main {
 
 
 
+/* --------------------- POPUP --------------------- */
+
+#popup {
+    margin: auto;
+    inset: 0;
+    border: none;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 400px;
+    width: 90%;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    bottom: 25px;
+    transform: translateY(25px);
+    font-size: .88rem;
+    transition: opacity .25s, transform .25s;
+}
+
+
+#popup p {
+    margin: 15px;
+}
+
+
+#popup::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+
+#popup.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+
 /* --------------------- TOAST --------------------- */
 
 #toast {

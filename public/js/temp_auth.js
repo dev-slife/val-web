@@ -1,7 +1,7 @@
 /**
  * Authors: dev.slife, jbeshir-umd
  * Date Created: 5/6/26
- * Date Updated: 5/30/26
+ * Date Updated: 7/28/26
  * Description:
  *      Handles session-based authentication using sessionStorage and checks automatically on load.
  */
@@ -9,11 +9,16 @@
 
 // --------------------------- HELPER FUNCTIONS --------------------------- //
 
+function saveUser(user) {
+    if (user) {
+        sessionStorage.setItem(SESSION_ID, JSON.stringify(user));
+    }
+}
+
+
 function getUser() {
     const user = sessionStorage.getItem(SESSION_ID);
-    if (user) {
-        return JSON.parse(user);
-    }
+    return (user) ? JSON.parse(user): null;
 }
 
 
