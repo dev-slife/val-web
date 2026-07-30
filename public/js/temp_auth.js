@@ -1,7 +1,7 @@
 /**
  * Authors: dev.slife, jbeshir-umd
  * Date Created: 5/6/26
- * Date Updated: 7/28/26
+ * Date Updated: 7/30/26
  * Description:
  *      Handles session-based authentication using sessionStorage and checks automatically on load.
  */
@@ -27,9 +27,9 @@ function isLoggedIn() {
 }
 
 
-function logout() {
+async function logout() {
     sessionStorage.removeItem(SESSION_ID);
-    changePage("login");
+    await changePage("login");
 }
 
 

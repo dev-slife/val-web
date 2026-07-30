@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 7/28/26
+ * Date Updated: 7/30/26
  * Description:
  *      Handles main frontend interaction.
  */
@@ -11,6 +11,13 @@
 // --------------------------- CONSTANTS --------------------------- //
 
 const SESSION_ID = "val_user";
+const SFX_PATH = "../../audio/";
+const SFX = {
+    CORRECT: new Audio(SFX_PATH + "correct.mp3"),
+    INCORRECT: new Audio(SFX_PATH + "incorrect.mp3"),
+    FOCUS: new Audio(SFX_PATH + "focus.mp3"),
+    POP_UP: new Audio(SFX_PATH + "pop-up.mp3")
+}
 const THEMES = {
     "DARK": {
         "--bg-deep":       "#13131a",
@@ -286,7 +293,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                     errorMsg.style.display = "block";
                 }
             }
-        })
+        });
     }
 
     if (registerBtn) {
@@ -309,7 +316,7 @@ document.addEventListener("DOMContentLoaded", async() => {
                     errorMsg.style.display = "block";
                 }
             }
-        })
+        });
     }
 });
 

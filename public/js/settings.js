@@ -33,6 +33,7 @@ function popup(title="", msg="", inputLabel="", open=true) {
 
         document.getElementById("popup-error").hidden = true;
         
+        SFX.FOCUS.play();
         header.textContent = title;
         info.innerHTML = msg;
         label.textContent = inputLabel;
@@ -132,19 +133,20 @@ async function deleteAccount() {
                 })
             }
             const response = await fetch(url, payload);
-            const result = response.json();
+            const result = await response.json();
     
             if (result.success) {
-                popup(null, null, null, false);
-                showToast("Account deleted.", "🗑️");
-                setTimeout(() => {
-                    logout();
+                msg.textContent = "Deleting account and all data associated...";
+                msg.hidden = false;
+                await setTimeout(async() => {
+                    await logout();
                 }, 2000);
             } else if (!result.authorized) {
                 msg.textContent = "The password you entered was incorrect.";
                 msg.hidden = false;
             } else {
                 msg.textContent = "The server ran into an unexpected error, try again later.";
+                msg.hidden = false;
             }
         } else {
             msg.textContent = "No password was given.";

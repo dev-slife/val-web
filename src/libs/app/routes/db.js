@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 7/28/26
+ * Date Updated: 7/30/26
  * Description:
  *      Handles all database API calls.
  */
@@ -174,7 +174,7 @@ router.post('/user/delete', async(req, res) => {
                             });
                         }
                     } else {
-                        res.status(400).send({
+                        res.status(200).send({
                             success: false,
                             authorized: false,
                             registered: true,
@@ -184,7 +184,7 @@ router.post('/user/delete', async(req, res) => {
                     }
                 });
             } else {
-                res.status(400).send({
+                res.status(200).send({
                     success: false,
                     authorized: false,
                     registered: false,
@@ -322,7 +322,7 @@ router.get('/user/pull_chat', async(req, res) => {
                     hist: hist
                 });
             } else {
-                res.status(500).send({
+                res.status(200).send({
                     success: false,
                     message: "Could not pull chat history."
                 });

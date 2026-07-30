@@ -52,6 +52,11 @@
     display: none;
 }
 
+ul {
+    list-style-type: circle;
+    list-style-position: inside;
+}
+
 
 /* Make logo slightly smaller on info pages */
 .logo-letter {

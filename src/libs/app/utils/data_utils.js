@@ -1,18 +1,16 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 7/28/26
+ * Date Updated: 7/30/26
  * Description:
  *      Utility functions to use for database management.
  */
 
 
 
-// --------------------------- IMPORTS & CONSTANTS --------------------------- //
-
+// ---------------------- IMPORTS & CONSTANTS ---------------------- //
 
 const path = require("path");
-const {readFile} = require("fs/promises");
 const {MongoClient} = require("mongodb");
 const {UserDNE} = require("../errors.js");
 

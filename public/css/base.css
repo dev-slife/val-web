@@ -160,6 +160,13 @@ footer {
     color: var(--text-primary);
 }
 
+.scroll {
+    height: 500px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    padding: 10px;
+}
+
 
 
 /* --------------------- PAGE LABEL --------------------- */
