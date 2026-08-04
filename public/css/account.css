@@ -21,7 +21,7 @@ main h1 {
 .account-card p {
     display: none;
     margin-top: 3%;
-    font-size: var(--content-card-size);
+    font-size: var(--p-size);
     color: var(--accent-red);
 }
 
@@ -45,7 +45,7 @@ form input {
     border-radius: 12px;
     background: var(--bg-input);
     color: var(--text-primary);
-    font-size: var(--content-card-size);
+    font-size: var(--p-size);
     outline: none;
     transition: 0.25s ease;
 }

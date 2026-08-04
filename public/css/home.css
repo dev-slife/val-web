@@ -232,7 +232,7 @@ main {
 .send-btn {
     background: var(--accent-blue);
     font-family: var(--font-primary);
-    font-size: var(--content-card-size);
+    font-size: var(--p-size);
     color: var(--text-primary);
     border: none;
     border-radius: 10px;

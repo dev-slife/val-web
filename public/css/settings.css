@@ -165,7 +165,7 @@ main {
 
 .section-subtitle {
     color: var(--text-sidebar);
-    font-size: var(--content-card-size);
+    font-size: var(--p-size);
     margin-bottom: 28px;
 }
 
@@ -182,7 +182,7 @@ main {
 }
 
 .card-title {
-    font-size: var(--content-card-size);
+    font-size: var(--p-size);
     font-family: var(--font-secondary);
     color: var(--text-muted);
     text-transform: uppercase;
@@ -239,7 +239,7 @@ main {
 }
 
 .pfp-meta p {
-    font-size: var(--content-card-size);
+    font-size: var(--p-size);
     color: var(--text-sidebar);
     margin-bottom: 12px;
     margin-left: 1%;

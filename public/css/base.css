@@ -21,12 +21,16 @@
     --h1-size: 64px;
     --h2-size: 40px;
     --h3-size: 24px;
+    --h1-size-s: 48px;
+    --h2-size-s: 32px;
+    --h3-size-s: 18px;
+
+    --p-size: 14px;
     --footer-size: 12px;
-    --logo-size: 128px;
-    --logo-subtitle-size: 28px;
-    --page-label-size: 18px;
-    --content-card-size: 14px;
     --sign-in-size: 16px;
+    --page-label-size: 18px;
+    --logo-subtitle-size: 28px;
+    --logo-size: 128px;
 
     /* VAL COLORS */
     --bg-deep:       #13131a;
@@ -65,6 +69,7 @@ html, body {
 }
 
 
+
 /* --------------------- HEADINGS --------------------- */
 
 h1 {
@@ -96,6 +101,26 @@ footer {
     font-family: var(--font-secondary);
     position: relative;
     z-index: 1;
+}
+
+
+
+/* --------------------- LINKS --------------------- */
+
+a {
+    color: var(--accent-blue);
+    text-decoration: none;
+}
+
+a:hover {
+    cursor: pointer;
+    color: var(--hover-blue);
+    text-decoration: underline;
+}
+
+a:visited {
+    color: var(--accent-yellow);
+    text-decoration: none;
 }
 
 
@@ -154,7 +179,7 @@ footer {
 }
 
 .content-card p {
-    font-size: var(--content-card-size);
+    font-size: var(--p-size);
     font-weight: 700;
     line-height: 1.75;
     color: var(--text-primary);

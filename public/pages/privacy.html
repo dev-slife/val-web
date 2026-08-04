@@ -22,7 +22,7 @@
 
     <nav>
         <button onclick="changePage('home')">Home</button>
-        <button onclick="changePage('about')">About</button>
+        <button onclick="changePage('resources')">Resources</button>
         <button class="active" onclick="changePage('privacy')">Privacy</button>
         <button onclick="changePage('terms')">Terms &amp; Services</button>
         <button onclick="changePage('copyright')">Copyright</button>
@@ -30,19 +30,42 @@
     </nav>
 
     <main>
-        <div class="page-label">Privacy Page</div>
+        <div class="page-label">Privacy Policy</div>
 
         <div class="content-card scroll">
+            <h2>Privacy with VAL</h2>
             <p>
                 It's crucial to keep track of what data you share and what information is being
                 collected. To keep as much of your data private, VAL will only collect information
-                that is necessary to provide and improve your experience. Some examples of this
-                include your account details if you choose to register for an account and any errors
-                VAL encounters when you converse with the virtual luminary. Conversation history
-                is only collected if you choose to enable the setting. Please do not provide or enter
-                any sensitive or personal information! We will never ask for your password or other
-                sensitive info! Your data is never sold to third parties and keep your data encrypted
-                with industry standard methods to keep your data safe. By using VAL, you agree to the
+                that is necessary to provide and improve your experience.
+            </p>
+            <h2>Information we Collect</h2>
+            <h3>Error Reports</h3>
+            <p>
+                Regardless if you have an account or not, we collect error information to help pinpoint
+                issues in our code as you converse with VAL. Not all errors you encounter will be collected
+                as data, only more critical ones such as, poor math calculations, or server-level bugs
+                will be considered. The details provided to us when VAL encounters an error is as follows:
+            </p>
+            <ul>
+                <li>The type of error VAL ran into</li>
+                <li>The error message associated</li>
+                <li>The message given to VAL and</li>
+                <li>The type of action that was attempted</li>
+            </ul>
+            <h3>Account Data</h3>
+            <p>
+                If you choose to register for an account and decide to enable conversation history,
+                we will collect all of your previous conversations with VAL. Please do not provide
+                or enter any sensitive or personal information! We will never ask for your password
+                or other sensitive info other than from the official
+                <a onclick="changePage('login')">login</a> or
+                <a onclick="changePage('register')">register</a> pages!
+            </p>
+            <h3>We Value your Data</h3>
+            <p>
+                Your data is never sold to third parties and we keep your data encrypted
+                with industry standard methods to protect it. By using VAL, you agree to the
                 collection and use of information in accordance with this policy. You may request
                 deletion of your data at any time by contacting us.
             </p>

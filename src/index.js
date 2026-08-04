@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 5/30/26
+ * Date Updated: 8/4/26
  * Description:
  *      Handles all of the main routing and communication for the entire web app.
  */
@@ -46,8 +46,8 @@ app.get('/', (_, res) => {
     res.sendFile(path.join(__public, 'pages', 'home.html'));
 });
 
-app.get('/about', (_, res) => {
-    res.sendFile(path.join(__public, 'pages', 'about.html'));
+app.get('/resources', (_, res) => {
+    res.sendFile(path.join(__public, 'pages', 'resources.html'));
 });
 
 app.get('/terms', (_, res) => {
