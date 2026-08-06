@@ -1,7 +1,7 @@
 /**
  * Authors: dev.slife, sfesseha
  * Date Created: 4/30/26
- * Date Updated: 7/28/26
+ * Date Updated: 8/6/26
  * Description:
  *      Manages all account settings.
  */
@@ -21,7 +21,7 @@ function showToast(msg, icon="🌠", lifetime=3) {
 }
 
 
-function popup(title="", msg="", inputLabel="", open=true) {
+async function popup(details={}, open=true) {
     const popup = document.getElementById("popup");
     
     if (open) {
@@ -30,15 +30,26 @@ function popup(title="", msg="", inputLabel="", open=true) {
         const label = document.getElementById("popup-label");
         const field = document.getElementById("popup-field");
         const textBox =  document.getElementById("popup-input");
+        const btnConf = document.getElementById("popup-conf");
+        const btnDeny = document.getElementById("popup-deny");
 
         document.getElementById("popup-error").hidden = true;
         
         SFX.FOCUS.play();
-        header.textContent = title;
-        info.innerHTML = msg;
-        label.textContent = inputLabel;
+        if (details.pType) {
+            if (details.pType == "account_removal") {
+                btnConf.onclick = await deleteAccount();
+            } else if (details.pType == "clear_chat_history") {
+                btnConf.onclick = await clearChatHistory();
+            }
+        }
+        header.textContent = details.title ?? "";
+        info.innerHTML = details.msg ?? "";
+        label.textContent = details.inputLabel ?? "";
+        btnConf.textContent = details.confText ?? "";
+        btnDeny.textContent = details.denyText ?? "";
         textBox.value = "";
-        field.style.display = (inputLabel == "") ? "none": "block";
+        field.style.display = (label.textContent == "") ? "none": "block";
         popup.showModal();
         popup.classList.add("show");
     } else {
@@ -48,11 +59,14 @@ function popup(title="", msg="", inputLabel="", open=true) {
 }
 
 
+
+// --------------------------- ACCOUNT CONFIG --------------------------- //
+
 async function updateConfig(config) {
     try {
         const user = getUser();
         if (user) {
-            const url = "/api/db/user/update_config";
+            const url = "/api/db/user/update-config";
             const payload = {
                 method: "POST",
                 headers: {
@@ -114,6 +128,9 @@ async function saveSection(section) {
 }
 
 
+
+// --------------------------- ACCOUNT SECURITY --------------------------- //
+
 async function deleteAccount() {
     const msg = document.getElementById("popup-error");
     const pass = document.getElementById("popup-input").value;
@@ -159,59 +176,98 @@ async function deleteAccount() {
 }
 
 
-
-// --------------------------- PASSWORDS --------------------------- //
-
-function updateStrength(pw) {
-    let score = 1;
-    if (pw.length >= 8) {
-        score++;
-    }
-    if (/[A-Z]/.test(pw)) {
-        score++;
-    }
-    if (/[0-9]/.test(pw)) {
-        score++;
-    }
-    if (/[^A-Za-z0-9]/.test(pw)) {
-        score++;
-    }
-    const fill = document.getElementById("strengthFill");
-    const label = document.getElementById("strengthLabel");
-    const levels = [
-        { w: "0%", bg: "transparent", txt: "Enter a new password" },
-        { w: "20%", bg: "#ef5350", txt: "Very Weak" },
-        { w: "40%", bg: "#ff9800", txt: "Weak" },
-        { w: "60%", bg: "#ffeb3b", txt: "Moderate" },
-        { w: "80%", bg: "#aaff3b", txt: "Good" },
-        { w: "100%", bg: "#26c27a", txt: "Strong" },
-    ];
-    const l = (pw.length == 0) ? levels[0] : levels[score];
-    fill.style.width = l.w;
-    fill.style.background = l.bg;
-    label.textContent = l.txt;
-}
-
-
-function changePassword() {
+async function changePassword() {
     const curPass = document.getElementById("currentPassword").value;
     const newPass = document.getElementById("newPassword").value;
     const conPass = document.getElementById("confirmPassword").value;
+
     if (!curPass) {
         showToast("Please enter your current password.", "🔒");
-    }
-    if (!newPass) {
+    } else if (!newPass) {
         showToast("Please enter a new password.", "🔒");
-        return;
+    } else if (newPass !== conPass) {
+        showToast("Your new passwords don't match.", "❌");
+    } else {
+        try {
+            const user = getUser();
+            if (user) {
+                const url = "/api/db/user/update-pass";
+                const payload = {
+                    method: "POST",
+                    headers: {
+                    "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "user": user,
+                        "pass": curPass,
+                        "newPass": newPass
+                    })
+                }
+                const response = await fetch(url, payload);
+                const result = await response.json();
+                if (result.success) {
+                    showToast("Password updated!", "🔑");
+                    ["currentPassword", "newPassword", "confirmPassword"].forEach(id => document.getElementById(id).value = "");
+                    updateStrength("");
+                    await setTimeout(async() => {
+                        await logout();
+                    }, 2000);
+                } else if (!result.authorized) {
+                    showToast("Incorrect password given.", "🔒");
+                }
+            } else {
+                showToast("How did you do that without logging in? Login buddy.", "😡");
+            }
+        } catch (err) {
+            console.error("Change password failed.");
+        }
     }
-    if (newPass !== conPass) {
-        showToast("Passwords don't match.", "❌");
-        return;
-    }
-    showToast("Password updated!", "🔑");
-    ["currentPassword", "newPassword", "confirmPassword"].forEach(id => document.getElementById(id).value = "");
-    updateStrength("");
 }
+
+
+async function clearChatHistory() {
+    const msg = document.getElementById("popup-error");
+    const pass = document.getElementById("popup-input").value;
+    const user = getUser();
+
+    if (user) {
+        if (pass) {
+            const url = "/api/db/user/clear-chat";
+            const payload = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "user": user
+                })
+            }
+            const response = await fetch(url, payload);
+            const result = await response.json();
+    
+            if (result.success) {
+                msg.textContent = "Chat history successfully erased.";
+                msg.hidden = false;
+                await setTimeout(async() => {
+                    await popup(null, false);
+                }, 2000);
+            } else if (!result.authorized) {
+                msg.textContent = "The password you entered was incorrect.";
+                msg.hidden = false;
+            } else {
+                msg.textContent = "The server ran into an unexpected error, try again later.";
+                msg.hidden = false;
+            }
+        } else {
+            msg.textContent = "No password was given.";
+            msg.hidden = false;
+        }
+    } else {
+        msg.textContent = "How did you do that? Login buddy.";
+        msg.hidden = false;
+    }
+}
+
 
 
 // --------------------------- PROFILE PICTURE --------------------------- //

@@ -106,3 +106,30 @@ main .account-footer a {
 main .account-footer a:hover {
     text-decoration: underline;
 }
+
+
+
+/* --------------------- PASSWORD STRENGTH --------------------- */
+
+.strength-bar {
+    height: 3px;
+    color: aliceblue;
+    width: 80%;
+    border-radius: 3px;
+    background: var(--border);
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    border-radius: 3px;
+    width: 0%;
+    transition: width .3s, background .3s;
+}
+
+.field-hint {
+    font-size: .76rem;
+    color: var(--text-muted);
+    margin-top: 5px;
+}

@@ -1,3 +1,5 @@
+/* ---------------------- NAV BAR ---------------------- */
+
 .info-page nav {
     margin: 0 auto 32px;
     max-width: 960px;
@@ -38,6 +40,10 @@
     color: var(--accent-blue);
 }
 
+
+
+/* ---------------------- MAIN ---------------------- */
+
 .info-page main {
     max-width: 860px;
     margin: 0 auto;
@@ -56,32 +62,41 @@
     font-size: var(--h1-size-s);
 }
 
-h2 {
+/* Make logo slightly smaller on info pages */
+.logo-letter {
+    font-size: 96px;
+}
+
+
+
+/* ---------------------- CONTENT CARD ---------------------- */
+
+.content-card h2 {
     margin: 30px;
     font-size: var(--h2-size-s);
 }
 
-h3 {
+.content-card h3 {
     margin-top: 30px;
     font-size: var(--h3-size-s);
 }
 
-ul, ol {
+.content-card ul, ol {
     width: 70%;
     margin-left: 15%;
     text-align: left;
     list-style-position: inside;
 }
 
-ul {
+.content-card ul {
     list-style-type: circle;
 }
 
-li {
+.content-card li {
     font-size: var(--p-size);
 }
 
-p {
+.content-card p {
     font-weight: 400 !important;
     width: 80%;
     margin-left: 10% !important;
@@ -89,12 +104,6 @@ p {
     margin: 10px;
 }
 
-b {
+.content-card b {
     font-weight: 900;
-}
-
-
-/* Make logo slightly smaller on info pages */
-.logo-letter {
-    font-size: 96px;
 }

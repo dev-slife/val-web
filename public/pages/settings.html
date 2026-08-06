@@ -243,16 +243,47 @@
                         </label>
                     </div>
                     <div class="field-hint">This setting currently does not do anything.</div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <h4>Generate Backup Codes</h4>
+                            <p>
+                                Create new backup codes that you can use to gain access to your account in case
+                                you forget your password.
+                            </p>
+                        </div>
+                        <button class="btn btn-primary">Generate</button>
+                    </div>
                 </div>
 
                 <div class="card danger-card">
                     <div class="card-title">Danger Zone</div>
-                    <div class="toggle-row" style="border-bottom:none;">
+                    <div class="toggle-row danger">
+                        <div class="toggle-info">
+                            <h4>Clear Chat History</h4>
+                            <p>Permanently delete your chat history.</p>
+                        </div>
+                        <button class="btn btn-danger" onclick="popup({
+                            title: 'Are you sure?',
+                            msg: 'The action you are about to take will <b>erase all conversation history associated to you</b> and is <b>irreversible</b>.',
+                            inputLabel: 'Enter Password',
+                            confText: 'Confirm Removal',
+                            denyText: 'Keep History',
+                            pType: 'clear_chat_history'
+                        })">Clear</button>
+                    </div>
+                    <div class="toggle-row danger" style="border-bottom:none;">
                         <div class="toggle-info">
                             <h4>Delete Account</h4>
                             <p>Permanently delete your account and all associated data.</p>
                         </div>
-                        <button class="btn btn-danger" onclick="popup('Are you sure?', 'The action you are about to take will remove all data associated to you and is <b>irreversible</b>.', 'Enter Password')">Delete</button>
+                        <button class="btn btn-danger" onclick="popup({
+                            title: 'Are you sure?',
+                            msg: 'The action you are about to take will <b>erase all data associated to you</b> as well as <b>remove your account</b> and is <b>irreversible</b>.',
+                            inputLabel: 'Enter Password',
+                            confText: 'Confirm Deletion',
+                            denyText: 'Keep Account',
+                            pType: 'account_removal'
+                        })">Delete</button>
                     </div>
                 </div>
             </section>
@@ -261,15 +292,15 @@
 
     <dialog id="popup">
         <div class="popup card danger-card">
-            <div class="card-title" id="popup-title">Are you sure?</div>
-            <p id="popup-info">The action you are about to take will remove all data associated to you and is <b>irreversible</b>.</p>
+            <div class="card-title" id="popup-title"></div>
+            <p id="popup-info"></p>
             <div class="field" id="popup-field">
-                <label id="popup-label" for="popup-input">Enter Password</label>
+                <label id="popup-label" for="popup-input"></label>
                 <input type="password" id="popup-input">
             </div>
-            <p id="popup-error" style="color: var(--accent-red)" hidden>An unexpected error occurred.</p>
-            <button class="btn btn-danger" onclick="deleteAccount()">Confirm Deletion</button>
-            <button class="btn btn-ghost" onclick="popup(null, null, null, false)">Keep Account</button>
+            <p id="popup-error" style="color: var(--accent-red)" hidden></p>
+            <button id="popup-conf" class="btn btn-danger"></button>
+            <button id="popup-deny" class="btn btn-ghost" onclick="popup(null, false)"></button>
         </div>
     </dialog>
 

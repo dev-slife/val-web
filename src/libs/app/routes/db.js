@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 7/30/26
+ * Date Updated: 8/6/26
  * Description:
  *      Handles all database API calls.
  */
@@ -209,9 +209,82 @@ router.post('/user/delete', async(req, res) => {
 
         res.status(500).send({
             success: false,
-            authorized: false,
             user: user,
             message: `The server ran into an unexpected error when trying to delete the account for ${user}, caught: ${err.name}.`
+        });
+    }
+});
+
+
+router.post('/user/update-pass', async(req, res) => {
+    const {user, pass, newPass} = req.body;
+
+    try {
+        if (validQuery("string", user, pass, newPass)) {
+            if (await dbUtils.isRegistered(user)) {
+                const hash = await dbUtils.userSecret(user);
+
+                await bcrypt.compare(pass, hash, async function(err, result) {
+                    if (result) {
+                        await bcrypt.genSalt(SALT_ROUNDS, async function(err, salt) {
+                            await bcrypt.hash(newPass, salt, async function(err, newHash) {
+                                if (await dbUtils.updateUserPass(user, newHash)) {
+                                    res.status(200).send({
+                                        success: true,
+                                        authorized: true,
+                                        registered: true,
+                                        user: user,
+                                        message: "User's passwords was successfully updated."
+                                    });
+                                } else {
+                                    res.status(500).send({
+                                        success: false,
+                                        authorized: true,
+                                        registered: true,
+                                        user: user,
+                                        message: "The server ran into an unexpected error when attempting to update the user's password."
+                                    });
+                                }
+                            });
+                        });
+                    } else {
+                        res.status(200).send({
+                            success: false,
+                            authorized: false,
+                            registered: true,
+                            user: user,
+                            message: "An incorrect password was given."
+                        });
+                    }
+                });
+            } else {
+                res.status(200).send({
+                    success: false,
+                    authorized: false,
+                    registered: false,
+                    user: user,
+                    message: "The given user is not registered."
+                });
+            }
+        } else {
+            res.status(400).send({
+                success: false,
+                authorized: false,
+                user: user,
+                message: "Incomplete body given, missing username, password, and/or new password."
+            })
+        }
+    } catch (err) {
+        console.error(`Server error on updating password of account for: ${user}`, {
+            name: err.name,
+            message: err.message,
+            stack: err.stack
+        });
+
+        res.status(500).send({
+            success: false,
+            user: user,
+            message: `The server ran into an unexpected error when trying to update the password of the account for ${user}, caught: ${err.name}.`
         });
     }
 });
@@ -220,7 +293,7 @@ router.post('/user/delete', async(req, res) => {
 
 // --------------------------- CHAT HISTORY ROUTES --------------------------- //
 
-router.post('/user/save_chat', async(req, res) => {
+router.post('/user/save-chat', async(req, res) => {
     const {user, title, msgs, nouns, verbs} = req.body;
 
     try {
@@ -265,32 +338,64 @@ router.post('/user/save_chat', async(req, res) => {
 });
 
 
-router.post('/user/clear_chat', async(req, res) => {
-    const {user} = req.body;
+router.post('/user/clear-chat', async(req, res) => {
+    const {user, pass} = req.body;
 
     try {
         if (validQuery("string", user)) {
-            if (await dbUtils.clearChat(user)) {
-                res.status(200).send({
-                    success: true,
-                    message: "Successfully cleared chat history."
+            if (await dbUtils.isRegistered(user)) {
+                const hash = await dbUtils.userSecret(user);
+
+                await bcrypt.compare(pass, hash, async function(err, result) {
+                    if (result) {
+                        if (await dbUtils.clearChat(user)) {
+                            res.status(200).send({
+                                success: true,
+                                authorized: true,
+                                registered: true,
+                                user: user,
+                                message: "Successfully cleared chat history."
+                            });
+                        } else {
+                            res.status(200).send({
+                                success: false,
+                                authorized: true,
+                                registered: true,
+                                user: user,
+                                message: "User has no chat history to clear."
+                            });
+                        }
+                    } else {
+                        res.status(200).send({
+                            success: false,
+                            authorized: false,
+                            registered: true,
+                            user: user,
+                            message: "An incorrect password was given."
+                        })
+                    }
                 });
             } else {
                 res.status(200).send({
                     success: false,
-                    message: "User has no chat history to clear."
+                    authorized: false,
+                    registered: false,
+                    user: user,
+                    message: "The given user is not registered."
                 });
             }
         } else {
             res.status(400).send({
                 success: false,
-                message: "Incomplete body given, missing user."
+                user: user,
+                message: "Incomplete body given, missing user and/or pass."
             });
         }
     } catch(err) {
         if (err instanceof UserDNE) {
             res.status(200).send({
                 success: false,
+                user: user,
                 message: `${user} is not a registered user.`
             });
         } else {
@@ -302,6 +407,7 @@ router.post('/user/clear_chat', async(req, res) => {
     
             res.status(500).send({
                 success: false,
+                user: user,
                 message: `The server ran into an unexpected error when trying to clear the chat history for ${user}, caught: ${err.name}.`
             });
         }
@@ -309,7 +415,7 @@ router.post('/user/clear_chat', async(req, res) => {
 });
 
 
-router.get('/user/pull_chat', async(req, res) => {
+router.get('/user/pull-chat', async(req, res) => {
     const {user} = req.query;
 
     try {
@@ -358,7 +464,7 @@ router.get('/user/pull_chat', async(req, res) => {
 
 // --------------------------- USER CONFIG ROUTES --------------------------- //
 
-router.post('/user/update_config', async(req, res) => {
+router.post('/user/update-config', async(req, res) => {
     const {user, config} = req.body;
 
     try {
@@ -396,7 +502,7 @@ router.post('/user/update_config', async(req, res) => {
 });
 
 
-router.get('/user/pull_config', async(req, res) => {
+router.get('/user/pull-config', async(req, res) => {
     const {user} = req.query;
 
     try {

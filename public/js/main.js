@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 7/30/26
+ * Date Updated: 8/6/26
  * Description:
  *      Handles main frontend interaction.
  */
@@ -127,6 +127,37 @@ async function updateBackground(theme) {
 }
 
 
+function updateStrength(pw) {
+    let score = 1;
+    if (pw.length >= 8) {
+        score++;
+    }
+    if (/[A-Z]/.test(pw)) {
+        score++;
+    }
+    if (/[0-9]/.test(pw)) {
+        score++;
+    }
+    if (/[^A-Za-z0-9]/.test(pw)) {
+        score++;
+    }
+    const fill = document.getElementById("strengthFill");
+    const label = document.getElementById("strengthLabel");
+    const levels = [
+        { w: "0%", bg: "transparent", txt: "Enter a new password" },
+        { w: "20%", bg: "#ef5350", txt: "Very Weak" },
+        { w: "40%", bg: "#ff9800", txt: "Weak" },
+        { w: "60%", bg: "#ffeb3b", txt: "Moderate" },
+        { w: "80%", bg: "#aaff3b", txt: "Good" },
+        { w: "100%", bg: "#26c27a", txt: "Strong" },
+    ];
+    const l = (pw.length == 0) ? levels[0] : levels[score];
+    fill.style.width = l.w;
+    fill.style.background = l.bg;
+    label.textContent = l.txt;
+}
+
+
 
 // --------------------------- ACCOUNT REQUESTS --------------------------- //
 
@@ -247,7 +278,7 @@ async function grabConfig() {
     try {
         const user = getUser();
         if (user) {
-            const url = `/api/db/user/pull_config?user=${user}`;
+            const url = `/api/db/user/pull-config?user=${user}`;
             const response = await fetch(url);
             const data = await response.json();
             return await formatConfig(data.config);

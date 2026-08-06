@@ -325,6 +325,10 @@ main {
     border-bottom: 1px solid var(--border);
 }
 
+.toggle-row.danger {
+    border-bottom: 1px solid var(--soft-red);
+}
+
 .toggle-row:last-child {
     border-bottom: none;
 }

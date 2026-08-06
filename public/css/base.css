@@ -209,28 +209,6 @@ a:visited {
 
 /* --------------------- SIGN IN --------------------- */
 
-.account-info {
-    display: flex;
-    margin-bottom: 15px;
-    align-items: center;
-    gap: 5px;
-}
-
-.account-info p {
-    font-size: 14px;
-    font-family: var(--font-primary);
-}
-
-#accountPFP {
-    max-height: 20px;
-    max-width: 20px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--border);
-    background: var(--bg-main);
-    display: block;
-}
-
 .sign-in-btn {
     font-family: var(--font-nav);
     font-size: var(--sign-in-size);
@@ -261,4 +239,26 @@ a:visited {
     background: var(--border);
     width: 160px;
     margin-bottom: 18px;
+}
+
+.account-info {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: center;
+    gap: 5px;
+}
+
+.account-info p {
+    font-size: 14px;
+    font-family: var(--font-primary);
+}
+
+#accountPFP {
+    display: block;
+    max-height: 20px;
+    max-width: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+    background: var(--bg-main);
 }

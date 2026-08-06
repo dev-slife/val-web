@@ -67,7 +67,7 @@ async function grabHist() {
     try {
         const user = getUser();
         if (user) {
-            const url = `/api/db/user/pull_chat?user=${encodeURIComponent(user)}`;
+            const url = `/api/db/user/pull-chat?user=${encodeURIComponent(user)}`;
             const response = await fetch(url);
             return response.json();
         }
@@ -82,7 +82,7 @@ async function updateHist(title, hist) {
     try {
         const user = getUser();
         if (user) {
-            const url = "/api/db/user/save_chat";
+            const url = "/api/db/user/save-chat";
             const payload = {
                 method: "POST",
                 headers: {
@@ -269,7 +269,7 @@ function messageSender() {
                 await addMessage(msg, "VAL", typingIndicator);
             }
         } else {
-            await addMessage("Sorry, I'm having trouble connecting with the server right now, please try again later.'.", "VAL", typingIndicator);
+            await addMessage("Sorry, I'm having trouble connecting with the server right now, please try again later.'.", "VAL");
         }
     }
 

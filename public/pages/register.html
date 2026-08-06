@@ -25,7 +25,9 @@
             <h1>Register</h1>
             <form id="register-form">
                 <input type="text" placeholder="Username" id="username" name="username">
-                <input type="password" placeholder="Password" id="pass" name="pass">
+                <input type="password" placeholder="Password" id="pass" name="pass" oninput="updateStrength(this.value)">
+                <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+                <div class="field-hint" id="strengthLabel">Enter a new password</div>
                 <button id="register">Sign Up</button>
             </form>
             <p id="error-msg">Username is already taken.</p>
