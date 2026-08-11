@@ -8,6 +8,33 @@
     <link rel="stylesheet" href="../css/account.css">
     <script src="../js/temp_auth.js"></script>
     <script src="../js/main.js"></script>
+    <script>
+        function popup(open=true) {
+            const passInput = document.getElementById("pass");
+            const popup = document.getElementById("popup");
+            if (open) {
+                SFX.FOCUS.play();
+                passInput.placeholder = "Code";
+                popup.showModal();
+                popup.classList.add("show");
+            } else {
+                popup.classList.remove("show");
+                popup.close();
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            const passInput = document.getElementById("pass");
+            const checkBox = document.getElementById("codes");
+            checkBox.addEventListener("change", (e) => {
+                if (e.target.checked) {
+                    popup();
+                } else {
+                    passInput.placeholder = "Password";
+                }
+            })
+        });
+    </script>
     <title>Login - VAL</title>
 </head>
 <body class="account-page">
@@ -26,6 +53,13 @@
             <form id="login-form">
                 <input type="text" placeholder="Username" id="username" name="username">
                 <input type="password" placeholder="Password" id="pass" name="pass">
+                <div class="toggle-row">
+                        <div class="toggle-info">Use a Backup Code</div>
+                        <label class="toggle">
+                            <input type="checkbox" id="codes">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
                 <button id="login">Login</button>
             </form>
             <p id="error-msg">Incorrect username or password was given.</p>
@@ -36,6 +70,12 @@
             <p>Want to visit as a guest? <a onclick="changePage('home')">Home</a></p>
         </div>
     </main>
+
+    <dialog id="popup">
+        <div id="popup-title">Important</div>
+        <p id="popup-info">By using backup codes you understand that a code can only be used once to gain access to your account.</p>
+        <button id="popup-conf" onclick="popup(false)">I understand</button>
+    </dialog>
 
     <footer>
         <p>&copy; 2026 VAL</p>

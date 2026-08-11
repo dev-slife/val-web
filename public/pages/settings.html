@@ -251,7 +251,7 @@
                                 you forget your password.
                             </p>
                         </div>
-                        <button class="btn btn-primary">Generate</button>
+                        <button class="btn btn-primary" onclick="genCodes()">Generate</button>
                     </div>
                 </div>
 
@@ -268,7 +268,7 @@
                             inputLabel: 'Enter Password',
                             confText: 'Confirm Removal',
                             denyText: 'Keep History',
-                            pType: 'clear_chat_history'
+                            func: async() => await clearChatHistory()
                         })">Clear</button>
                     </div>
                     <div class="toggle-row danger" style="border-bottom:none;">
@@ -282,7 +282,7 @@
                             inputLabel: 'Enter Password',
                             confText: 'Confirm Deletion',
                             denyText: 'Keep Account',
-                            pType: 'account_removal'
+                            func: async() => await deleteAccount()
                         })">Delete</button>
                     </div>
                 </div>
@@ -317,7 +317,7 @@
         <p>&copy; 2026 VAL</p>
     </footer>
 
-    <div id="toast">
+    <div id="toast" popover>
         <span class="toast-icon" id="toastIcon"></span>
         <span id="toastMsg"></span>
     </div>

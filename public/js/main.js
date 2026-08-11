@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 8/6/26
+ * Date Updated: 8/11/26
  * Description:
  *      Handles main frontend interaction.
  */
@@ -68,6 +68,12 @@ const THEMES = {
 
 
 // --------------------------- HELPER FUNCTIONS --------------------------- //
+
+function copyToClip(obj) {
+    const text = JSON.stringify(obj);
+    navigator.clipboard.writeText(text);
+}
+
 
 async function expressPage(url) {
     try {
@@ -161,7 +167,7 @@ function updateStrength(pw) {
 
 // --------------------------- ACCOUNT REQUESTS --------------------------- //
 
-async function login(user, pass) {
+async function login(user, pass, useCode=false) {
     try {
         const url = "/api/db/user/login";
         const payload = {
@@ -171,7 +177,8 @@ async function login(user, pass) {
             },
             body: JSON.stringify({
                 "user": user,
-                "pass": pass
+                "pass": pass,
+                "useCode": useCode
             })
         }
         const response = await fetch(url, payload);
@@ -297,6 +304,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     const registerBtn = document.getElementById("register");
     const user = document.getElementById("username");
     const pass = document.getElementById("pass");
+    const codeCheckBox = document.getElementById("codes");
     const errorMsg = document.getElementById("error-msg");
     const config = await grabConfig();
 
@@ -311,12 +319,19 @@ document.addEventListener("DOMContentLoaded", async() => {
                 errorMsg.textContent = "Please enter a username and password.";
                 errorMsg.style.display = "block";
             } else {
-                const result = await login(user.value, pass.value);
+                let useCode = false;
+                if (codeCheckBox) {
+                    useCode = codeCheckBox.checked;
+                }
+                const result = await login(user.value, pass.value, useCode);
 
-                if (result["success"] && result["registered"]) {
+                if (result.success && result.registered) {
                     saveUser(user.value);
                     await changePage("home");
-                } else if (result["registered"]) {
+                } else if (result.registered && useCode) {
+                    errorMsg.textContent = "Incorrect backup code was given.";
+                    errorMsg.style.display = "block";
+                } else if (result.registered) {
                     errorMsg.textContent = "Incorrect username or password was given.";
                     errorMsg.style.display = "block";
                 } else {

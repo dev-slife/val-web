@@ -1,10 +1,17 @@
 /**
  * Authors: dev.slife, sfesseha
  * Date Created: 4/30/26
- * Date Updated: 8/6/26
+ * Date Updated: 8/11/26
  * Description:
  *      Manages all account settings.
  */
+
+
+
+// --------------------------- CONSTANTS --------------------------- //
+
+const BACKUP_CODE_COUNT = 6;
+// const HEX_CODES = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
 
 
 
@@ -19,6 +26,12 @@ function showToast(msg, icon="🌠", lifetime=3) {
     t.classList.add("show");
     toastTimer = setTimeout(() => t.classList.remove("show"), 1000 * lifetime);
 }
+
+
+// function toHex(byte) {
+//     let char = byte % 16;
+
+// }
 
 
 async function popup(details={}, open=true) {
@@ -36,12 +49,8 @@ async function popup(details={}, open=true) {
         document.getElementById("popup-error").hidden = true;
         
         SFX.FOCUS.play();
-        if (details.pType) {
-            if (details.pType == "account_removal") {
-                btnConf.onclick = await deleteAccount();
-            } else if (details.pType == "clear_chat_history") {
-                btnConf.onclick = await clearChatHistory();
-            }
+        if (details.func) {
+            btnConf.onclick = details.func;
         }
         header.textContent = details.title ?? "";
         info.innerHTML = details.msg ?? "";
@@ -225,6 +234,55 @@ async function changePassword() {
 }
 
 
+async function applyCodes(codes) {
+    try {
+        popup(null, false);
+        const user = getUser();
+        if (user) {
+            const url = "/api/db/user/gen-codes";
+            const payload = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "user": user,
+                    "codes": codes
+                })
+            }
+            const response = await fetch(url, payload);
+            const result = await response.json();
+            if (result.success) {
+                showToast("Backup Codes Applied To Account Successfully", "🔑");
+            } else {
+                showToast("An unexpected issue occurred when generating codes, try again.", "❌");
+            }
+        } else {
+            showToast("How did you do that without logging in? Login buddy.", "😡");
+        }
+    } catch (err) {
+        console.error("Failed to apply generated backup codes.");
+    }
+}
+
+
+function genCodes() {
+    let unsignedInts = new Uint32Array(BACKUP_CODE_COUNT);
+    crypto.getRandomValues(unsignedInts);
+    const codes = Array.from(unsignedInts).map(b => b.toString(16));
+    popup({
+        title: "Backup Codes",
+        msg: `Below are 6 generated codes you can use to gain access to your account if applied.
+        <br><br><b>PLEASE MAKE SURE THAT YOU RECEIVE A CONFIRMATION MESSAGE AND SAVE THESE CODES
+        SOMEWHERE SAFE</b><br><br>${codes.join(' | ')}
+        <button popovertargetaction="show" popovertarget="toast" onclick='copyToClip(${JSON.stringify(codes.join(" | "))}); showToast("Copied to Clipboard", "📋")'>📋</button>`,
+        confText: "Apply To Account",
+        denyText: "Don't Apply",
+        func: async() => await applyCodes(codes)
+    });
+}
+
+
 async function clearChatHistory() {
     const msg = document.getElementById("popup-error");
     const pass = document.getElementById("popup-input").value;
@@ -239,7 +297,8 @@ async function clearChatHistory() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "user": user
+                    "user": user,
+                    "pass": pass
                 })
             }
             const response = await fetch(url, payload);

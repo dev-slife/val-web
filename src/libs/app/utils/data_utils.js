@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 8/6/26
+ * Date Updated: 8/11/26
  * Description:
  *      Utility functions to use for database management.
  */
@@ -83,6 +83,12 @@ async function userSecret(user) {
 }
 
 
+async function userCodes(user) {
+    const userData = await whoIsUser(user);
+    return (userData) ? userData.codes: null;
+}
+
+
 async function userConfig(user) {
     const userData = await whoIsUser(user);
     return (userData) ? userData.config: null;
@@ -134,6 +140,23 @@ async function updateUserPass(user, newHash) {
     const result = await users.updateOne(
         {user: user},
         {$set: {["pass"]: newHash}},
+        {upsert: false}
+    );
+
+    await client.close();
+    return (result) ? true: false;
+}
+
+
+async function updateBackupCodes(user, hashes) {
+    const client = new MongoClient(process.env.MONGO_CONN);
+    await client.connect();
+
+    const db = client.db(DB);
+    const users = db.collection("users");
+    const result = await users.updateOne(
+        {user: user},
+        {$set: {["codes"]: hashes}},
         {upsert: false}
     );
 
@@ -251,11 +274,13 @@ async function pullChat(user) {
 module.exports = {
     isRegistered,
     userSecret,
+    userCodes,
     userConfig,
     histEnabled,
     initUser,
     removeUser,
     updateUserPass,
+    updateBackupCodes,
     updateUserConfig,
     saveChat,
     clearChat,

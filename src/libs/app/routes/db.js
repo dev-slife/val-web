@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 8/6/26
+ * Date Updated: 8/11/26
  * Description:
  *      Handles all database API calls.
  */
@@ -34,30 +34,68 @@ function validQuery(dataType, ...values) {
 // --------------------------- USER ACCOUNT ROUTES --------------------------- //
 
 router.post('/user/login', async(req, res) => {
-    const {user, pass} = req.body;
+    const {user, pass, useCode} = req.body;
 
     try {
         if (validQuery("string", user, pass)) {
             if (await dbUtils.isRegistered(user)) {
-                const hash = await dbUtils.userSecret(user);
-            
-                await bcrypt.compare(pass, hash, async function(err, result) {
-                    if (result) {
+                if (useCode) {
+                    const hashes = await dbUtils.userCodes(user);
+                    let unlocked = false;
+                    let newHashes = [];
+
+                    if (hashes) {
+                        for (const hash of hashes) {
+                            if (unlocked) {
+                                newHashes.push(hash);
+                            } else {
+                                const match = await bcrypt.compare(pass, hash)
+                                if (match) {
+                                    unlocked = true;
+                                } else {
+                                    newHashes.push(hash);
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (unlocked) {
+                        await dbUtils.updateBackupCodes(user, newHashes);
                         res.status(200).send({
                             success: true,
                             registered: true,
                             user: user,
-                            message: "Sucessfully logged in"
-                        });
+                            message: "Successfully logged in"
+                        })
                     } else {
                         res.status(200).send({
                             success: false,
                             registered: true,
                             user: user,
-                            message: "Incorrect password given."
-                        });
+                            message: "Invalid backup code given."
+                        })
                     }
-                });
+                } else {
+                    const hash = await dbUtils.userSecret(user);
+
+                    await bcrypt.compare(pass, hash, async function(err, result) {
+                        if (result) {
+                            res.status(200).send({
+                                success: true,
+                                registered: true,
+                                user: user,
+                                message: "Sucessfully logged in"
+                            });
+                        } else {
+                            res.status(200).send({
+                                success: false,
+                                registered: true,
+                                user: user,
+                                message: "Incorrect password given."
+                            });
+                        }
+                    });
+                }
             } else {
                 res.status(200).send({
                     success: false,
@@ -95,25 +133,23 @@ router.post('/user/register', async(req, res) => {
     try {
         if (validQuery("string", user, pass)) {
             if (!await dbUtils.isRegistered(user)) {
-                await bcrypt.genSalt(SALT_ROUNDS, async function(err, salt) {
-                    await bcrypt.hash(pass, salt, async function(err, hash) {
-                        const success = await dbUtils.initUser(user, hash);
-                        if (success) {
-                            res.status(200).send({
-                                success: true,
-                                registered: true,
-                                user: user,
-                                message: "User successfully registered."
-                            });
-                        } else {
-                            res.status(500).send({
-                                success: false,
-                                registered: false,
-                                user: user,
-                                message: "The server ran into an unexpected error when registering."
-                            });
-                        }
-                    });
+                await bcrypt.hash(pass, SALT_ROUNDS, async function(err, hash) {
+                    const success = await dbUtils.initUser(user, hash);
+                    if (success) {
+                        res.status(200).send({
+                            success: true,
+                            registered: true,
+                            user: user,
+                            message: "User successfully registered."
+                        });
+                    } else {
+                        res.status(500).send({
+                            success: false,
+                            registered: false,
+                            user: user,
+                            message: "The server ran into an unexpected error when registering."
+                        });
+                    }
                 });
             } else {
                res.status(200).send({
@@ -226,26 +262,24 @@ router.post('/user/update-pass', async(req, res) => {
 
                 await bcrypt.compare(pass, hash, async function(err, result) {
                     if (result) {
-                        await bcrypt.genSalt(SALT_ROUNDS, async function(err, salt) {
-                            await bcrypt.hash(newPass, salt, async function(err, newHash) {
-                                if (await dbUtils.updateUserPass(user, newHash)) {
-                                    res.status(200).send({
-                                        success: true,
-                                        authorized: true,
-                                        registered: true,
-                                        user: user,
-                                        message: "User's passwords was successfully updated."
-                                    });
-                                } else {
-                                    res.status(500).send({
-                                        success: false,
-                                        authorized: true,
-                                        registered: true,
-                                        user: user,
-                                        message: "The server ran into an unexpected error when attempting to update the user's password."
-                                    });
-                                }
-                            });
+                        await bcrypt.hash(newPass, SALT_ROUNDS, async function(err, newHash) {
+                            if (await dbUtils.updateUserPass(user, newHash)) {
+                                res.status(200).send({
+                                    success: true,
+                                    authorized: true,
+                                    registered: true,
+                                    user: user,
+                                    message: "User's passwords was successfully updated."
+                                });
+                            } else {
+                                res.status(500).send({
+                                    success: false,
+                                    authorized: true,
+                                    registered: true,
+                                    user: user,
+                                    message: "The server ran into an unexpected error when attempting to update the user's password."
+                                });
+                            }
                         });
                     } else {
                         res.status(200).send({
@@ -272,7 +306,7 @@ router.post('/user/update-pass', async(req, res) => {
                 authorized: false,
                 user: user,
                 message: "Incomplete body given, missing username, password, and/or new password."
-            })
+            });
         }
     } catch (err) {
         console.error(`Server error on updating password of account for: ${user}`, {
@@ -285,6 +319,63 @@ router.post('/user/update-pass', async(req, res) => {
             success: false,
             user: user,
             message: `The server ran into an unexpected error when trying to update the password of the account for ${user}, caught: ${err.name}.`
+        });
+    }
+});
+
+
+router.post('/user/gen-codes', async(req, res) => {
+    const {user, codes} = req.body;
+
+    try {
+        if (validQuery("string", user) && validQuery("object", codes)) {
+            if (await dbUtils.isRegistered(user)) {
+                let hashes = [];
+                for (const code of codes) {
+                    hashes.push(await bcrypt.hash(code, SALT_ROUNDS));
+                }
+
+                if (await dbUtils.updateBackupCodes(user, hashes)) {
+                    res.status(200).send({
+                        success: true,
+                        registered: true,
+                        user: user,
+                        message: "User successfully generated new backup codes."
+                    });
+                } else {
+                    res.status(500).send({
+                        success: false,
+                        registered: true,
+                        user: user,
+                        message: "The server ran into an unexpected error when attempting to generate backup codes."
+                    });
+                }
+            } else {
+                res.status(200).send({
+                    success: false,
+                    registered: false,
+                    user: user,
+                    message: "The given user is not registered."
+                });
+            }
+        } else {
+            res.status(400).send({
+                success: false,
+                user: user,
+                message: "Incomplete body given, missing username and/or codes."
+            });
+        }
+    } catch (err) {
+        console.error(`Server error on generating backup codes to account for: ${user}`, {
+            name: err.name,
+            message: err.message,
+            stack: err.stack
+        });
+
+        res.status(500).send({
+            success: false,
+            user: user,
+            message: `The server ran into an unexpected error when trying to generate backup codes to the account for ${user}, caught: ${err.name}.`
         });
     }
 });

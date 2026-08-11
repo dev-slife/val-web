@@ -332,6 +332,7 @@ main {
 .toggle-row:last-child {
     border-bottom: none;
 }
+
 .toggle-info h4 {
     font-size: .9rem;
     font-weight: 500;
@@ -525,7 +526,8 @@ main {
 
 #toast {
     position: fixed;
-    bottom: 32px; left: 50%;
+    bottom: 32px;
+    left: 50%;
     transform: translateX(-50%) translateY(12px);
     background: var(--bg-card);
     border: 1px solid var(--border);
