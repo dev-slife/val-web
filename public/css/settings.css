@@ -526,7 +526,7 @@ main {
 
 #toast {
     position: fixed;
-    bottom: 32px;
+    top: 90%;
     left: 50%;
     transform: translateX(-50%) translateY(12px);
     background: var(--bg-card);

@@ -1,7 +1,7 @@
 /**
  * Authors: dev.slife, sfesseha
  * Date Created: 4/30/26
- * Date Updated: 8/11/26
+ * Date Updated: 8/13/26
  * Description:
  *      Manages all account settings.
  */
@@ -162,8 +162,7 @@ async function deleteAccount() {
             const result = await response.json();
     
             if (result.success) {
-                msg.textContent = "Deleting account and all data associated...";
-                msg.hidden = false;
+                showToast("Deleting account and all data associated...", "🛡️");
                 await setTimeout(async() => {
                     await logout();
                 }, 2000);
@@ -305,11 +304,8 @@ async function clearChatHistory() {
             const result = await response.json();
     
             if (result.success) {
-                msg.textContent = "Chat history successfully erased.";
-                msg.hidden = false;
-                await setTimeout(async() => {
-                    await popup(null, false);
-                }, 2000);
+                await popup(null, false);
+                showToast("Chat history successfully erased.", "🗨️");
             } else if (!result.authorized) {
                 msg.textContent = "The password you entered was incorrect.";
                 msg.hidden = false;
