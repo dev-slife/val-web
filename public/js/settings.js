@@ -11,7 +11,6 @@
 // --------------------------- CONSTANTS --------------------------- //
 
 const BACKUP_CODE_COUNT = 6;
-// const HEX_CODES = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
 
 
 
@@ -26,12 +25,6 @@ function showToast(msg, icon="🌠", lifetime=3) {
     t.classList.add("show");
     toastTimer = setTimeout(() => t.classList.remove("show"), 1000 * lifetime);
 }
-
-
-// function toHex(byte) {
-//     let char = byte % 16;
-
-// }
 
 
 async function popup(details={}, open=true) {

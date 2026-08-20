@@ -1,6 +1,6 @@
-name: VAST Download
+name: AMA Download
 env:
-  VAST_BUILD: "vast-linux"
+  AMA_BUILD: "ama-linux"
 on:
   push:
     branches: [ main ]
@@ -18,11 +18,11 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Checkout VAST Repo
+    - name: Checkout AMA Repo
       uses: actions/checkout@v4
       with:
         repository: dev-slife/val-ast
-        token: ${{ secrets.VAST_DOWNLOAD }}
+        token: ${{ secrets.AMA_DOWNLOAD }}
         path: val-ast
 
     - name: Grab Latest Tag
@@ -35,7 +35,7 @@ jobs:
     - name: Grab Latest Workflow Run
       id: latest-run
       env:
-        GITHUB_TOKEN: ${{ secrets.VAST_DOWNLOAD }}
+        GITHUB_TOKEN: ${{ secrets.AMA_DOWNLOAD }}
       run: |
         RUN_ID=$(gh api \
           -H "Accept: application/vnd.github+json" \
@@ -49,18 +49,18 @@ jobs:
 
         echo "run-id=$RUN_ID" >> $GITHUB_OUTPUT
 
-    - name: Grab VAST Build
+    - name: Grab AMA Build
       id: latest-artifact
       env:
-        GITHUB_TOKEN: ${{ secrets.VAST_DOWNLOAD }}
+        GITHUB_TOKEN: ${{ secrets.AMA_DOWNLOAD }}
       run: |
         ARTIFACT_ID=$(gh api \
           -H "Accept: application/vnd.github+json" \
           /repos/dev-slife/val-ast/actions/runs/${{ steps.latest-run.outputs.run-id }}/artifacts \
-          | jq -r --arg substr "$VAST_BUILD" '.artifacts[] | select(.name | contains($substr)) | .id // empty')
+          | jq -r --arg substr "$AMA_BUILD" '.artifacts[] | select(.name | contains($substr)) | .id // empty')
 
         if [ -z "$ARTIFACT_ID" ] || [ "$ARTIFACT_ID" = "null" ]; then
-          echo "No artifact containing '$VAST_BUILD' found"
+          echo "No artifact containing '$AMA_BUILD' found"
           exit 1
         fi
 
@@ -68,41 +68,41 @@ jobs:
 
     - name: Set Tag Data
       run: |
-        echo "VAST_VER=${{ steps.latest-tag.outputs.tag }}" >> $GITHUB_ENV
-        echo "VAST_ID=${{ steps.latest-artifact.outputs.artifact-id }}" >> $GITHUB_ENV
+        echo "AMA_VER=${{ steps.latest-tag.outputs.tag }}" >> $GITHUB_ENV
+        echo "AMA_ID=${{ steps.latest-artifact.outputs.artifact-id }}" >> $GITHUB_ENV
     
     - uses: actions/setup-node@v4
       with:
         node-version: '24'
 
-    - name: Cache VAST
+    - name: Cache AMA
       id: cache
       uses: actions/cache@v4
       with:
-        path: src/libs/vast
-        key: vast-${{ env.VAST_ID }}
-        restore-keys: vast-
+        path: src/libs/ama
+        key: ama-${{ env.AMA_ID }}
+        restore-keys: ama-
     
-    - name: Download VAST
+    - name: Download AMA
       if: steps.cache.outputs.cache-hit != 'true'
       env:
-        GITHUB_TOKEN: ${{ secrets.VAST_DOWNLOAD }}
+        GITHUB_TOKEN: ${{ secrets.AMA_DOWNLOAD }}
       run: |
-        rm -rf src/libs/vast || true
+        rm -rf src/libs/ama || true
 
         echo "Downloading artifact..."
         curl -L -H "Authorization: token $GITHUB_TOKEN" \
-          "https://api.github.com/repos/dev-slife/val-ast/actions/artifacts/${{ env.VAST_ID }}/zip" \
-          -o vast.zip
+          "https://api.github.com/repos/dev-slife/val-ast/actions/artifacts/${{ env.AMA_ID }}/zip" \
+          -o ama.zip
 
-        mkdir -p src/libs/vast
-        unzip -o vast.zip -d src/libs/vast/
-        rm vast.zip
-        ls -la src/libs/vast/
+        mkdir -p src/libs/ama
+        unzip -o ama.zip -d src/libs/ama/
+        rm ama.zip
+        ls -la src/libs/ama/
 
-    - name: Test New VAST
+    - name: Test New AMA
       if: steps.cache.outputs.cache-hit != 'true'
-      id: vast-test
+      id: ama-test
       shell: bash
       run: |
         npm ci
@@ -111,10 +111,10 @@ jobs:
         npm test
         npm audit fix
 
-    - name: Commit VAST Files
-      if: steps.cache.outputs.cache-hit != 'true' && steps.vast-test.outcome == 'success'
+    - name: Commit AMA Files
+      if: steps.cache.outputs.cache-hit != 'true' && steps.ama-test.outcome == 'success'
       env:
-        GITHUB_TOKEN: ${{ secrets.VAST_UPLOAD }}
+        GITHUB_TOKEN: ${{ secrets.AMA_UPLOAD }}
         GIT_AUTHOR_NAME: VAL
         GIT_AUTHOR_EMAIL: val-slife@users.noreply.github.com
         GIT_COMMITTER_NAME: VAL
@@ -122,15 +122,15 @@ jobs:
       run: |
         git config user.name "$GIT_AUTHOR_NAME"
         git config user.email "$GIT_AUTHOR_EMAIL"
-        git add src/libs/vast/*
-        git commit -m "Updated Dependency: VAST ${{ env.VAST_VER }}" || echo "No changes"
+        git add src/libs/ama/*
+        git commit -m "Updated Dependency: AMA ${{ env.AMA_VER }}" || echo "No changes"
         git remote set-url origin https://x-access-token:$GITHUB_TOKEN@github.com/dev-slife/val-web.git
         git push origin HEAD:main
 
-    - name: Revert VAST
-      if: steps.cache.outputs.cache-hit != 'true' && steps.vast-test.outcome == 'failure'
+    - name: Revert AMA
+      if: steps.cache.outputs.cache-hit != 'true' && steps.ama-test.outcome == 'failure'
       env:
-        GITHUB_TOKEN: ${{ secrets.VAST_UPLOAD }}
+        GITHUB_TOKEN: ${{ secrets.AMA_UPLOAD }}
         GIT_AUTHOR_NAME: VAL
         GIT_AUTHOR_EMAIL: val-slife@users.noreply.github.com
         GIT_COMMITTER_NAME: VAL
