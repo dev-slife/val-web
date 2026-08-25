@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 6/25/26
+ * Date Updated: 8/25/26
  * Description:
  *      Handles all message generation for VAL.
  */
@@ -11,8 +11,7 @@
 // --------------------------- IMPORTS & CONSTANTS --------------------------- //
 
 const path = require("path");
-const {readFile} = require("fs/promises");
-const algebra = require("../../vast/api/algebra.js");
+const algebra = require("../../ama/api/algebra.js");
 
 const VAL_JSON = path.join(__dirname, "..", "..", "..", "json");
 const VAL_prompts = require(path.join(VAL_JSON, "prompts.json"));
@@ -312,8 +311,8 @@ class SLM {
                 return [await this.choose_response("client_error", "error", null, null, ["bad-equation"].concat(tags))];
             } else if (error instanceof algebra.NotEstablishedYet) {
                 return [await this.choose_response("client_error", "error", null, null, ["not-established"].concat(tags))];
-            } else if (error instanceof algebra.VASTError) {
-                return [await this.choose_response("client_error", "error", null, null, ["VAST-error"].concat(tags))];
+            } else if (error instanceof algebra.AMAError) {
+                return [await this.choose_response("client_error", "error", null, null, ["AMA-error"].concat(tags))];
             } else {
                 return [await this.choose_response("server_error", "error", null, null, tags)];
             }

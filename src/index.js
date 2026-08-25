@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 8/4/26
+ * Date Updated: 8/25/26
  * Description:
  *      Handles all of the main routing and communication for the entire web app.
  */
@@ -22,7 +22,7 @@ const options = {
 }
 
 const dbRouter = require("./libs/app/routes/db.js");
-const vastRouter = require("./libs/app/routes/vast.js");
+const amaRouter = require("./libs/app/routes/ama.js");
 const storeRouter = require("./libs/app/routes/storage.js");
 
 
@@ -35,7 +35,7 @@ app.use(express.json());
 
 // Mount routers
 app.use('/api/db', dbRouter);
-app.use('/api/val', vastRouter);
+app.use('/api/val', amaRouter);
 app.use('/api/storage', storeRouter);
 
 

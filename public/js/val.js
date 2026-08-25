@@ -3,7 +3,7 @@
  * Date Created: 3/30/26
  * Date Updated: 7/28/26
  * Description:
- *      Communicates with the VAST system to handle all math logic.
+ *      Communicates with the AMA system to handle all math logic.
  */
 
 

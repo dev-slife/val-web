@@ -1,9 +1,9 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 6/5/26
+ * Date Updated: 8/25/26
  * Description:
- *      Works with the VAST system (C++) & VAL's SLM to generate responses and walk students through math problems.
+ *      Works with the AMA system (C++) & VAL's SLM to generate responses and walk students through math problems.
  */
 
 
@@ -12,9 +12,9 @@
 
 const express = require("express");
 const router = express.Router();
-const algebra = require("../../vast/api/algebra.js");
+const algebra = require("../../ama/api/algebra.js");
 const {saveChat, histEnabled} = require("../utils/data_utils.js");
-const {ModelManager, SLM} = require("../utils/slm.js");
+const {ModelManager} = require("../utils/slm.js");
 const MODELS = new ModelManager();
 
 

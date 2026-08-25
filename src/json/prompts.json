@@ -1,6 +1,6 @@
 {
   "name": "VAL Response Bank",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "VAL's tutor response bank organized by category, state, difficulty, and tone",
   "messages": [
     {
@@ -649,7 +649,7 @@
       "difficulty": "beginner",
       "tone": "neutral",
       "text": "It looks like I hit some weird issue when looking at your equation. Could you reformat it and try again?",
-      "tags": ["format", "VAST-error"]
+      "tags": ["format", "AMA-error"]
     },
     {
       "id": "cerr-008",

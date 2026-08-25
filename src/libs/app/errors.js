@@ -1,22 +1,22 @@
 /**
  * Author: dev.slife
  * Date Created: 5/30/26
- * Date Updated: 5/30/26
+ * Date Updated: 8/25/26
  * Description:
  *      Defines all custom errors that could occur on the backend.
  */
 
 
 
-// --------------------------- VAST ERRORS --------------------------- //
+// --------------------------- AMA ERRORS --------------------------- //
 
 const {
-    VASTError,
+    AMAError,
     NotEstablishedYet,
     InvalidEquation,
     UndefinedVariable,
     InvalidType
-} = require("../vast/api/algebra.js");
+} = require("../ama/api/algebra.js");
 
 
 
@@ -59,7 +59,7 @@ class BucketDNE extends VALError {
 // --------------------------- EXPORT ERRORS --------------------------- //
 
 module.exports = {
-    VASTError,
+    AMAError,
     NotEstablishedYet,
     InvalidEquation,
     UndefinedVariable,
