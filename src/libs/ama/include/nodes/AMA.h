@@ -223,8 +223,14 @@ inline bool is_num(bool canBeNode, const T& item) {
         if (sv.empty() || start == sv.size()) {
             return false;
         } else {
+            bool decimal = false;
             for (size_t i = start; i < sv.size(); i++) {
-                if (!std::isdigit(static_cast<unsigned char>(sv[i]))) {
+                if (sv[i] == '.') {
+                    if (decimal) {
+                        return false;
+                    }
+                    decimal = true;
+                } else if ((!std::isdigit(static_cast<unsigned char>(sv[i])))) {
                     return false;
                 }
             }
