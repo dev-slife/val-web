@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 4/18/26
- * Date Updated: 8/25/26
+ * Date Updated: 8/27/26
  * Description:
  *      Handles all message generation for VAL.
  */
@@ -252,7 +252,8 @@ class SLM {
             const log = tutorLog[this.step];
             
             if (this.asking) {
-                const isCorrect = (this.input == log["result"]);
+                const isCorrect = await algebra.approximate(this.input, log["result"]);
+                // const isCorrect = (this.input == log["result"]);
                 if (isCorrect || this.attempts >= MAX_ATTEMPTS - 1) {
                     this.asking = false;
                     this.attempts = 0;
