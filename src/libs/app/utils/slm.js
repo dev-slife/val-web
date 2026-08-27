@@ -252,8 +252,7 @@ class SLM {
             const log = tutorLog[this.step];
             
             if (this.asking) {
-                const isCorrect = await algebra.approximate(this.input, log["result"]);
-                // const isCorrect = (this.input == log["result"]);
+                const isCorrect = (await algebra.approximate(this.input, log["result"])).answer;
                 if (isCorrect || this.attempts >= MAX_ATTEMPTS - 1) {
                     this.asking = false;
                     this.attempts = 0;
