@@ -109,3 +109,6 @@ __pycache__/
 
 # Directory of private info
 .private
+
+# Licenses
+minio.license
