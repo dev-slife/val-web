@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/30/26
- * Date Updated: 8/11/26
+ * Date Updated: 10/12/26
  * Description:
  *      Handles all database API calls.
  */
@@ -31,7 +31,7 @@ function validQuery(dataType, ...values) {
 
 
 
-// --------------------------- USER ACCOUNT ROUTES --------------------------- //
+// --------------------------- MANAGEMENT ROUTES --------------------------- //
 
 router.post('/user/login', async(req, res) => {
     const {user, pass, useCode} = req.body;
@@ -251,6 +251,9 @@ router.post('/user/delete', async(req, res) => {
     }
 });
 
+
+
+// --------------------------- SECURITY ROUTES --------------------------- //
 
 router.post('/user/update-pass', async(req, res) => {
     const {user, pass, newPass} = req.body;
