@@ -5,9 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../favicon.ico">
     <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <script src="../js/temp_auth.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/load_profile.js"></script>
     <title>Profile - VAL</title>
 </head>
-<body>
-    <h1>Profile Pages Are In Development</h1>
+<body class="profile-page">
+    <div class="logo-area">
+        <div class="logo-letters">
+            <span class="logo-letter v">V</span>
+            <span class="logo-letter a">A</span>
+            <span class="logo-letter l">L</span>
+        </div>
+        <div class="logo-subtitle">Virtual Arithmetic Luminary</div>
+    </div>
+
+    <nav>
+        <button onclick="changePage('home')">Home</button>
+        <button onclick="changePage('resources')">Resources</button>
+        <button onclick="changePage('privacy')">Privacy</button>
+        <button onclick="changePage('terms')">Terms &amp; Services</button>
+        <button onclick="changePage('copyright')">Copyright</button>
+        <button onclick="changePage('settings')">Settings</button>
+    </nav>
+
+
+    <div class="content-card">
+        <img id="avatar">
+        <h2 id="username">Username</h2>
+        <p id="bio">This is where the bio goes.</p>
+    </div>
+
+
+    <div class="bottom-section">
+        <div class="bottom-divider"></div>
+        <div class="account-info">
+            <img id="accountPFP">
+            <p id="accountName"></p>
+        </div>
+        <button class="sign-in-btn" onclick="changePage('login')">Sign In</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 VAL</p>
+    </footer>
 </body>
 </html>

@@ -1,0 +1,70 @@
+/* ---------------------- NAV BAR ---------------------- */
+
+nav {
+    margin: 0 auto 32px;
+    max-width: 960px;
+    background: var(--bg-input);
+    border-radius: 999px;
+    border: 1px solid var(--nav-border);
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+nav button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 10px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-family: var(--font-nav);
+    font-size: 18px;
+    letter-spacing: 1px;
+    border-right: 1px solid var(--nav-border);
+    background: rgba(255,255,255,0);
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+nav button:last-child {
+    border-right: none;
+}
+
+nav button:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+nav button.active {
+    color: var(--accent-blue);
+}
+
+
+
+/* ---------------------- MAIN ---------------------- */
+
+.content-card {
+    margin: 5% 20% 5% 20%;
+}
+
+main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+}
+
+#avatar {
+    display: none;
+    height: 120px;
+    width: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 6px solid var(--border);
+    background: var(--bg-main);
+}
+
+/* Make logo slightly smaller on profile page */
+.logo-letter {
+    font-size: 96px;
+}

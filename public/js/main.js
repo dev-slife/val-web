@@ -1,7 +1,7 @@
 /**
  * Author: dev.slife
  * Date Created: 3/23/26
- * Date Updated: 8/11/26
+ * Date Updated: 10/13/26
  * Description:
  *      Handles main frontend interaction.
  */
@@ -215,7 +215,7 @@ async function register(user, pass) {
 
 // --------------------------- BLOB REQUESTS --------------------------- //
 
-async function getBlobItem(imgName="default_pfp.png") {
+async function getBlobItem(imgName) {
     try {
         const url = `/api/storage/blob/pull?key=${imgName}`;
         const response = await fetch(url);
@@ -238,9 +238,12 @@ async function getPFP(default_img=false) {
             const result = await response.json();
             if (response.status == 200 && await validURL(result["url"])) {
                 return result["url"];
+            } else if (default_img) {
+                return await getBlobItem("default_pfp.png");
             }
+        } else if (default_img) {
+            return await getBlobItem("default_pfp.png");
         }
-        return await getBlobItem();
     } catch (err) {
         console.error("Could not get pfp.");
     }

@@ -1,6 +1,6 @@
 /* ---------------------- NAV BAR ---------------------- */
 
-.info-page nav {
+nav {
     margin: 0 auto 32px;
     max-width: 960px;
     background: var(--bg-input);
@@ -11,7 +11,7 @@
     overflow: hidden;
 }
 
-.info-page nav button {
+nav button {
     flex: 1;
     display: flex;
     align-items: center;
@@ -28,15 +28,15 @@
     white-space: nowrap;
 }
 
-.info-page nav button:last-child {
+nav button:last-child {
     border-right: none;
 }
 
-.info-page nav button:hover {
+nav button:hover {
     background: rgba(255,255,255,0.05);
 }
 
-.info-page nav button.active {
+nav button.active {
     color: var(--accent-blue);
 }
 
@@ -44,21 +44,21 @@
 
 /* ---------------------- MAIN ---------------------- */
 
-.info-page main {
+main {
     max-width: 860px;
     margin: 0 auto;
     padding: 0 24px 60px;
 }
 
-.info-page main div h1 {
+main div h1 {
     display: none;
 }
 
-.info-page .title {
+.title {
     display: none;
 }
 
-.info-page .page-label {
+.page-label {
     font-size: var(--h1-size-s);
 }
 
